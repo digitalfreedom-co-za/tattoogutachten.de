@@ -137,6 +137,17 @@ Hinweis: Auf github.io liegt `robots.txt` unter dem Basispfad, Crawler lesen sie
 
 `.github/workflows/deploy.yml` läuft bei jedem Push auf `main` (und manuell über `workflow_dispatch`): `npm ci`, `astro check`, `astro build`, `npm run validate:jsonld`, danach `upload-pages-artifact` und `deploy-pages`. GitHub Pages steht im Repository auf Quelle GitHub Actions.
 
+### Cache-Header
+
+GitHub Pages liefert alles mit `Cache-Control: max-age=600` aus, auch die Dateien unter `/_astro/`, und lässt keine eigenen Header zu (geprüft am 12.11.2026). Die Dateien unter `/_astro/` tragen einen Inhalts-Hash im Namen und ändern sich nie. Sobald die Seite hinter einem Hoster oder CDN mit konfigurierbaren Antwort-Headern liegt, gilt:
+
+| Pfad | Header |
+| --- | --- |
+| `/_astro/*` | `Cache-Control: public, max-age=31536000, immutable` |
+| HTML, `sitemap*.xml`, `robots.txt`, `llms*.txt` | `Cache-Control: public, max-age=0, must-revalidate` |
+
+Unter dem Basispfad der Vorschau lautet der erste Pfad `/tattoogutachten.de/_astro/*`.
+
 ## Umzug auf die eigene Domain
 
 1. In `astro.config.mjs` die Konstante `SITE` auf `{ url: 'https://www.tattoogutachten.de', base: '/' }` setzen.
