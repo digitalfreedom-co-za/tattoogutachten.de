@@ -13,17 +13,17 @@ const trail: NavItem[] = [{ label: 'Start', href: '/' }, ...items];
 ---
 
 <nav aria-label="Brotkrumen" class:list={['label text-graphite', className]}>
-  <ol class="flex flex-wrap items-center gap-x-3 gap-y-1">
+  <ol class="flex flex-wrap items-center gap-x-3">
     {
       trail.map((item, index) => {
         const isLast = index === trail.length - 1;
         return (
           <li class="flex items-center gap-3">
             {isLast ? (
-              <span aria-current="page" class="text-ink">{item.label}</span>
+              <span aria-current="page" class="inline-flex min-h-11 items-center text-ink">{item.label}</span>
             ) : (
               <>
-                <a class="link-ink no-underline hover:underline" href={url(item.href)}>{item.label}</a>
+                <a class="link-ink inline-flex min-h-11 items-center no-underline hover:underline" href={url(item.href)}>{item.label}</a>
                 <span class="h-px w-4 bg-stone" aria-hidden="true" />
               </>
             )}

@@ -7,8 +7,11 @@ function revealAll(elements: Element[]): void {
   elements.forEach((el) => el.classList.add('is-visible'));
 }
 
-/** Upper bound of the stagger, so a long list never waits more than a few steps. */
-const MAX_STAGGER_STEPS = 4;
+/** Upper bound of the stagger: three steps of 60 ms, so no item waits longer than 180 ms. */
+const MAX_STAGGER_STEPS = 3;
+
+/** Items whose tops differ by less than this sit in one row and enter together. */
+const ROW_TOLERANCE_PX = 8;
 
 function initReveal(): void {
   const elements = Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]'));
@@ -19,19 +22,23 @@ function initReveal(): void {
     return;
   }
 
-  // Stagger only the group members that enter the viewport together, counted per observer batch,
-  // so an element further down a long list does not inherit a delay from its position in the list.
+  // Stagger only group members that enter the viewport together side by side, e.g. a row of three
+  // cards on desktop. Stacked items (every list on a phone, FAQ rows on any width) never wait for
+  // their neighbours, and an item further down never inherits a delay from its position in the list.
   const observer = new IntersectionObserver(
     (entries) => {
-      const steps = new Map<Element, number>();
+      const rows = new Map<Element, { top: number; step: number }>();
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
         const target = entry.target as HTMLElement;
         const group = target.closest('[data-reveal-group]');
         if (group) {
-          const step = steps.get(group) ?? 0;
+          const top = entry.boundingClientRect.top;
+          const row = rows.get(group);
+          const sameRow = row !== undefined && Math.abs(row.top - top) < ROW_TOLERANCE_PX;
+          const step = sameRow ? row.step + 1 : 0;
           target.style.setProperty('--reveal-index', String(Math.min(step, MAX_STAGGER_STEPS)));
-          steps.set(group, step + 1);
+          rows.set(group, { top: sameRow ? row.top : top, step });
         }
         target.classList.add('is-visible');
         observer.unobserve(target);

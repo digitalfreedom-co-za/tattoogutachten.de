@@ -21,7 +21,7 @@ const resolvedHref = href?.startsWith('/') ? url(href) : href;
 <article
   class:list={[
     'group/card relative flex h-full flex-col border-t border-ink bg-paper pt-5 pb-7 transition-colors duration-300',
-    resolvedHref && 'hover:bg-paper-deep/60',
+    resolvedHref && 'hover:bg-paper-deep/60 has-[a:focus-visible]:bg-paper-deep/60',
     className,
   ]}
   data-reveal
@@ -44,10 +44,10 @@ const resolvedHref = href?.startsWith('/') ? url(href) : href;
   {
     resolvedHref && (
       <p class="mt-auto flex items-center gap-2 pt-6 text-sm font-semibold" aria-hidden="true">
-        <span class="border-b border-ink/30 transition-colors group-hover/card:border-oxblood group-hover/card:text-oxblood">
+        <span class="border-b border-ink/30 transition-colors group-hover/card:border-oxblood group-hover/card:text-oxblood group-has-[a:focus-visible]/card:border-oxblood group-has-[a:focus-visible]/card:text-oxblood">
           {linkLabel}
         </span>
-        <Icon name="arrow" size={16} class="transition-transform duration-300 group-hover/card:translate-x-1 motion-reduce:transition-none" />
+        <Icon name="arrow" size={16} class="transition-transform duration-300 group-hover/card:translate-x-1 group-has-[a:focus-visible]/card:translate-x-1 motion-reduce:transition-none" />
       </p>
     )
   }

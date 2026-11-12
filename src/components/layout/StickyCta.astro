@@ -1,7 +1,10 @@
 ---
 // Mobile only booking bar fixed to the bottom edge, above the home indicator (safe area).
-// It needs JS to know when to step aside: it hides while a booking section ([data-booking-section])
-// or the footer is on screen, so it never covers the calendar or the contact details. While hidden
+// It needs JS to know when to step aside: it hides once the calendar frame of a booking section
+// ([data-booking-section], the section itself if it has no calendar) reaches the usable viewport
+// between header and bar, or while the footer is on screen, so it stays available through the
+// introduction and never covers the calendar or the contact details. Below 360px it drops the
+// supporting line and keeps only the booking button, so the bar stays one row high. While hidden
 // it leaves the focus order, as it does while the mobile menu is open. Its measured height is the
 // bottom scroll padding and the body padding, and a focused element that still ends up behind
 // the bar is scrolled clear of it, so keyboard focus is never hidden.
@@ -16,12 +19,12 @@ const href = url(bookingHref(withoutBase(Astro.url.pathname)));
 
 <aside class="sticky-cta md:hidden" aria-label="Erstberatung buchen" data-sticky-cta hidden>
   <Container class="flex items-center justify-between gap-4 py-3">
-    <p class="text-sm leading-snug text-paper/75">
+    <p class="text-sm leading-snug text-paper/75 max-[359px]:hidden">
       Erstberatung kostenlos,<br />bis zu 60 Minuten
     </p>
     <a
       href={href}
-      class="inline-flex min-h-11 shrink-0 items-center gap-3 rounded-xs border border-paper bg-paper px-5 py-3 text-[0.9375rem] font-semibold leading-none text-ink transition-colors hover:border-brass-light hover:bg-brass-light"
+      class="inline-flex min-h-11 shrink-0 items-center justify-center gap-3 rounded-xs max-[359px]:flex-1 border border-paper bg-paper px-5 py-3 text-[0.9375rem] font-semibold leading-none text-ink transition-colors hover:border-brass-light hover:bg-brass-light"
     >
       <span>{primaryCta.label}</span>
       <Icon name="calendar" size={18} class="shrink-0" />
@@ -73,8 +76,13 @@ const href = url(bookingHref(withoutBase(Astro.url.pathname)));
 
 <script>
   const bar = document.querySelector<HTMLElement>('[data-sticky-cta]');
-  const blockers = document.querySelectorAll<HTMLElement>('[data-booking-section], footer');
   const menu = document.getElementById('mobile-nav');
+  const header = document.getElementById('site-header');
+  // The interactive calendar, not the whole section: its heading and intro stay bar territory.
+  const calendars = Array.from(document.querySelectorAll<HTMLElement>('[data-booking-section]'), (section) =>
+    section.querySelector<HTMLElement>('.booking-frame') ?? section,
+  );
+  const footers = document.querySelectorAll<HTMLElement>('footer');
 
   if (bar && 'IntersectionObserver' in window) {
     const visible = new Set<Element>();
@@ -86,21 +94,42 @@ const href = url(bookingHref(withoutBase(Astro.url.pathname)));
 
     if (menu) new MutationObserver(update).observe(menu, { attributes: true, attributeFilter: ['data-open'] });
 
-    const observer = new IntersectionObserver((entries) => {
+    bar.hidden = false;
+
+    const track = (entries: IntersectionObserverEntry[]) => {
       for (const entry of entries) {
         if (entry.isIntersecting) visible.add(entry.target);
         else visible.delete(entry.target);
       }
       update();
-    });
+    };
 
-    blockers.forEach((el) => observer.observe(el));
-    bar.hidden = false;
+    // The calendar counts once it reaches the usable viewport, between the sticky header on top
+    // and the bar itself at the bottom. Both heights change with width, rotation and text size, so
+    // the observer is rebuilt with fresh margins whenever one of them does. The footer counts as
+    // soon as it touches the viewport.
+    let calendarObserver: IntersectionObserver | undefined;
+    let insets = '';
+    const observeCalendars = () => {
+      const margins = `-${header?.offsetHeight ?? 0}px 0px -${bar.offsetHeight}px 0px`;
+      if (margins === insets) return;
+      insets = margins;
+      calendarObserver?.disconnect();
+      calendars.forEach((el) => visible.delete(el));
+      calendarObserver = new IntersectionObserver(track, { rootMargin: margins });
+      calendars.forEach((el) => calendarObserver!.observe(el));
+    };
+    observeCalendars();
+    const footerObserver = new IntersectionObserver(track);
+    footers.forEach((el) => footerObserver.observe(el));
     document.documentElement.classList.add('has-sticky-cta');
 
-    new ResizeObserver(() => {
+    const sizes = new ResizeObserver(() => {
       document.documentElement.style.setProperty('--sticky-cta-height', `${bar.offsetHeight}px`);
-    }).observe(bar);
+      observeCalendars();
+    });
+    sizes.observe(bar);
+    if (header) sizes.observe(header);
 
     // Browsers do not all honour scroll-padding when focus moves, so a focused element that ends up
     // behind the visible bar is scrolled up until it clears the bar's top edge.

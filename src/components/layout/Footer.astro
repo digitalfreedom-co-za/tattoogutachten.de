@@ -16,7 +16,7 @@ const year = new Date().getFullYear();
     <div class="md:col-span-12 lg:col-span-4">
       <p class="font-serif text-h3 tracking-tightish">{site.office}</p>
       <p class="mt-2 text-sm text-paper/60">{site.expert}, {site.role}</p>
-      <address class="mt-8 grid gap-4 text-[0.9375rem] not-italic">
+      <address class="mt-8 grid gap-2 text-[0.9375rem] not-italic">
         <p class="flex gap-3">
           <Icon name="pin" size={18} class="mt-0.5 shrink-0 text-brass-light" />
           <span>
@@ -24,16 +24,16 @@ const year = new Date().getFullYear();
             {contact.postalCode} {contact.city}
           </span>
         </p>
-        <p class="flex items-center gap-3">
-          <Icon name="phone" size={18} class="shrink-0 text-brass-light" />
-          <a class="link-ink hover:!text-brass-light" href={contact.phone.href}>
-            <span class="sr-only">Telefon </span>{contact.phone.display}
+        <p>
+          <a class="link-ink inline-flex min-h-11 items-center gap-3 hover:!text-brass-light" href={contact.phone.href}>
+            <Icon name="phone" size={18} class="shrink-0 text-brass-light" />
+            <span><span class="sr-only">Telefon </span>{contact.phone.display}</span>
           </a>
         </p>
-        <p class="flex items-center gap-3">
-          <Icon name="mail" size={18} class="shrink-0 text-brass-light" />
-          <a class="link-ink break-all hover:!text-brass-light" href={contact.email.href}>
-            <span class="sr-only">E-Mail </span>{contact.email.display}
+        <p>
+          <a class="link-ink inline-flex min-h-11 items-center gap-3 hover:!text-brass-light" href={contact.email.href}>
+            <Icon name="mail" size={18} class="shrink-0 text-brass-light" />
+            <span class="break-all"><span class="sr-only">E-Mail </span>{contact.email.display}</span>
           </a>
         </p>
       </address>
@@ -42,26 +42,26 @@ const year = new Date().getFullYear();
     <nav aria-label="Fußzeile" class="grid gap-10 sm:grid-cols-2 sm:gap-x-8 md:col-span-7 lg:col-span-5">
       <div>
         <p class="label text-paper/50">Seiten</p>
-        <ul class="mt-5 grid gap-3 text-[0.9375rem]">
+        <ul class="mt-3 grid text-[0.9375rem]">
           {
             mainNav.map((item) => (
               <li>
-                <a class="link-ink no-underline hover:!text-brass-light hover:underline" href={url(item.href)}>{item.label}</a>
+                <a class="link-ink inline-flex min-h-11 items-center no-underline hover:!text-brass-light hover:underline" href={url(item.href)}>{item.label}</a>
               </li>
             ))
           }
           <li>
-            <a class="link-ink no-underline hover:!text-brass-light hover:underline" href={url(primaryCta.href)}>{primaryCta.label}</a>
+            <a class="link-ink inline-flex min-h-11 items-center no-underline hover:!text-brass-light hover:underline" href={url(primaryCta.href)}>{primaryCta.label}</a>
           </li>
         </ul>
       </div>
       <div>
         <p class="label text-paper/50">Für wen</p>
-        <ul class="mt-5 grid gap-3 text-[0.9375rem]">
+        <ul class="mt-3 grid text-[0.9375rem]">
           {
             audiences.map((audience) => (
               <li>
-                <a class="link-ink no-underline hover:!text-brass-light hover:underline" href={url(audienceHref(audience))}>
+                <a class="link-ink inline-flex min-h-11 items-center no-underline hover:!text-brass-light hover:underline" href={url(audienceHref(audience))}>
                   Für {audience.label}
                 </a>
               </li>
@@ -82,13 +82,13 @@ const year = new Date().getFullYear();
   </Container>
 
   <Container>
-    <div class="flex flex-col gap-4 border-t border-paper/15 py-6 text-sm text-paper/60 sm:flex-row sm:items-center sm:justify-between">
+    <div class="flex flex-col gap-2 border-t border-paper/15 py-4 text-sm text-paper/60 sm:flex-row sm:items-center sm:justify-between">
       <p>&copy; {year} {site.office}</p>
       <ul class="flex gap-6">
         {
           legalNav.map((item) => (
             <li>
-              <a class="link-ink hover:!text-brass-light" href={url(item.href)}>{item.label}</a>
+              <a class="link-ink inline-flex min-h-11 items-center hover:!text-brass-light" href={url(item.href)}>{item.label}</a>
             </li>
           ))
         }

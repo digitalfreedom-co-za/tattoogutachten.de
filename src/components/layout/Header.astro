@@ -85,9 +85,19 @@ const ctaHref = bookingHref(withoutBase(currentPath));
       </nav>
       <div class="mobile-nav-item mt-8 flex flex-col gap-6" style={`--i:${mainNav.length}`}>
         <Button href={ctaHref} icon="calendar" class="self-start">{primaryCta.label}</Button>
-        <ul class="grid gap-3 text-sm text-graphite">
-          <li><a class="link-ink" href={contact.phone.href}>{contact.phone.display}</a></li>
-          <li><a class="link-ink break-all" href={contact.email.href}>{contact.email.display}</a></li>
+        <ul class="grid text-sm text-graphite">
+          <li>
+            <a class="link-ink inline-flex min-h-11 items-center gap-3" href={contact.phone.href}>
+              <Icon name="phone" size={18} class="shrink-0 text-oxblood" />
+              <span><span class="sr-only">Telefon </span>{contact.phone.display}</span>
+            </a>
+          </li>
+          <li>
+            <a class="link-ink inline-flex min-h-11 items-center gap-3" href={contact.email.href}>
+              <Icon name="mail" size={18} class="shrink-0 text-oxblood" />
+              <span class="break-all"><span class="sr-only">E-Mail </span>{contact.email.display}</span>
+            </a>
+          </li>
         </ul>
       </div>
     </Container>
@@ -261,12 +271,29 @@ const ctaHref = bookingHref(withoutBase(currentPath));
       }
     });
 
-    // Links close the panel. tel: and mailto: keep the page open, so focus returns to the button.
-    panel.addEventListener('click', (event) => {
+    // Every header link closes the panel first: logo, booking button and the panel links alike.
+    // tel: and mailto: keep the page open, so focus returns to the menu button. An anchor on the
+    // current page is navigated explicitly once scrolling and interaction are restored, and focus
+    // moves to its target, so the jump does not leave focus behind in the closed panel.
+    header.addEventListener('click', (event) => {
+      if (!isOpen() || event.defaultPrevented || event.button !== 0) return;
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       const link = (event.target as HTMLElement).closest('a');
-      if (!link) return;
-      const staysOnPage = /^(tel|mailto):/.test(link.getAttribute('href') ?? '');
+      if (!link || link.closest('#site-header') !== header) return;
+      const href = link.getAttribute('href') ?? '';
+      const staysOnPage = /^(tel|mailto):/.test(href);
       setOpen(false, staysOnPage);
+      if (staysOnPage) return;
+
+      const target = new URL(link.href, location.href);
+      const samePage = target.origin === location.origin && target.pathname === location.pathname;
+      const anchor = samePage && target.hash ? document.getElementById(decodeURIComponent(target.hash.slice(1))) : null;
+      if (!anchor) return;
+      event.preventDefault();
+      if (location.hash !== target.hash) history.pushState(null, '', target.hash);
+      anchor.scrollIntoView({ block: 'start' });
+      if (!anchor.hasAttribute('tabindex')) anchor.setAttribute('tabindex', '-1');
+      anchor.focus({ preventScroll: true });
     });
 
     const isShown = (el: HTMLElement) =>

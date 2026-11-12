@@ -1,8 +1,10 @@
 ---
 // Long form layout for the Ratgeber articles and legal pages: breadcrumbs, report style
 // title block with an optional byline, prose column and a margin column for notes
-// (stacks under the text on mobile). The "after" slot follows the article, e.g. related
-// content and the closing call to action.
+// (stacks under the text on mobile and tablet). With asideFirst the margin column comes first in
+// the document and stacks above the text below lg, e.g. a contents navigation that has to be met
+// before the sections it leads to; on desktop it stays in the margin. The "after" slot follows the
+// article, e.g. related content and the closing call to action.
 import BaseLayout from './BaseLayout.astro';
 import Container from '../components/ui/Container.astro';
 import PageHeader from '../components/ui/PageHeader.astro';
@@ -26,9 +28,12 @@ interface Props extends Omit<SeoProps, 'breadcrumbs'> {
   /** ISO date of the last factual review, shown as Stand. */
   updated?: string;
   byline?: Byline;
+  /** Puts the margin column before the text below lg (contents navigation). */
+  asideFirst?: boolean;
 }
 
-const { heading, lead, label = 'Ratgeber', breadcrumbs, updated, byline, ...seo } = Astro.props;
+const { heading, lead, label = 'Ratgeber', breadcrumbs, updated, byline, asideFirst = false, ...seo } = Astro.props;
+const hasAside = Astro.slots.has('aside');
 const formatDate = (iso: string) =>
   new Intl.DateTimeFormat('de-DE', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(iso));
 ---
@@ -60,11 +65,18 @@ const formatDate = (iso: string) =>
       }
     </PageHeader>
     <Container class="grid gap-12 pb-section md:grid-cols-12 md:gap-x-8">
-      <div class="prose prose-report min-w-0 md:col-span-8 md:col-start-4 lg:col-span-6 lg:col-start-4">
+      {
+        hasAside && asideFirst && (
+          <aside class="min-w-0 border-t border-ink pt-5 text-sm text-graphite hyphens-auto break-words md:col-span-8 md:col-start-4 lg:col-span-3 lg:col-start-10 lg:row-start-1 lg:self-start lg:sticky lg:top-[calc(var(--header-height)+2rem)]">
+            <slot name="aside" />
+          </aside>
+        )
+      }
+      <div class="prose prose-report min-w-0 md:col-span-8 md:col-start-4 lg:col-span-6 lg:col-start-4 lg:row-start-1">
         <slot />
       </div>
       {
-        Astro.slots.has('aside') && (
+        hasAside && !asideFirst && (
           <aside class="min-w-0 border-t border-ink pt-5 text-sm text-graphite hyphens-auto break-words md:col-span-8 md:col-start-4 lg:col-span-3 lg:col-start-10 lg:self-start lg:sticky lg:top-[calc(var(--header-height)+2rem)]">
             <slot name="aside" />
           </aside>

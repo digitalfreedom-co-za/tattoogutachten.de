@@ -47,24 +47,24 @@ const featuredArticles = (await getArticles()).slice(0, 3);
   <section class="relative overflow-hidden" aria-labelledby="start-titel">
     <Container class="grid gap-12 pt-10 pb-16 md:grid-cols-12 md:gap-x-8 md:pt-16 md:pb-24">
       <div class="relative z-10 flex flex-col md:col-span-7 md:pt-6">
-        <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-y border-ink py-3" data-reveal>
+        <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-y border-ink py-3">
           <p class="label text-ink">{site.office}</p>
-          <p class="label hidden text-graphite min-[420px]:block">{contact.city}, bundesweit tätig</p>
+          <p class="label text-graphite">{contact.city}, bundesweit tätig</p>
         </div>
         <Eyebrow class="mt-10 md:mt-14">{site.role}</Eyebrow>
         <h1 id="start-titel" class="mt-6 text-h1 tracking-display">
           Tattoo Gutachter für <em class="text-oxblood">unabhängige</em> Tattoogutachten, bundesweit.
         </h1>
-        <p class="mt-8 max-w-[34rem] text-lead text-graphite" data-reveal>
+        <p class="mt-8 max-w-[34rem] text-lead text-graphite">
           {site.expert} ist geprüfter und zertifizierter Gutachter des {credentials.associationShort} und seit über
           {credentials.yearsInTrade} Jahren in der Tattoo- und Piercingbranche. Seine Tattoogutachten stellen fest, was
           handwerklich vorliegt, für Privatpersonen, Studios, Rechtsanwälte und Gerichte.
         </p>
-        <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-5" data-reveal>
+        <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-5">
           <Button href="/#termin" icon="calendar">{primaryCta.label}</Button>
           <Button href="/leistungen/" variant="text">Leistungen</Button>
         </div>
-        <p class="mt-8 flex items-start gap-3 text-sm text-graphite" data-reveal>
+        <p class="mt-8 flex items-start gap-3 text-sm text-graphite">
           <Icon name="check" size={18} class="mt-0.5 shrink-0 text-oxblood" />
           <span>Erstberatung kostenlos und unverbindlich, bis zu 60 Minuten.</span>
         </p>
@@ -127,7 +127,7 @@ const featuredArticles = (await getArticles()).slice(0, 3);
       </div>
       <div class="md:col-span-6 lg:col-span-5">
         <Eyebrow>Unabhängigkeit</Eyebrow>
-        <h2 id="unabhaengig-titel" class="mt-6 text-h2 tracking-display" data-reveal>
+        <h2 id="unabhaengig-titel" class="mt-6 text-h2 tracking-display">
           Tätowierer und Gutachter, klar getrennt.
         </h2>
         <div class="mt-6 grid gap-4 text-graphite" data-reveal>
@@ -211,7 +211,7 @@ const featuredArticles = (await getArticles()).slice(0, 3);
       </div>
       <div class="md:col-span-7 md:order-1">
         <Eyebrow>Über mich</Eyebrow>
-        <h2 id="person-titel" class="mt-6 text-h2 tracking-display" data-reveal>
+        <h2 id="person-titel" class="mt-6 text-h2 tracking-display">
           Vom Tätowierer zum Sachverständigen.
         </h2>
         <p class="mt-6 max-w-[36rem] text-lead text-graphite" data-reveal>

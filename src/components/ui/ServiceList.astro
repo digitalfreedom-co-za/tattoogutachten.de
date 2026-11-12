@@ -18,7 +18,7 @@ const { services, headingLevel: Heading = 'h3', class: className } = Astro.props
 <ul class:list={['border-t border-ink', className]} data-reveal-group>
   {
     services.map((service) => (
-      <li class="group/row relative border-b border-rule transition-colors duration-300 hover:bg-paper-deep/60" data-reveal>
+      <li class="group/row relative border-b border-rule transition-colors duration-300 hover:bg-paper-deep/60 has-[a:focus-visible]:bg-paper-deep/60" data-reveal>
         <div class="grid gap-3 py-6 md:grid-cols-[11rem_1fr_auto] md:items-baseline md:gap-8 md:py-8 md:pr-2">
           <p class="label text-oxblood">{service.kicker}</p>
           <div>
@@ -35,7 +35,7 @@ const { services, headingLevel: Heading = 'h3', class: className } = Astro.props
           <Icon
             name="arrow"
             size={22}
-            class="hidden text-ink transition-transform duration-300 group-hover/row:translate-x-1 group-hover/row:text-oxblood motion-reduce:transition-none md:block"
+            class="hidden text-ink transition-transform duration-300 group-hover/row:translate-x-1 group-hover/row:text-oxblood group-has-[a:focus-visible]/row:translate-x-1 group-has-[a:focus-visible]/row:text-oxblood motion-reduce:transition-none md:block"
           />
         </div>
       </li>

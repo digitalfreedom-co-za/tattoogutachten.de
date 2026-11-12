@@ -2,8 +2,10 @@
 // Booking calendar (cal.com inline embed) in a reserved frame. Nothing from cal.com loads with the
 // page: src/scripts/booking.ts injects the official embed once the frame scrolls into view.
 // While the demo calendar is configured (CAL_IS_DEMO), a notice above the frame says so.
-// Until then a calendar sheet skeleton holds the final height, so nothing shifts.
-// Without JavaScript the frame shows the alternatives instead: the booking link, phone, email.
+// While it loads, a calendar sheet skeleton holds the height of the month view, so nothing shifts;
+// once ready, the frame follows the iframe, including the shorter form step after a time is chosen.
+// Without JavaScript, or when cal.com fails, no height is reserved: the alternatives (booking link,
+// phone, email) sit in the normal flow.
 // Both variants hide the cal.com event details (see src/scripts/booking.ts); they differ in the fallback:
 //   compact: landing page, fallback link to /termin/.
 //   full:    /termin/, fallback link straight to the cal.com booking page.
@@ -74,7 +76,7 @@ const weekdays = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
     </div>
 
     <!-- Without JavaScript, or when cal.com is blocked: the direct ways to a first consultation. -->
-    <div class="booking-fallback absolute inset-0 z-20 flex items-center bg-paper p-6 md:p-10">
+    <div class="booking-fallback relative z-20 bg-paper p-6 md:p-10">
       <div class="max-w-[30rem]">
         <p class="font-serif text-h4">
           <span class="booking-fallback-nojs">Der Buchungskalender braucht JavaScript.</span>
@@ -99,34 +101,39 @@ const weekdays = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
       überträgt Ihr Browser unter anderem Ihre IP-Adresse an cal.com. Was dabei verarbeitet wird, steht in der
       <a class="link-ink" href={url('/datenschutz/')}>Datenschutzerklärung</a>.
     </p>
-    <ul class="grid content-start gap-3 md:col-span-5 md:justify-self-end">
-      <li class="flex items-center gap-3">
-        <Icon name="phone" size={18} class="shrink-0 text-oxblood" />
-        <a class="link-ink" href={contact.phone.href}><span class="sr-only">Telefon </span>{contact.phone.display}</a>
+    <ul class="grid content-start md:col-span-5 md:justify-self-end">
+      <li>
+        <a class="link-ink inline-flex min-h-11 items-center gap-3" href={contact.phone.href}>
+          <Icon name="phone" size={18} class="shrink-0 text-oxblood" />
+          <span><span class="sr-only">Telefon </span>{contact.phone.display}</span>
+        </a>
       </li>
-      <li class="flex items-center gap-3">
-        <Icon name="mail" size={18} class="shrink-0 text-oxblood" />
-        <a class="link-ink break-all" href={contact.email.href}><span class="sr-only">E-Mail </span>{contact.email.display}</a>
+      <li>
+        <a class="link-ink inline-flex min-h-11 items-center gap-3" href={contact.email.href}>
+          <Icon name="mail" size={18} class="shrink-0 text-oxblood" />
+          <span class="break-all"><span class="sr-only">E-Mail </span>{contact.email.display}</span>
+        </a>
       </li>
     </ul>
   </div>
 </div>
 
 <style>
-  /* Reserved height of the loaded cal.com month view (event details hidden), so the embed lands
-     without moving anything below it. Measured against the rendered embed (November 2026): below a
-     frame width of 770px cal.com stacks its layout and the height grows linearly with the width;
-     from 770px it is fixed. Re-measure if cal.com changes its layout. */
+  /* Reserved height of the loaded cal.com month view (event details hidden), only while the calendar
+     is pending or loading, so the embed lands without moving anything below it. Measured against the
+     rendered embed (November 2026): below a frame width of 770px cal.com stacks its layout and the
+     height grows linearly with the width; from 770px it is fixed. Re-measure if cal.com changes its
+     layout. Idle (no JS) and failed keep no reservation; ready follows the iframe height. */
   .booking {
     container: booking / inline-size;
   }
 
-  .booking-frame {
+  .booking:is([data-state='pending'], [data-state='loading']) .booking-frame {
     min-height: calc(1018px + 0.819 * 100cqw);
   }
 
   @container booking (min-width: 770px) {
-    .booking-frame {
+    .booking:is([data-state='pending'], [data-state='loading']) .booking-frame {
       min-height: 572px;
     }
   }
@@ -183,6 +190,8 @@ const weekdays = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
     pointer-events: none;
   }
 
+  /* Failed: a half loaded iframe takes no space above the fallback. */
+  .booking[data-state='failed'] .booking-target,
   .booking[data-state='failed'] .booking-skeleton,
   .booking[data-state='failed'] .booking-fallback-nojs {
     display: none;

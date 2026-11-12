@@ -37,6 +37,7 @@ const external = { target: '_blank', rel: 'noopener noreferrer' };
   label="Rechtliches"
   breadcrumbs={breadcrumbs}
   updated={contentUpdated}
+  asideFirst
 >
   <h2 id="verantwortlicher">Verantwortlicher</h2>
   <p>Verantwortlich für die Verarbeitung personenbezogener Daten auf dieser Internetseite ist:</p>
@@ -234,11 +235,11 @@ const external = { target: '_blank', rel: 'noopener noreferrer' };
 
   <nav slot="aside" aria-label="Inhalt der Datenschutzerklärung">
     <p class="label text-ink">Auf dieser Seite</p>
-    <ul class="mt-3 grid gap-2">
+    <ul class="mt-2 grid">
       {
         toc.map((item) => (
           <li>
-            <a class="link-ink" href={item.href}>{item.label}</a>
+            <a class="link-ink inline-flex min-h-11 items-center" href={item.href}>{item.label}</a>
           </li>
         ))
       }

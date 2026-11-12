@@ -66,7 +66,9 @@
     color-scheme: light;
     --header-height: 4.25rem;
     --reveal-distance: 1.25rem;
-    --reveal-duration: 900ms;
+    /* Routine text reveals stay short; images, rules and line drawings keep their own, slower timing. */
+    --reveal-duration: 400ms;
+    --reveal-stagger: 60ms;
   }
 
   html {
@@ -292,13 +294,20 @@
  * inline head script has set html.js, and never under prefers-reduced-motion.
  */
 @media (prefers-reduced-motion: no-preference) {
+  /* The reveal composes with the hover feedback of rows and cards: their colour transitions stay
+     short and never inherit the reveal delay. */
   .js [data-reveal] {
     opacity: 0;
     transform: translate3d(0, var(--reveal-distance), 0);
-    transition:
-      opacity var(--reveal-duration) var(--ease-out-quint),
-      transform var(--reveal-duration) var(--ease-out-quint);
-    transition-delay: calc(var(--reveal-index, 0) * 90ms);
+    transition-property: opacity, transform, background-color, border-color, color;
+    transition-duration: var(--reveal-duration), var(--reveal-duration), 250ms, 250ms, 250ms;
+    transition-timing-function: var(--ease-out-quint), var(--ease-out-quint), ease, ease, ease;
+    transition-delay:
+      calc(var(--reveal-index, 0) * var(--reveal-stagger)),
+      calc(var(--reveal-index, 0) * var(--reveal-stagger)),
+      0s,
+      0s,
+      0s;
   }
 
   .js [data-reveal="rule"] {
@@ -306,7 +315,7 @@
     transform: scaleX(0);
     transform-origin: left center;
     transition: transform 1400ms var(--ease-ink);
-    transition-delay: calc(var(--reveal-index, 0) * 90ms);
+    transition-delay: calc(var(--reveal-index, 0) * var(--reveal-stagger));
   }
 
   /* The clip sits on the inner picture: a clipped observed element reports no intersection. */
