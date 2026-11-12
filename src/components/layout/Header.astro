@@ -1,5 +1,5 @@
 ---
-// Site header: logo, main navigation, booking CTA. Below lg the navigation moves into a
+// Site header: logo, main navigation, booking CTA (icon only up to xl, so six nav items fit at lg). Below lg the navigation moves into a
 // full screen panel behind a menu button (aria-expanded, Escape closes, focus is trapped
 // and returned). Without JS the panel renders as a plain list under the header.
 import Logo from './Logo.astro';
@@ -18,14 +18,14 @@ const isCurrent = (href: string) => currentPath.startsWith(url(href));
     <Logo />
 
     <nav aria-label="Hauptnavigation" class="hidden lg:block">
-      <ul class="flex items-center gap-7 xl:gap-9">
+      <ul class="flex items-center gap-6 xl:gap-9">
         {
           mainNav.map((item) => (
             <li>
               <a
                 href={url(item.href)}
                 aria-current={isCurrent(item.href) ? 'page' : undefined}
-                class="nav-link relative py-2 text-[0.9375rem] font-medium text-ink-soft transition-colors hover:text-ink aria-[current=page]:text-oxblood"
+                class="nav-link relative whitespace-nowrap py-2 text-[0.9375rem] font-medium text-ink-soft transition-colors hover:text-ink aria-[current=page]:text-oxblood"
               >
                 {item.label}
               </a>
@@ -36,12 +36,12 @@ const isCurrent = (href: string) => currentPath.startsWith(url(href));
     </nav>
 
     <div class="flex items-center gap-2">
-      <div class="hidden lg:block">
+      <div class="hidden xl:block">
         <Button href={primaryCta.href} icon="calendar">{primaryCta.label}</Button>
       </div>
       <a
         href={url(primaryCta.href)}
-        class="hidden size-11 items-center justify-center border border-ink text-ink transition-colors hover:bg-ink hover:text-paper min-[360px]:inline-flex lg:hidden"
+        class="hidden size-11 items-center justify-center border border-ink text-ink transition-colors hover:bg-ink hover:text-paper min-[360px]:inline-flex xl:hidden"
         aria-label={primaryCta.label}
         title={primaryCta.label}
       >

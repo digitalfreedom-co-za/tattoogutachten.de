@@ -1,0 +1,82 @@
+---
+// Ratgeber index: all articles from the content collection, the audience pages and a CTA.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/ui/PageHeader.astro';
+import Section from '../../components/ui/Section.astro';
+import Card from '../../components/ui/Card.astro';
+import ArticleList from '../../components/ui/ArticleList.astro';
+import CtaBand from '../../components/ui/CtaBand.astro';
+import JsonLd from '../../components/seo/JsonLd.astro';
+import { site, credentials, contentUpdated } from '../../config/site';
+import { audiences, audienceHref } from '../../data/audiences';
+import { getArticles, articleHref } from '../../lib/ratgeber';
+import { absoluteUrl, breadcrumbList, organizationRef, personRef } from '../../lib/schema';
+
+const articles = await getArticles();
+const breadcrumbs = [{ label: 'Ratgeber', href: '/ratgeber/' }];
+const description = `Ratgeber zum Tattoo-Gutachten von Tattoo Gutachter ${site.expert}: Tattoo misslungen, Mangel oder Geschmackssache, Privat- oder Gerichtsgutachten, Fotos für die Begutachtung, Hygiene im Studio, Piercing Probleme.`;
+
+const schema = {
+  '@graph': [
+    {
+      '@type': 'CollectionPage',
+      name: 'Ratgeber zum Tattoo-Gutachten',
+      description,
+      inLanguage: 'de-DE',
+      url: absoluteUrl('/ratgeber/', Astro.site),
+      author: personRef(Astro.site),
+      publisher: organizationRef(Astro.site),
+      mainEntity: {
+        '@type': 'ItemList',
+        itemListElement: articles.map((article, index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          name: article.data.title,
+          url: absoluteUrl(articleHref(article), Astro.site),
+        })),
+      },
+    },
+    breadcrumbList(breadcrumbs, Astro.site),
+  ],
+};
+---
+
+<BaseLayout title="Ratgeber Tattoo-Gutachten: Mangel, Fotos, Hygiene, Privat- und Gerichtsgutachten | Tattoogutachten" description={description}>
+  <JsonLd slot="head" data={schema} />
+
+  <PageHeader
+    label="Ratgeber"
+    heading="Ratgeber zum Tattoo-Gutachten."
+    lead={`Kurze, sachliche Antworten auf die Fragen, die vor einem Gutachten am häufigsten auftauchen. Geschrieben von ${site.expert}, geprüfter und zertifizierter Gutachter des ${credentials.associationShort}. Die Beiträge informieren allgemein und ersetzen keine Rechtsberatung.`}
+    breadcrumbs={breadcrumbs}
+    updated={contentUpdated}
+  />
+
+  <Section id="beitraege" label="Beiträge" title="Alle Beiträge">
+    <p slot="note">Jeder Beitrag beginnt mit der Antwort und verweist auf die passenden Leistungen und Fragen.</p>
+    <ArticleList articles={articles} />
+  </Section>
+
+  <Section
+    id="fuer-wen"
+    label="Für wen"
+    title="Informationen nach Auftraggeber"
+    intro="Privatpersonen, Studios, Rechtsanwälte und Gerichte haben unterschiedliche Fragen. Hier finden Sie, was für Ihre Seite wichtig ist."
+    tone="deep"
+  >
+    <div class="grid gap-x-8 gap-y-4 md:grid-cols-3" data-reveal-group>
+      {
+        audiences.map((audience) => (
+          <Card kicker={audience.label} title={audience.title} href={audienceHref(audience)} linkLabel={`Mehr für ${audience.label}`}>
+            <p>{audience.text}</p>
+          </Card>
+        ))
+      }
+    </div>
+  </Section>
+
+  <CtaBand
+    title="Ihr Fall ist nicht dabei?"
+    text="Nicht jeder Sachverhalt lässt sich mit einer allgemeinen Antwort klären. Ihr Anliegen besprechen wir gern in einer kostenlosen Erstberatung von bis zu 60 Minuten."
+  />
+</BaseLayout>

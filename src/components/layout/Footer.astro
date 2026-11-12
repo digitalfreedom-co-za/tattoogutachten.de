@@ -1,9 +1,11 @@
 ---
-// Site footer on ink: office address and direct contact, navigation, legal links, DGuSV seal.
+// Site footer on ink: office address and direct contact, navigation, audience pages,
+// legal links, DGuSV seal.
 import Container from '../ui/Container.astro';
 import Seal from '../ui/Seal.astro';
 import Icon from '../ui/Icon.astro';
 import { site, contact, credentials, mainNav, legalNav, primaryCta } from '../../config/site';
+import { audiences, audienceHref } from '../../data/audiences';
 import { url } from '../../lib/url';
 
 const year = new Date().getFullYear();
@@ -11,7 +13,7 @@ const year = new Date().getFullYear();
 
 <footer class="bg-ink text-paper" data-inert-when-menu>
   <Container class="grid gap-12 pt-16 pb-10 md:grid-cols-12 md:gap-x-8 md:pt-20">
-    <div class="md:col-span-5">
+    <div class="md:col-span-12 lg:col-span-4">
       <p class="font-serif text-h3 tracking-tightish">{site.office}</p>
       <p class="mt-2 text-sm text-paper/60">{site.expert}, {site.role}</p>
       <address class="mt-8 grid gap-4 text-[0.9375rem] not-italic">
@@ -37,23 +39,39 @@ const year = new Date().getFullYear();
       </address>
     </div>
 
-    <nav aria-label="Fußzeile" class="md:col-span-3">
-      <p class="label text-paper/50">Seiten</p>
-      <ul class="mt-5 grid gap-3 text-[0.9375rem]">
-        {
-          mainNav.map((item) => (
-            <li>
-              <a class="link-ink no-underline hover:!text-brass-light hover:underline" href={url(item.href)}>{item.label}</a>
-            </li>
-          ))
-        }
-        <li>
-          <a class="link-ink no-underline hover:!text-brass-light hover:underline" href={url(primaryCta.href)}>{primaryCta.label}</a>
-        </li>
-      </ul>
+    <nav aria-label="Fußzeile" class="grid gap-10 sm:grid-cols-2 sm:gap-x-8 md:col-span-7 lg:col-span-5">
+      <div>
+        <p class="label text-paper/50">Seiten</p>
+        <ul class="mt-5 grid gap-3 text-[0.9375rem]">
+          {
+            mainNav.map((item) => (
+              <li>
+                <a class="link-ink no-underline hover:!text-brass-light hover:underline" href={url(item.href)}>{item.label}</a>
+              </li>
+            ))
+          }
+          <li>
+            <a class="link-ink no-underline hover:!text-brass-light hover:underline" href={url(primaryCta.href)}>{primaryCta.label}</a>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <p class="label text-paper/50">Für wen</p>
+        <ul class="mt-5 grid gap-3 text-[0.9375rem]">
+          {
+            audiences.map((audience) => (
+              <li>
+                <a class="link-ink no-underline hover:!text-brass-light hover:underline" href={url(audienceHref(audience))}>
+                  Für {audience.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
     </nav>
 
-    <div class="flex gap-6 md:col-span-4 md:justify-end">
+    <div class="flex gap-6 md:col-span-5 lg:col-span-3 lg:justify-end">
       <Seal width={104} class="w-20 self-start md:w-[104px]" />
       <div class="text-sm text-paper/60 md:max-w-[11rem]">
         <p class="label text-paper/50">Zertifizierung</p>

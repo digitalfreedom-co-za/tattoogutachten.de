@@ -214,6 +214,22 @@
   border-left-color: var(--color-oxblood);
 }
 
+/* Tables in articles: long German compounds hyphenate instead of widening the page on phones. */
+.prose-report :where(th, td):not(:where(.not-prose *)) {
+  hyphens: auto;
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 39.99rem) {
+  .prose-report :where(table):not(:where(.not-prose *)) {
+    font-size: var(--text-sm);
+  }
+
+  .prose-report :where(th, td):not(:where(.not-prose *)) {
+    padding-inline: 0.375rem;
+  }
+}
+
 /* The plugin adds typographic quotes around blockquotes; the copy rules forbid them. */
 .prose-report blockquote p:first-of-type::before,
 .prose-report blockquote p:last-of-type::after {

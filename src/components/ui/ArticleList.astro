@@ -1,0 +1,50 @@
+---
+// Ratgeber index in the style of a report's table of contents: topic label and reading time,
+// title and answer first lead per row; the whole row links to the article. No numbering.
+import Icon from './Icon.astro';
+import { url } from '../../lib/url';
+import { articleHref, type Article } from '../../lib/ratgeber';
+import { readingTimeLabel } from '../../lib/reading-time';
+
+interface Props {
+  articles: Article[];
+  /** Heading level of the article titles inside the surrounding outline. */
+  headingLevel?: 'h2' | 'h3';
+  /** Shows the answer first lead under each title. */
+  showLead?: boolean;
+  class?: string;
+}
+
+const { articles, headingLevel: Heading = 'h3', showLead = true, class: className } = Astro.props;
+---
+
+<ul class:list={['border-t border-ink', className]} data-reveal-group>
+  {
+    articles.map((article) => (
+      <li class="group/row relative border-b border-rule transition-colors duration-300 hover:bg-paper-deep/60" data-reveal>
+        <div class="grid gap-3 py-6 md:grid-cols-[11rem_1fr_auto] md:items-baseline md:gap-8 md:py-8 md:pr-2">
+          <div>
+            <p class="label text-oxblood">{article.data.kicker}</p>
+            <p class="mt-1 text-sm text-graphite">{readingTimeLabel(article.body ?? '')}</p>
+          </div>
+          <div>
+            <Heading class="text-h3">
+              <a
+                href={url(articleHref(article))}
+                class="after:absolute after:inset-0 focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-signal"
+              >
+                {article.data.title}
+              </a>
+            </Heading>
+            {showLead && <p class="mt-3 max-w-[40rem] text-graphite">{article.data.lead}</p>}
+          </div>
+          <Icon
+            name="arrow"
+            size={22}
+            class="hidden text-ink transition-transform duration-300 group-hover/row:translate-x-1 group-hover/row:text-oxblood motion-reduce:transition-none md:block"
+          />
+        </div>
+      </li>
+    ))
+  }
+</ul>

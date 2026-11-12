@@ -56,6 +56,7 @@ export const mainNav: NavItem[] = [
   { label: 'Leistungen', href: '/leistungen/' },
   { label: 'Ablauf und Kosten', href: '/ablauf-kosten/' },
   { label: 'Über mich', href: '/ueber-mich/' },
+  { label: 'Ratgeber', href: '/ratgeber/' },
   { label: 'FAQ', href: '/haeufige-fragen/' },
   { label: 'Kontakt', href: '/kontakt/' },
 ];

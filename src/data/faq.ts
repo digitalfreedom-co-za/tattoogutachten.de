@@ -4,6 +4,7 @@
 
 import type { FaqEntry } from '../components/ui/Faq.astro';
 import type { ServiceSlug } from './services';
+import type { AudienceSlug } from './audiences';
 import { credentials } from '../config/site';
 
 export type FaqTopic = 'grundlagen' | 'begutachtung' | 'auftrag' | 'kosten' | 'person';
@@ -12,6 +13,8 @@ export interface FaqItem extends FaqEntry {
   topic: FaqTopic;
   /** Service pages that show this entry under their typical questions. */
   services?: ServiceSlug[];
+  /** Audience pages that show this entry. */
+  audiences?: AudienceSlug[];
   /** Shown in the FAQ teaser on the landing page. */
   featured?: boolean;
 }
@@ -50,6 +53,7 @@ export const faq: FaqItem[] = [
     topic: 'grundlagen',
     featured: true,
     services: ['tattoo-gutachten', 'streitfaelle'],
+    audiences: ['fuer-privatpersonen'],
     question: 'Ist eine Tätowierung, die mir nicht gefällt, automatisch mangelhaft?',
     answer:
       'Nein. Die Bewertung unterscheidet zwischen persönlichem Geschmack und objektiv feststellbaren Ausführungsmängeln. Entscheidend sind die konkreten Umstände und die tatsächliche handwerkliche Ausführung.',
@@ -57,6 +61,7 @@ export const faq: FaqItem[] = [
   {
     topic: 'begutachtung',
     services: ['tattoo-gutachten', 'privatgutachten'],
+    audiences: ['fuer-privatpersonen'],
     question: 'Können auch abgeheilte Tätowierungen begutachtet werden?',
     answer:
       'Ja, auch vollständig abgeheilte Tätowierungen lassen sich untersuchen. Ein großer zeitlicher Abstand, spätere Veränderungen oder fehlende Dokumentation können einzelne Fragen aber schwerer beantwortbar machen. Fotos aus der Stech- und Heilungsphase helfen deshalb.',
@@ -65,6 +70,7 @@ export const faq: FaqItem[] = [
     topic: 'begutachtung',
     featured: true,
     services: ['tattoo-gutachten', 'piercing-gutachten'],
+    audiences: ['fuer-privatpersonen', 'fuer-rechtsanwaelte-und-gerichte'],
     question: 'Kann eine Tätowierung anhand von Fotos beurteilt werden?',
     answer:
       'Eine erste Einschätzung ist mit aussagekräftigen Fotos oft möglich. Für eine abschließende Beurteilung kann eine persönliche Untersuchung nötig sein, weil sich nicht jedes Merkmal auf Bildern zuverlässig zeigt.',
@@ -86,6 +92,7 @@ export const faq: FaqItem[] = [
   {
     topic: 'begutachtung',
     services: ['hygiene-gutachten'],
+    audiences: ['fuer-tattoo-studios'],
     question: 'Prüfen Sie auch die Hygiene in einem Studio?',
     answer:
       'Ja. Geprüft werden die Vorbereitung des Arbeitsplatzes, der Umgang mit Instrumenten und Verbrauchsmaterialien, Hautvorbereitung und Desinfektion, Wundversorgung und Nachbehandlung sowie Hygieneunterlagen und Arbeitsanweisungen. Bei Bedarf gehört eine Besichtigung der Räume dazu.',
@@ -93,6 +100,7 @@ export const faq: FaqItem[] = [
   {
     topic: 'auftrag',
     services: ['streitfaelle', 'privatgutachten'],
+    audiences: ['fuer-tattoo-studios'],
     question: 'Beraten Sie auch rechtlich?',
     answer:
       'Nein. Die Tätigkeit umfasst die fachliche Begutachtung. Rechtsberatung, anwaltliche Vertretung sowie die Diagnose und Behandlung medizinischer Erkrankungen gehören nicht dazu.',
@@ -107,6 +115,7 @@ export const faq: FaqItem[] = [
   {
     topic: 'person',
     services: ['gerichtsgutachten'],
+    audiences: ['fuer-rechtsanwaelte-und-gerichte'],
     question: 'Sind Sie auch als Gerichtsgutachter tätig?',
     answer:
       'Ja. Patrick Wolf wurde erstmals durch das Landgericht Frankfurt am Main in einem Gerichtsverfahren als Sachverständiger bestellt. Außerdem ist er geprüfter und zertifizierter Gutachter des Deutschen Gutachter und Sachverständigen Verbandes (DGuSV).',
@@ -115,6 +124,7 @@ export const faq: FaqItem[] = [
     topic: 'auftrag',
     featured: true,
     services: ['privatgutachten', 'gerichtsgutachten'],
+    audiences: ['fuer-tattoo-studios', 'fuer-rechtsanwaelte-und-gerichte'],
     question: 'Ist ein Privatgutachten vor Gericht verwendbar?',
     answer:
       'Ein Privatgutachten kann im Verfahren vorgelegt werden und hilft, den Sachverhalt fachlich darzustellen. Es steht aber nicht automatisch einem vom Gericht eingeholten Gutachten gleich. Welches Gewicht es erhält, entscheidet das Gericht.',
@@ -122,6 +132,7 @@ export const faq: FaqItem[] = [
   {
     topic: 'auftrag',
     services: ['hygiene-gutachten', 'streitfaelle'],
+    audiences: ['fuer-tattoo-studios'],
     question: 'Übernehmen Sie auch Gutachten für Tattoo-Studios?',
     answer:
       'Ja. Auch Tattoo- und Piercingstudios können eine Begutachtung beauftragen, etwa wenn ihnen handwerkliche Fehler vorgeworfen werden. Die Bewertung hängt nicht davon ab, wer den Auftrag erteilt.',
@@ -129,12 +140,14 @@ export const faq: FaqItem[] = [
   {
     topic: 'auftrag',
     services: ['streitfaelle', 'privatgutachten'],
+    audiences: ['fuer-privatpersonen', 'fuer-rechtsanwaelte-und-gerichte'],
     question: 'Kann ein Gutachten meinen Anspruch auf Schadensersatz bestätigen?',
     answer:
       'Nein, das entscheidet nicht der Sachverständige. Das Gutachten liefert fachliche Feststellungen zu Ausführungsmängeln, Arbeitsabläufen und weiteren Umständen. Ob daraus ein Anspruch auf Schadensersatz oder Schmerzensgeld folgt, ist eine Rechtsfrage für einen Rechtsanwalt.',
   },
   {
     topic: 'kosten',
+    audiences: ['fuer-rechtsanwaelte-und-gerichte'],
     question: 'Wie lange dauert die Erstellung eines Gutachtens?',
     answer:
       'Die Dauer hängt vom Umfang des Auftrags, den vorhandenen Unterlagen und dem Untersuchungsaufwand ab. Nach der Erstberatung lässt sich der Zeitbedarf in der Regel genauer einschätzen.',
@@ -149,6 +162,7 @@ export const faq: FaqItem[] = [
   {
     topic: 'kosten',
     services: ['gerichtsgutachten'],
+    audiences: ['fuer-rechtsanwaelte-und-gerichte'],
     question: 'Wer bezahlt ein Gutachten, das ein Gericht anordnet?',
     answer:
       'Bei einer Bestellung durch das Gericht kommt der Auftrag unmittelbar vom Gericht. Die Vergütung richtet sich dann nach dem Justizvergütungs- und Entschädigungsgesetz (JVEG) und läuft über das Gericht.',
@@ -156,6 +170,7 @@ export const faq: FaqItem[] = [
   {
     topic: 'kosten',
     services: ['privatgutachten', 'streitfaelle'],
+    audiences: ['fuer-privatpersonen'],
     question: 'Zahlt die Rechtsschutzversicherung das Gutachten?',
     answer:
       'Das kann nur Ihr Versicherer verbindlich beantworten. Klären Sie die Kostenübernahme am besten vor der Beauftragung direkt mit Ihrer Rechtsschutzversicherung.',
@@ -193,6 +208,7 @@ export const faq: FaqItem[] = [
   },
   {
     topic: 'person',
+    audiences: ['fuer-tattoo-studios'],
     question: 'Sind Sie unabhängig, obwohl Sie selbst tätowieren?',
     answer:
       'Ja. Patrick Wolf tätowiert weiterhin, führt die Gutachten aber über das Sachverständigenbüro Wolf und diese eigenständige Website, die sich ausschließlich der Sachverständigentätigkeit widmet. Die Bewertung stützt sich allein auf feststellbare Tatsachen, nicht darauf, wer den Auftrag erteilt.',
@@ -208,5 +224,7 @@ export const faq: FaqItem[] = [
 export const featuredFaq = faq.filter((item) => item.featured);
 
 export const faqForService = (slug: ServiceSlug) => faq.filter((item) => item.services?.includes(slug));
+
+export const faqForAudience = (slug: AudienceSlug) => faq.filter((item) => item.audiences?.includes(slug));
 
 export const faqByTopic = (topic: FaqTopic) => faq.filter((item) => item.topic === topic);

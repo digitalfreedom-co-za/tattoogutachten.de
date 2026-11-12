@@ -1,0 +1,222 @@
+---
+// One page per audience (/fuer-privatpersonen/, /fuer-tattoo-studios/, /fuer-rechtsanwaelte-und-gerichte/),
+// generated from src/data/audiences.ts: situation, how the expert helps, fitting services,
+// what to prepare, typical questions, Ratgeber articles and the booking CTA.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/ui/PageHeader.astro';
+import Section from '../components/ui/Section.astro';
+import Button from '../components/ui/Button.astro';
+import Icon from '../components/ui/Icon.astro';
+import Checklist from '../components/ui/Checklist.astro';
+import ExpertCard from '../components/ui/ExpertCard.astro';
+import ServiceList from '../components/ui/ServiceList.astro';
+import ArticleList from '../components/ui/ArticleList.astro';
+import CourtReference from '../components/ui/CourtReference.astro';
+import CompareTable from '../components/ui/CompareTable.astro';
+import Faq from '../components/ui/Faq.astro';
+import ArtImage from '../components/ui/ArtImage.astro';
+import CtaBand from '../components/ui/CtaBand.astro';
+import JsonLd from '../components/seo/JsonLd.astro';
+import { site, contact, contentUpdated, primaryCta } from '../config/site';
+import { audiences, audienceHref, type Audience, type AudienceSlug } from '../data/audiences';
+import { serviceBySlug, serviceHref, reportComparison } from '../data/services';
+import { faqForAudience } from '../data/faq';
+import { getArticles, articlesForAudience } from '../lib/ratgeber';
+import { absoluteUrl, breadcrumbList, organizationRef } from '../lib/schema';
+import type { ImageMetadata } from 'astro';
+
+import atWork from '../assets/images/patrick-wolf-beim-taetowieren.webp';
+import studio from '../assets/images/patrick-wolf-studio-weit.webp';
+import portrait from '../assets/images/patrick-wolf-portrait-studio-sitzend.jpg';
+
+export function getStaticPaths() {
+  return audiences.map((audience) => ({ params: { audience: audience.slug }, props: { audience } }));
+}
+
+interface Props {
+  audience: Audience;
+}
+
+const { audience } = Astro.props;
+const services = audience.services.map(serviceBySlug);
+const questions = faqForAudience(audience.slug);
+const articles = articlesForAudience(await getArticles(), audience.slug);
+const breadcrumbs = [{ label: `Für ${audience.label}`, href: audienceHref(audience) }];
+
+const pictures: Record<AudienceSlug, { src: ImageMetadata; alt: string }> = {
+  'fuer-privatpersonen': {
+    src: atWork,
+    alt: `${site.expert} mit Handschuhen bei konzentrierter Arbeit an einer Tätowierung.`,
+  },
+  'fuer-tattoo-studios': {
+    src: studio,
+    alt: `${site.expert} sitzt lächelnd in seinem Studio in ${contact.city} zwischen den Behandlungsliegen.`,
+  },
+  'fuer-rechtsanwaelte-und-gerichte': {
+    src: portrait,
+    alt: `${site.expert}, Sachverständiger für Tätowierungen und Piercings, sitzt im Studio und hört aufmerksam zu.`,
+  },
+};
+const picture = pictures[audience.slug];
+
+// Sections alternate between paper and deep paper in render order.
+let toneIndex = 0;
+const nextTone = () => (toneIndex++ % 2 === 0 ? 'paper' : 'deep');
+
+const schema = {
+  '@graph': [
+    {
+      '@type': 'WebPage',
+      name: audience.heading,
+      description: audience.metaDescription,
+      inLanguage: 'de-DE',
+      url: absoluteUrl(audienceHref(audience), Astro.site),
+      audience: { '@type': 'Audience', audienceType: audience.label },
+      publisher: organizationRef(Astro.site),
+      about: services.map((service) => ({
+        '@type': 'Service',
+        name: service.name,
+        url: absoluteUrl(serviceHref(service), Astro.site),
+      })),
+    },
+    breadcrumbList(breadcrumbs, Astro.site),
+  ],
+};
+---
+
+<BaseLayout title={audience.metaTitle} description={audience.metaDescription}>
+  <JsonLd slot="head" data={schema} />
+
+  <PageHeader
+    label={`Für ${audience.label}`}
+    heading={audience.heading}
+    lead={audience.lead}
+    breadcrumbs={breadcrumbs}
+    updated={contentUpdated}
+  >
+    <Button href={primaryCta.href} icon="calendar">Kostenlose Erstberatung</Button>
+    <Button href="#leistungen" variant="text">Passende Leistungen</Button>
+  </PageHeader>
+
+  <Section id="ausgangslage" label="Ausgangslage" title={audience.situationTitle} tone={nextTone()}>
+    <div class="grid gap-12 md:grid-cols-12 md:gap-x-8">
+      <ul class="grid content-start border-t border-ink md:col-span-7" data-reveal-group>
+        {
+          audience.situations.map((situation) => (
+            <li class="border-b border-rule py-5 font-serif text-h4 text-ink" data-reveal>
+              {situation}
+            </li>
+          ))
+        }
+      </ul>
+      <figure class="md:col-span-5 md:col-start-8">
+        <ArtImage
+          src={picture.src}
+          alt={picture.alt}
+          ratio={4 / 3}
+          position="center"
+          crops={[{ media: '(min-width: 768px)', ratio: 4 / 5, position: 'center' }]}
+          sizes="(min-width: 1344px) 520px, (min-width: 768px) 40vw, 100vw"
+          widths={[400, 640, 880]}
+        />
+      </figure>
+    </div>
+  </Section>
+
+  <Section id="hilfe" label="Unterstützung" title={audience.help.title} tone={nextTone()}>
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-x-8">
+      <div class="grid content-start gap-5 lg:col-span-7" data-reveal>
+        {
+          audience.help.paragraphs.map((paragraph, i) => (
+            <p class:list={['max-w-[40rem]', i === 0 ? 'text-lead text-ink' : 'text-graphite']}>{paragraph}</p>
+          ))
+        }
+        <div class="mt-4 max-w-[40rem] border-t border-rule pt-5">
+          <h3 class="label text-graphite">Wo das Gutachten endet</h3>
+          <ul class="mt-4 grid gap-3">
+            {
+              audience.limits.map((limit) => (
+                <li class="grid grid-cols-[1.125rem_1fr] gap-3 text-graphite">
+                  <Icon name="close" size={18} class="mt-0.5 text-stone" />
+                  <span>{limit}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+      <ExpertCard class="self-start lg:col-span-5 xl:col-span-4 xl:col-start-9" />
+    </div>
+  </Section>
+
+  {
+    audience.showCourt && (
+      <Section
+        id="privat-oder-gericht"
+        label="Vergleich"
+        title="Privatgutachten oder Gerichtsgutachten?"
+        intro="Den Unterschied macht der Auftraggeber: Ein Privatgutachten beauftragen Sie oder Ihr Mandant, ein Gerichtsgutachten holt das Gericht ein."
+        tone={nextTone()}
+      >
+        <CourtReference class="mb-16" />
+        <CompareTable caption="Privatgutachten und Gerichtsgutachten im Vergleich" {...reportComparison} />
+      </Section>
+    )
+  }
+
+  <Section
+    id="leistungen"
+    label="Leistungen"
+    title="Welche Leistungen passen?"
+    intro="Jede Leistung hat eine eigene Seite mit Prüfumfang, Ergebnis und typischen Fragen. Wenn Sie unsicher sind, klären wir es in der kostenlosen Erstberatung."
+    tone={nextTone()}
+  >
+    <ServiceList services={services} />
+    <p class="mt-10" data-reveal>
+      <Button href="/leistungen/" variant="text">Alle Leistungen im Überblick</Button>
+    </p>
+  </Section>
+
+  <Section id="vorbereiten" label="Vorbereitung" title={audience.prepareTitle} tone={nextTone()}>
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-x-8">
+      <Checklist items={audience.prepare} title="Hilfreiche Unterlagen" class="self-start lg:col-span-7" />
+      <div class="grid content-start gap-6 lg:col-span-5" data-reveal>
+        <p class="text-lead text-ink">{audience.prepareNote}</p>
+        <p class="text-graphite">
+          Am Anfang steht eine kostenlose Erstberatung von bis zu 60 Minuten. Kostenpflichtig wird es erst nach einer
+          schriftlichen Beauftragung.
+        </p>
+        <p>
+          <Button href="/ablauf-kosten/" variant="text">Ablauf und Kosten im Detail</Button>
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  {
+    questions.length > 0 && (
+      <Section id="fragen" label="Typische Fragen" title={`Häufige Fragen für ${audience.label}`} tone={nextTone()}>
+        <p slot="note">
+          Alle Antworten nach Themen auf der Seite häufige Fragen.
+        </p>
+        <Faq items={questions} name={`faq-${audience.slug}`} />
+        <p class="mt-8" data-reveal>
+          <Button href="/haeufige-fragen/" variant="text">Alle häufigen Fragen</Button>
+        </p>
+      </Section>
+    )
+  }
+
+  {
+    articles.length > 0 && (
+      <Section id="ratgeber" label="Ratgeber" title="Zum Weiterlesen" tone={nextTone()}>
+        <ArticleList articles={articles} showLead={false} />
+        <p class="mt-10" data-reveal>
+          <Button href="/ratgeber/" variant="text">Alle Beiträge im Ratgeber</Button>
+        </p>
+      </Section>
+    )
+  }
+
+  <CtaBand title={audience.ctaTitle} text={audience.ctaText} />
+</BaseLayout>

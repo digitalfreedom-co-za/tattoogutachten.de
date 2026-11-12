@@ -20,17 +20,20 @@ import CourtReference from '../components/ui/CourtReference.astro';
 import ServiceList from '../components/ui/ServiceList.astro';
 import ArtImage from '../components/ui/ArtImage.astro';
 import NeedleLine from '../components/ui/NeedleLine.astro';
+import ArticleList from '../components/ui/ArticleList.astro';
 import { site, contact, credentials, credentialLines, primaryCta } from '../config/site';
 import { services, serviceScopeNote } from '../data/services';
 import { audiences, audienceHref } from '../data/audiences';
 import { steps, costFacts, preparationChecklist } from '../data/process';
 import { featuredFaq } from '../data/faq';
 import { url } from '../lib/url';
+import { getArticles } from '../lib/ratgeber';
 
 import portrait from '../assets/images/patrick-wolf-portrait-studio-sitzend.jpg';
 import atWork from '../assets/images/patrick-wolf-beim-taetowieren.webp';
 import studio from '../assets/images/patrick-wolf-studio-weit.webp';
 
+const featuredArticles = (await getArticles()).slice(0, 3);
 ---
 
 <BaseLayout
@@ -265,6 +268,19 @@ import studio from '../assets/images/patrick-wolf-studio-weit.webp';
       <a class="link-ink not-italic" href={url('/haeufige-fragen/')}>häufige Fragen zum Tattoogutachten</a>.
     </p>
     <Faq items={featuredFaq} name="faq-start" />
+  </Section>
+
+  <Section
+    id="ratgeber"
+    label="Ratgeber"
+    title="Erst informieren, dann entscheiden."
+    intro="Kurze, sachliche Beiträge zu den Fragen, die vor einem Gutachten am häufigsten auftauchen."
+    tone="deep"
+  >
+    <ArticleList articles={featuredArticles} />
+    <p class="mt-10" data-reveal>
+      <Button href="/ratgeber/" variant="text">Alle Beiträge im Ratgeber</Button>
+    </p>
   </Section>
 
   <CtaBand

@@ -1,6 +1,9 @@
 import { defineConfig, fontProviders } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import { unified } from '@astrojs/markdown-remark';
 import tailwindcss from '@tailwindcss/vite';
+import rehypeBaseLinks from './src/lib/rehype-base-links.ts';
+import rehypeTableRowHeaders from './src/lib/rehype-table-row-headers.ts';
 
 // Single place for the deploy target. Switching to the real domain later:
 // SITE = { url: 'https://www.tattoogutachten.de', base: '/' } plus public/CNAME.
@@ -31,6 +34,11 @@ export default defineConfig({
   base: SITE.base,
   trailingSlash: 'always',
   integrations: [sitemap()],
+  // Ratgeber Markdown: internal links get the base path, table rows get row headers; SmartyPants stays off because the
+  // copy rules forbid typographic quotes and dashes.
+  markdown: {
+    processor: unified({ rehypePlugins: [[rehypeBaseLinks, { base: SITE.base }], rehypeTableRowHeaders], smartypants: false }),
+  },
   fonts: [
     {
       provider: fontProviders.local(),
