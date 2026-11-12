@@ -26,15 +26,15 @@ const facts = [
 ---
 
 <section aria-label="Qualifikation und Nachweise" class:list={['border-y border-ink bg-paper-deep', className]}>
-  <Container class="grid gap-8 py-8 md:py-10 xl:grid-cols-[auto_1fr] xl:items-center xl:gap-12">
-    <div class="flex items-center gap-5" data-reveal>
+  <Container class="grid gap-8 py-8 md:py-10 xl:grid-cols-[auto_minmax(0,1fr)] xl:items-center xl:gap-12">
+    <div class="flex flex-wrap items-center gap-5" data-reveal>
       <Seal width={84} class="w-16 md:w-[84px]" />
-      <Image src={badge} alt="Abzeichen geprüfter und zertifizierter Gutachter des DGuSV" width={210} densities={[1, 2]} class="h-auto w-44 md:w-[210px]" />
+      <Image src={badge} alt="Abzeichen geprüfter und zertifizierter Gutachter des DGuSV" width={210} densities={[1, 2]} class="h-auto w-44 max-w-full md:w-[210px]" />
     </div>
     <ul class="grid grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-3 lg:grid-cols-4" data-reveal-group>
       {
         facts.map((fact) => (
-          <li class:list={['border-l border-rule pl-4', fact.mono && 'col-span-2 sm:col-span-3 lg:col-span-2']} data-reveal>
+          <li class:list={['min-w-0 border-l border-rule pl-4 hyphens-auto break-words', fact.mono && 'col-span-2 sm:col-span-3 lg:col-span-2']} data-reveal>
             <p class="label text-[0.6875rem] text-graphite">{fact.label}</p>
             <p class:list={['mt-2 text-ink', fact.mono ? 'numeral text-base whitespace-nowrap' : 'font-serif text-lg leading-tight']}>{fact.value}</p>
             {fact.note && <p class="mt-1 text-xs leading-snug text-graphite">{fact.note}</p>}

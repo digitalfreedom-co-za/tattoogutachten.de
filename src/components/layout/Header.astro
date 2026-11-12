@@ -1,8 +1,10 @@
 ---
 // Site header: logo, main navigation, booking CTA as a visible text button on every breakpoint
-// (compact below sm and between lg and xl, where the nav tightens too). Below lg the navigation moves into a
-// full screen panel behind a menu button (aria-expanded, Escape closes, focus is trapped
-// and returned). Without JS the panel renders as a plain list under the header.
+// (compact below sm and between lg and xl, where the nav tightens too). Below lg, and whenever the
+// desktop row does not fit (enlarged text), the navigation moves into a full screen panel behind a
+// menu button (aria-expanded, Escape closes, focus is trapped and returned). Without JS the panel
+// renders as a plain list under the header and the desktop row wraps instead of overflowing.
+// aria-current="page" marks only the exact page; the parent section is a visual state (data-active).
 import Logo from './Logo.astro';
 import Container from '../ui/Container.astro';
 import Icon from '../ui/Icon.astro';
@@ -11,24 +13,28 @@ import { mainNav, primaryCta, contact } from '../../config/site';
 import { bookingHref } from '../../config/booking';
 import { url, withoutBase } from '../../lib/url';
 
-const currentPath = Astro.url.pathname;
-const isCurrent = (href: string) => currentPath.startsWith(url(href));
+const normalize = (path: string) => (path.endsWith('/') ? path : `${path}/`);
+const currentPath = normalize(Astro.url.pathname);
+const isPage = (href: string) => currentPath === normalize(url(href));
+const isSection = (href: string) => currentPath.startsWith(normalize(url(href)));
 const ctaHref = bookingHref(withoutBase(currentPath));
 ---
 
 <header id="site-header" class="relative z-40 border-b border-ink/15 bg-paper">
-  <Container class="flex h-(--header-height) items-center justify-between gap-2 min-[360px]:gap-4">
+  <Container class="header-row flex min-h-(--header-height) items-center justify-between gap-2 min-[360px]:gap-4">
     <Logo />
 
-    <nav aria-label="Hauptnavigation" class="hidden lg:block">
-      <ul class="flex items-center gap-4 xl:gap-9">
+    <nav aria-label="Hauptnavigation" class="desktop-nav hidden lg:block">
+      <ul class="flex flex-wrap items-center gap-x-4 xl:gap-x-9">
         {
           mainNav.map((item) => (
             <li>
               <a
                 href={url(item.href)}
-                aria-current={isCurrent(item.href) ? 'page' : undefined}
-                class="nav-link relative whitespace-nowrap py-2 text-[0.875rem] font-medium xl:text-[0.9375rem] text-ink-soft transition-colors hover:text-ink aria-[current=page]:text-oxblood"
+                aria-current={isPage(item.href) ? 'page' : undefined}
+                data-active={isSection(item.href) ? '' : undefined}
+                data-nav-href={item.href}
+                class="nav-link relative whitespace-nowrap py-2 text-[0.875rem] font-medium xl:text-[0.9375rem] text-ink-soft transition-colors hover:text-ink data-active:text-oxblood"
               >
                 {item.label}
               </a>
@@ -65,8 +71,10 @@ const ctaHref = bookingHref(withoutBase(currentPath));
               <li class="mobile-nav-item border-b border-rule" style={`--i:${index}`}>
                 <a
                   href={url(item.href)}
-                  aria-current={isCurrent(item.href) ? 'page' : undefined}
-                  class="flex items-baseline py-4 font-serif text-[1.75rem] leading-tight tracking-tightish text-ink transition-colors hover:text-oxblood aria-[current=page]:text-oxblood"
+                  aria-current={isPage(item.href) ? 'page' : undefined}
+                  data-active={isSection(item.href) ? '' : undefined}
+                  data-nav-href={item.href}
+                  class="flex items-baseline py-4 font-serif text-[1.75rem] leading-tight tracking-tightish text-ink transition-colors hover:text-oxblood data-active:text-oxblood"
                 >
                   {item.label}
                 </a>
@@ -107,8 +115,13 @@ const ctaHref = bookingHref(withoutBase(currentPath));
   }
 
   .nav-link:hover::after,
-  .nav-link[aria-current='page']::after {
+  .nav-link[data-active]::after {
     transform: scaleX(1);
+  }
+
+  /* Without JS the row wraps when enlarged text no longer fits it, instead of widening the page. */
+  .header-row {
+    flex-wrap: wrap;
   }
 
   /* With JS the header sticks and the panel becomes an overlay toggled by the menu button.
@@ -116,6 +129,12 @@ const ctaHref = bookingHref(withoutBase(currentPath));
   :global(.js) #site-header {
     position: sticky;
     top: 0;
+  }
+
+  /* With JS the row keeps one line: the script switches to the menu button when it would overflow. */
+  :global(.js) .header-row,
+  :global(.js) .desktop-nav ul {
+    flex-wrap: nowrap;
   }
 
   :global(.js) .menu-toggle {
@@ -169,10 +188,19 @@ const ctaHref = bookingHref(withoutBase(currentPath));
     }
   }
 
+  /* From lg the desktop row shows, unless the script found it too wide (data-compact). */
   @media (min-width: 64rem) {
-    :global(.js) .menu-toggle,
-    :global(.js) .mobile-nav {
+    :global(.js) #site-header:not([data-compact]) .menu-toggle,
+    :global(.js) #site-header:not([data-compact]) .mobile-nav {
       display: none;
+    }
+
+    :global(.js) #site-header[data-compact] .desktop-nav {
+      display: none;
+    }
+
+    :global(.js) #site-header[data-compact] .mobile-nav {
+      display: block;
     }
   }
 </style>
@@ -241,9 +269,49 @@ const ctaHref = bookingHref(withoutBase(currentPath));
       setOpen(false, staysOnPage);
     });
 
-    desktop.addEventListener('change', (event) => {
-      if (event.matches && isOpen()) setOpen(false, false);
-    });
+    const isShown = (el: HTMLElement) =>
+      el.checkVisibility?.({ visibilityProperty: true }) ?? el.getClientRects().length > 0;
+
+    // A focused header control that a mode switch hides hands focus to its visible counterpart:
+    // into the desktop row the same link (or the booking button), into compact mode the menu button.
+    // Focus elsewhere stays put.
+    const handOverFocus = (focused: HTMLElement, compact: boolean) => {
+      if (isShown(focused)) return;
+      if (compact) {
+        toggle.focus();
+        return;
+      }
+      const navHref = focused.closest<HTMLElement>('[data-nav-href]')?.dataset.navHref;
+      const target =
+        (navHref && header.querySelector<HTMLElement>(`.desktop-nav [data-nav-href="${navHref}"]`)) ||
+        header.querySelector<HTMLElement>('.header-cta');
+      target?.focus();
+    };
+
+    // Compact mode below lg, and from lg whenever the desktop row overflows its container, e.g.
+    // with enlarged text. The check renders the desktop row for one synchronous measurement.
+    const row = header.querySelector<HTMLElement>('.header-row');
+    const updateCompact = () => {
+      if (!row) return;
+      const active = document.activeElement;
+      const focused = active instanceof HTMLElement && header.contains(active) ? active : null;
+      let compact = !desktop.matches;
+      if (!compact) {
+        header.removeAttribute('data-compact');
+        compact = row.scrollWidth > row.clientWidth;
+      }
+      header.toggleAttribute('data-compact', compact);
+      if (!compact && isOpen()) setOpen(false, false);
+      if (focused) handOverFocus(focused, compact);
+    };
+
+    if (row) {
+      // The row height is set in rem, so a changed root text size also triggers the observer.
+      new ResizeObserver(updateCompact).observe(row);
+      document.fonts?.ready.then(updateCompact);
+    }
+    desktop.addEventListener('change', updateCompact);
+    updateCompact();
 
     document.documentElement.classList.add('nav-ready');
   }

@@ -31,7 +31,7 @@ const { steps, prepareLabel = 'Sie bereiten vor', detailed = false, class: class
 <ol class:list={['relative', className]} data-reveal-group>
   {
     steps.map((step, index) => (
-      <li class="relative grid grid-cols-[2.25rem_1fr] gap-x-4 pb-12 last:pb-0 md:grid-cols-[6rem_1fr] md:gap-x-8 lg:grid-cols-[6rem_1fr_16rem]" data-reveal>
+      <li class="relative grid grid-cols-[2.25rem_minmax(0,1fr)] gap-x-4 pb-12 last:pb-0 md:grid-cols-[6rem_minmax(0,1fr)] md:gap-x-8 lg:grid-cols-[6rem_minmax(0,1fr)_16rem]" data-reveal>
         {index < steps.length - 1 && (
           <span class="absolute top-11 bottom-1 left-[1.125rem] w-px bg-rule md:top-13 md:left-[1.375rem]" aria-hidden="true" />
         )}

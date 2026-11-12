@@ -47,12 +47,12 @@ const featuredArticles = (await getArticles()).slice(0, 3);
   <section class="relative overflow-hidden" aria-labelledby="start-titel">
     <Container class="grid gap-12 pt-10 pb-16 md:grid-cols-12 md:gap-x-8 md:pt-16 md:pb-24">
       <div class="relative z-10 flex flex-col md:col-span-7 md:pt-6">
-        <div class="flex items-center justify-between gap-4 border-y border-ink py-3" data-reveal>
-          <p class="label whitespace-nowrap text-ink">{site.office}</p>
-          <p class="label hidden whitespace-nowrap text-graphite min-[420px]:block">{contact.city}, bundesweit tätig</p>
+        <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-y border-ink py-3" data-reveal>
+          <p class="label text-ink">{site.office}</p>
+          <p class="label hidden text-graphite min-[420px]:block">{contact.city}, bundesweit tätig</p>
         </div>
         <Eyebrow class="mt-10 md:mt-14">{site.role}</Eyebrow>
-        <h1 id="start-titel" class="mt-6 text-h1 tracking-display" data-reveal>
+        <h1 id="start-titel" class="mt-6 text-h1 tracking-display">
           Tattoo Gutachter für <em class="text-oxblood">unabhängige</em> Tattoogutachten, bundesweit.
         </h1>
         <p class="mt-8 max-w-[34rem] text-lead text-graphite" data-reveal>
@@ -83,6 +83,7 @@ const featuredArticles = (await getArticles()).slice(0, 3);
             widths={[400, 640, 880, 1037]}
             loading="eager"
             fetchpriority="high"
+            reveal={false}
             parallax
             class="relative z-10"
           />

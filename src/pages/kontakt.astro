@@ -137,9 +137,9 @@ const channels: Channel[] = [
           }
         </p>
       </div>
-      <div class="flex items-start gap-6 md:col-span-5" data-reveal>
+      <div class="flex flex-wrap items-start gap-6 md:col-span-5" data-reveal>
         <Seal width={96} class="w-20 shrink-0 md:w-24" />
-        <p class="text-sm text-graphite">
+        <p class="min-w-0 flex-1 basis-64 text-sm text-graphite">
           Geprüfter und zertifizierter Gutachter des {credentials.associationShort}, Bestätigungs-Register
           <span class="numeral whitespace-nowrap text-ink">Nr. {credentials.registerNumber}</span>. Mehr zur Qualifikation auf der Seite
           <a class="link-ink" href={url('/ueber-mich/')}>über {site.expert}</a>.

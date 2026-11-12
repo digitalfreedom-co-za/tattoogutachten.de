@@ -65,7 +65,7 @@ const formatDate = (iso: string) =>
       </div>
       {
         Astro.slots.has('aside') && (
-          <aside class="min-w-0 border-t border-ink pt-5 text-sm text-graphite md:col-span-8 md:col-start-4 lg:col-span-3 lg:col-start-10 lg:self-start lg:sticky lg:top-[calc(var(--header-height)+2rem)]">
+          <aside class="min-w-0 border-t border-ink pt-5 text-sm text-graphite hyphens-auto break-words md:col-span-8 md:col-start-4 lg:col-span-3 lg:col-start-10 lg:self-start lg:sticky lg:top-[calc(var(--header-height)+2rem)]">
             <slot name="aside" />
           </aside>
         )
