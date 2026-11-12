@@ -2,7 +2,9 @@
 // Mobile only booking bar fixed to the bottom edge, above the home indicator (safe area).
 // It needs JS to know when to step aside: it hides while a booking section ([data-booking-section])
 // or the footer is on screen, so it never covers the calendar or the contact details. While hidden
-// it leaves the focus order, as it does while the mobile menu is open. The body gets matching bottom padding, so no content sits under it.
+// it leaves the focus order, as it does while the mobile menu is open. Its measured height is the
+// bottom scroll padding and the body padding, and a focused element that still ends up behind
+// the bar is scrolled clear of it, so keyboard focus is never hidden.
 import Container from '../ui/Container.astro';
 import Icon from '../ui/Icon.astro';
 import { primaryCta } from '../../config/site';
@@ -56,10 +58,15 @@ const href = url(bookingHref(withoutBase(Astro.url.pathname)));
     }
   }
 
-  /* Room for the bar at the end of the page, mobile only and only when the bar exists. */
+  /* Room for the bar, mobile only and only when the bar exists. --sticky-cta-height is measured by
+     the script below and includes the safe area; 4.5rem plus safe area is the first paint value. */
   @media (max-width: 47.99rem) {
+    :global(html.has-sticky-cta) {
+      scroll-padding-bottom: calc(var(--sticky-cta-height, 4.5rem) + 0.5rem);
+    }
+
     :global(html.has-sticky-cta body) {
-      padding-bottom: calc(4.5rem + env(safe-area-inset-bottom));
+      padding-bottom: var(--sticky-cta-height, calc(4.5rem + env(safe-area-inset-bottom)));
     }
   }
 </style>
@@ -90,5 +97,23 @@ const href = url(bookingHref(withoutBase(Astro.url.pathname)));
     blockers.forEach((el) => observer.observe(el));
     bar.hidden = false;
     document.documentElement.classList.add('has-sticky-cta');
+
+    new ResizeObserver(() => {
+      document.documentElement.style.setProperty('--sticky-cta-height', `${bar.offsetHeight}px`);
+    }).observe(bar);
+
+    // Browsers do not all honour scroll-padding when focus moves, so a focused element that ends up
+    // behind the visible bar is scrolled up until it clears the bar's top edge.
+    document.addEventListener('focusin', (event) => {
+      const target = event.target as HTMLElement;
+      // The bar is inert while away or while the menu is open; then it covers nothing.
+      const clear = () => bar.inert || bar.offsetHeight === 0 || bar.contains(target);
+      if (clear()) return;
+      requestAnimationFrame(() => {
+        if (clear()) return;
+        const overlap = target.getBoundingClientRect().bottom - bar.getBoundingClientRect().top + 8;
+        if (overlap > 0) window.scrollBy({ top: overlap, behavior: 'instant' });
+      });
+    });
   }
 </script>

@@ -7,34 +7,53 @@ function revealAll(elements: Element[]): void {
   elements.forEach((el) => el.classList.add('is-visible'));
 }
 
+/** Upper bound of the stagger, so a long list never waits more than a few steps. */
+const MAX_STAGGER_STEPS = 4;
+
 function initReveal(): void {
   const elements = Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]'));
   if (elements.length === 0) return;
-
-  // Stagger siblings inside a [data-reveal-group] container.
-  document.querySelectorAll<HTMLElement>('[data-reveal-group]').forEach((group) => {
-    group.querySelectorAll<HTMLElement>('[data-reveal]').forEach((el, index) => {
-      el.style.setProperty('--reveal-index', String(index));
-    });
-  });
 
   if (reducedMotion.matches || !('IntersectionObserver' in window)) {
     revealAll(elements);
     return;
   }
 
+  // Stagger only the group members that enter the viewport together, counted per observer batch,
+  // so an element further down a long list does not inherit a delay from its position in the list.
   const observer = new IntersectionObserver(
     (entries) => {
+      const steps = new Map<Element, number>();
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
-        entry.target.classList.add('is-visible');
-        observer.unobserve(entry.target);
+        const target = entry.target as HTMLElement;
+        const group = target.closest('[data-reveal-group]');
+        if (group) {
+          const step = steps.get(group) ?? 0;
+          target.style.setProperty('--reveal-index', String(Math.min(step, MAX_STAGGER_STEPS)));
+          steps.set(group, step + 1);
+        }
+        target.classList.add('is-visible');
+        observer.unobserve(target);
       }
     },
     { rootMargin: '0px 0px -8% 0px', threshold: 0.12 },
   );
 
   elements.forEach((el) => observer.observe(el));
+
+  // Keyboard focus outruns the reveal: every reveal ancestor of the focused element shows at once,
+  // including one whose transition is already running.
+  document.addEventListener('focusin', (event) => {
+    let el = (event.target as Element | null)?.closest<HTMLElement>('[data-reveal]');
+    while (el) {
+      el.style.setProperty('--reveal-index', '0');
+      el.classList.add('is-visible');
+      observer.unobserve(el);
+      el.getAnimations().forEach((animation) => animation instanceof CSSTransition && animation.finish());
+      el = el.parentElement?.closest<HTMLElement>('[data-reveal]') ?? null;
+    }
+  });
 }
 
 function initParallax(): void {

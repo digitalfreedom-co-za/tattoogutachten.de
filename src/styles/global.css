@@ -116,8 +116,9 @@
     border-radius: var(--radius-xs);
   }
 
-  /* Signal red is too dark on ink (2.9:1); brass keeps the ring above 3:1 there. */
-  :where(.bg-ink) :focus-visible {
+  /* Signal red is too dark on ink (2.9:1); brass keeps the ring above 3:1 there.
+     .sticky-cta sets its ink background in scoped CSS, so it is listed explicitly. */
+  :where(.bg-ink, .sticky-cta) :focus-visible {
     outline-color: var(--color-brass-light);
   }
 
@@ -342,6 +343,14 @@
   .js [data-reveal].is-visible {
     opacity: 1;
     transform: none;
+  }
+
+  /* Safeguard next to the focusin handler in motion.ts: focused content never waits for a reveal. */
+  .js [data-reveal]:focus-within {
+    opacity: 1;
+    transform: none;
+    transition-duration: 0s;
+    transition-delay: 0s;
   }
 
   .js [data-reveal="image"].is-visible > picture {
