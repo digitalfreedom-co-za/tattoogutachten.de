@@ -1,0 +1,80 @@
+---
+// Site footer on ink: office address and direct contact, navigation, legal links, DGuSV seal.
+import Container from '../ui/Container.astro';
+import Seal from '../ui/Seal.astro';
+import Icon from '../ui/Icon.astro';
+import { site, contact, credentials, mainNav, legalNav, primaryCta } from '../../config/site';
+import { url } from '../../lib/url';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-ink text-paper" data-inert-when-menu>
+  <Container class="grid gap-12 pt-16 pb-10 md:grid-cols-12 md:gap-x-8 md:pt-20">
+    <div class="md:col-span-5">
+      <p class="font-serif text-h3 tracking-tightish">{site.office}</p>
+      <p class="mt-2 text-sm text-paper/60">{site.expert}, {site.role}</p>
+      <address class="mt-8 grid gap-4 text-[0.9375rem] not-italic">
+        <p class="flex gap-3">
+          <Icon name="pin" size={18} class="mt-0.5 shrink-0 text-brass-light" />
+          <span>
+            {contact.street}<br />
+            {contact.postalCode} {contact.city}
+          </span>
+        </p>
+        <p class="flex items-center gap-3">
+          <Icon name="phone" size={18} class="shrink-0 text-brass-light" />
+          <a class="link-ink hover:!text-brass-light" href={contact.phone.href}>
+            <span class="sr-only">Telefon </span>{contact.phone.display}
+          </a>
+        </p>
+        <p class="flex items-center gap-3">
+          <Icon name="mail" size={18} class="shrink-0 text-brass-light" />
+          <a class="link-ink break-all hover:!text-brass-light" href={contact.email.href}>
+            <span class="sr-only">E-Mail </span>{contact.email.display}
+          </a>
+        </p>
+      </address>
+    </div>
+
+    <nav aria-label="Fußzeile" class="md:col-span-3">
+      <p class="label text-paper/50">Seiten</p>
+      <ul class="mt-5 grid gap-3 text-[0.9375rem]">
+        {
+          mainNav.map((item) => (
+            <li>
+              <a class="link-ink no-underline hover:!text-brass-light hover:underline" href={url(item.href)}>{item.label}</a>
+            </li>
+          ))
+        }
+        <li>
+          <a class="link-ink no-underline hover:!text-brass-light hover:underline" href={url(primaryCta.href)}>{primaryCta.label}</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="flex gap-6 md:col-span-4 md:justify-end">
+      <Seal width={104} class="w-20 self-start md:w-[104px]" />
+      <div class="text-sm text-paper/60 md:max-w-[11rem]">
+        <p class="label text-paper/50">Zertifizierung</p>
+        <p class="mt-3">Geprüfter und zertifizierter Gutachter des {credentials.associationShort}</p>
+        <p class="numeral mt-3 text-paper/80">Reg.-Nr. {credentials.registerNumber}</p>
+      </div>
+    </div>
+  </Container>
+
+  <Container>
+    <div class="flex flex-col gap-4 border-t border-paper/15 py-6 text-sm text-paper/60 sm:flex-row sm:items-center sm:justify-between">
+      <p>&copy; {year} {site.office}</p>
+      <ul class="flex gap-6">
+        {
+          legalNav.map((item) => (
+            <li>
+              <a class="link-ink hover:!text-brass-light" href={url(item.href)}>{item.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </Container>
+</footer>

@@ -1,0 +1,31 @@
+---
+// Pull quote with a hanging oxblood rule and a plain attribution line.
+interface Props {
+  author?: string;
+  role?: string;
+  size?: 'md' | 'lg';
+  class?: string;
+}
+
+const { author, role, size = 'lg', class: className } = Astro.props;
+---
+
+<figure class:list={['relative max-w-[46rem] pl-6 md:pl-10', className]} data-reveal>
+  <span class="absolute top-2 bottom-2 left-0 w-px bg-oxblood" aria-hidden="true"></span>
+  <blockquote
+    class:list={[
+      'font-serif italic tracking-tightish text-ink',
+      size === 'lg' ? 'text-h3 leading-[1.2]' : 'text-lead',
+    ]}
+  >
+    <slot />
+  </blockquote>
+  {
+    author && (
+      <figcaption class="mt-6 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+        <span class="label text-ink">{author}</span>
+        {role && <span class="text-sm text-graphite">{role}</span>}
+      </figcaption>
+    )
+  }
+</figure>

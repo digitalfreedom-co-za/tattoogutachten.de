@@ -1,0 +1,42 @@
+---
+// Small line icon set, drawn on a 24 grid with a 1.5 stroke to match the hairline language.
+export type IconName = 'arrow' | 'chevron' | 'plus' | 'menu' | 'close' | 'phone' | 'mail' | 'pin' | 'check' | 'calendar';
+
+interface Props {
+  name: IconName;
+  class?: string;
+  size?: number;
+}
+
+const { name, class: className, size = 20 } = Astro.props;
+
+const paths: Record<IconName, string> = {
+  arrow: 'M4 12h15M14 6.5l5.5 5.5-5.5 5.5',
+  chevron: 'M9.5 6l6 6-6 6',
+  plus: 'M12 5v14M5 12h14',
+  menu: 'M3 8h18M3 16h18',
+  close: 'M5.5 5.5l13 13M18.5 5.5l-13 13',
+  phone:
+    'M6.6 3.5h2.6l1.4 4.1-2 1.4a12 12 0 0 0 6.4 6.4l1.4-2 4.1 1.4v2.6a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2z',
+  mail: 'M3.5 6h17v12h-17zM3.5 6.5l8.5 7 8.5-7',
+  pin: 'M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11zM12 12.2a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4z',
+  check: 'M4.5 12.5l4.5 4.5 10.5-11',
+  calendar: 'M4 6h16v14H4zM4 10.5h16M8.5 3.5v4M15.5 3.5v4',
+};
+---
+
+<svg
+  class={className}
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.5"
+  stroke-linecap="square"
+  stroke-linejoin="miter"
+  aria-hidden="true"
+  focusable="false"
+>
+  <path d={paths[name]}></path>
+</svg>

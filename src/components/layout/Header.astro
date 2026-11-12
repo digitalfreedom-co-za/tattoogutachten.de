@@ -1,0 +1,240 @@
+---
+// Site header: logo, main navigation, booking CTA. Below lg the navigation moves into a
+// full screen panel behind a menu button (aria-expanded, Escape closes, focus is trapped
+// and returned). Without JS the panel renders as a plain list under the header.
+import Logo from './Logo.astro';
+import Container from '../ui/Container.astro';
+import Icon from '../ui/Icon.astro';
+import Button from '../ui/Button.astro';
+import { mainNav, primaryCta, contact } from '../../config/site';
+import { url } from '../../lib/url';
+
+const currentPath = Astro.url.pathname;
+const isCurrent = (href: string) => currentPath.startsWith(url(href));
+---
+
+<header id="site-header" class="relative z-40 border-b border-ink/15 bg-paper">
+  <Container class="flex h-(--header-height) items-center justify-between gap-4">
+    <Logo />
+
+    <nav aria-label="Hauptnavigation" class="hidden lg:block">
+      <ul class="flex items-center gap-7 xl:gap-9">
+        {
+          mainNav.map((item) => (
+            <li>
+              <a
+                href={url(item.href)}
+                aria-current={isCurrent(item.href) ? 'page' : undefined}
+                class="nav-link relative py-2 text-[0.9375rem] font-medium text-ink-soft transition-colors hover:text-ink aria-[current=page]:text-oxblood"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <div class="hidden lg:block">
+        <Button href={primaryCta.href} icon="calendar">{primaryCta.label}</Button>
+      </div>
+      <a
+        href={url(primaryCta.href)}
+        class="hidden size-11 items-center justify-center border border-ink text-ink transition-colors hover:bg-ink hover:text-paper min-[360px]:inline-flex lg:hidden"
+        aria-label={primaryCta.label}
+        title={primaryCta.label}
+      >
+        <Icon name="calendar" size={20} />
+      </a>
+      <button
+        type="button"
+        class="menu-toggle hidden size-11 items-center justify-center bg-ink text-paper transition-colors hover:bg-oxblood"
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+        aria-label="Menü öffnen"
+        title="Menü"
+        data-label-open="Menü öffnen"
+        data-label-close="Menü schließen"
+      >
+        <Icon name="menu" size={22} class="icon-open" />
+        <Icon name="close" size={22} class="icon-close hidden" />
+      </button>
+    </div>
+  </Container>
+
+  <div id="mobile-nav" class="mobile-nav border-t border-ink/15 bg-paper lg:hidden">
+    <Container class="flex min-h-full flex-col py-8">
+      <nav aria-label="Hauptnavigation mobil">
+        <ol class="border-t border-ink">
+          {
+            mainNav.map((item, index) => (
+              <li class="mobile-nav-item border-b border-rule" style={`--i:${index}`}>
+                <a
+                  href={url(item.href)}
+                  aria-current={isCurrent(item.href) ? 'page' : undefined}
+                  class="flex items-baseline gap-5 py-4 font-serif text-[1.75rem] leading-tight tracking-tightish text-ink transition-colors hover:text-oxblood aria-[current=page]:text-oxblood"
+                >
+                  <span class="numeral w-6 text-sm text-oxblood" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+      </nav>
+      <div class="mobile-nav-item mt-8 flex flex-col gap-6" style={`--i:${mainNav.length}`}>
+        <Button href={primaryCta.href} icon="calendar" class="self-start">{primaryCta.label}</Button>
+        <ul class="grid gap-3 text-sm text-graphite">
+          <li><a class="link-ink" href={contact.phone.href}>{contact.phone.display}</a></li>
+          <li><a class="link-ink break-all" href={contact.email.href}>{contact.email.display}</a></li>
+        </ul>
+      </div>
+    </Container>
+  </div>
+</header>
+
+<style>
+  /* Desktop nav: hairline underline drawn from the left on hover, fixed under the current page. */
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.2rem;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 350ms var(--ease-out-quint);
+  }
+
+  .nav-link:hover::after,
+  .nav-link[aria-current='page']::after {
+    transform: scaleX(1);
+  }
+
+  /* With JS the header sticks and the panel becomes an overlay toggled by the menu button.
+     Without JS the header scrolls away, so the static panel never covers the page. */
+  :global(.js) #site-header {
+    position: sticky;
+    top: 0;
+  }
+
+  :global(.js) .menu-toggle {
+    display: inline-flex;
+  }
+
+  :global(.js) .mobile-nav {
+    position: fixed;
+    inset: var(--header-height) 0 0 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    visibility: hidden;
+    opacity: 0;
+    transition:
+      opacity 250ms ease,
+      visibility 0s linear 250ms;
+  }
+
+  :global(.js) .mobile-nav[data-open] {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 250ms ease;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .mobile-nav-item {
+      opacity: 0;
+      transform: translateY(0.75rem);
+      transition:
+        opacity 500ms var(--ease-out-quint),
+        transform 500ms var(--ease-out-quint);
+    }
+
+    :global(.js) .mobile-nav[data-open] .mobile-nav-item {
+      opacity: 1;
+      transform: none;
+      transition-delay: calc(var(--i) * 45ms + 60ms);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    :global(.js) .menu-toggle,
+    :global(.js) .mobile-nav {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  const panel = document.getElementById('mobile-nav');
+  const header = document.getElementById('site-header');
+  const desktop = window.matchMedia('(min-width: 64rem)');
+
+  if (toggle && panel && header) {
+    const focusables = () =>
+      [toggle, ...panel.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')].filter(
+        (el) => el.offsetParent !== null || el === toggle,
+      );
+
+    const setOpen = (open: boolean, returnFocus = true) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', (open ? toggle.dataset.labelClose : toggle.dataset.labelOpen) ?? '');
+      toggle.querySelector('.icon-open')?.classList.toggle('hidden', open);
+      toggle.querySelector('.icon-close')?.classList.toggle('hidden', !open);
+      panel.toggleAttribute('data-open', open);
+      document.documentElement.style.overflow = open ? 'hidden' : '';
+      // Background content leaves the focus order and the accessibility tree while open.
+      document.querySelectorAll<HTMLElement>('[data-inert-when-menu]').forEach((el) => {
+        el.inert = open;
+      });
+
+      if (open) {
+        panel.querySelector<HTMLElement>('a[href]')?.focus();
+      } else if (returnFocus) {
+        toggle.focus();
+      }
+    };
+
+    const isOpen = () => panel.hasAttribute('data-open');
+
+    toggle.addEventListener('click', () => setOpen(!isOpen()));
+
+    // Focus trap over the menu button and the panel while open; Escape works from anywhere.
+    document.addEventListener('keydown', (event) => {
+      if (!isOpen()) return;
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setOpen(false);
+        return;
+      }
+      if (event.key !== 'Tab') return;
+      const items = focusables();
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+
+    // Links close the panel. tel: and mailto: keep the page open, so focus returns to the button.
+    panel.addEventListener('click', (event) => {
+      const link = (event.target as HTMLElement).closest('a');
+      if (!link) return;
+      const staysOnPage = /^(tel|mailto):/.test(link.getAttribute('href') ?? '');
+      setOpen(false, staysOnPage);
+    });
+
+    desktop.addEventListener('change', (event) => {
+      if (event.matches && isOpen()) setOpen(false, false);
+    });
+
+    document.documentElement.classList.add('nav-ready');
+  }
+</script>

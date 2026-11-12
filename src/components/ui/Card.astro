@@ -1,0 +1,56 @@
+---
+// Audience or service card: hairline frame, report number, serif title.
+// The whole card is clickable when href is set; the title link carries the accessible name.
+import Icon from './Icon.astro';
+import { url } from '../../lib/url';
+
+interface Props {
+  number?: string;
+  kicker?: string;
+  title: string;
+  href?: string;
+  linkLabel?: string;
+  class?: string;
+}
+
+const { number, kicker, title, href, linkLabel = 'Mehr erfahren', class: className } = Astro.props;
+const resolvedHref = href?.startsWith('/') ? url(href) : href;
+---
+
+<article
+  class:list={[
+    'group/card relative flex h-full flex-col border-t border-ink bg-paper pt-5 pb-7 transition-colors duration-300',
+    resolvedHref && 'hover:bg-paper-deep/60',
+    className,
+  ]}
+  data-reveal
+>
+  <div class="label flex items-baseline justify-between gap-4 text-graphite">
+    {kicker && <span>{kicker}</span>}
+    {number && <span class="numeral text-sm tracking-normal text-oxblood">{number}</span>}
+  </div>
+  <h3 class="mt-8 text-h3">
+    {
+      resolvedHref ? (
+        <a href={resolvedHref} class="after:absolute after:inset-0 focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-4 focus-visible:after:outline-signal">
+          {title}
+        </a>
+      ) : (
+        title
+      )
+    }
+  </h3>
+  <div class="mt-4 text-graphite">
+    <slot />
+  </div>
+  {
+    resolvedHref && (
+      <p class="mt-auto flex items-center gap-2 pt-6 text-sm font-semibold" aria-hidden="true">
+        <span class="border-b border-ink/30 transition-colors group-hover/card:border-oxblood group-hover/card:text-oxblood">
+          {linkLabel}
+        </span>
+        <Icon name="arrow" size={16} class="transition-transform duration-300 group-hover/card:translate-x-1 motion-reduce:transition-none" />
+      </p>
+    )
+  }
+</article>

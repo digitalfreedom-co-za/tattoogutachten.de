@@ -1,0 +1,26 @@
+---
+// Checklist in report style, e.g. what to prepare for the first consultation.
+import Icon from './Icon.astro';
+
+interface Props {
+  items: string[];
+  title?: string;
+  class?: string;
+}
+
+const { items, title, class: className } = Astro.props;
+---
+
+<div class:list={['border border-ink bg-paper p-6 md:p-8', className]} data-reveal>
+  {title && <p class="label mb-5 text-graphite">{title}</p>}
+  <ul class="grid gap-4">
+    {
+      items.map((item) => (
+        <li class="grid grid-cols-[1.25rem_1fr] gap-4 border-t border-rule pt-4 first:border-t-0 first:pt-0">
+          <Icon name="check" size={20} class="mt-0.5 text-oxblood" />
+          <span>{item}</span>
+        </li>
+      ))
+    }
+  </ul>
+</div>

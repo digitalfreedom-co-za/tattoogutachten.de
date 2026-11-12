@@ -1,0 +1,80 @@
+---
+// Page section in report layout: a narrow margin column (number, label, margin note)
+// next to a wide content column. On small screens the margin column stacks on top.
+import Container from './Container.astro';
+import Eyebrow from './Eyebrow.astro';
+
+interface Props {
+  id?: string;
+  number?: string;
+  label?: string;
+  title?: string;
+  intro?: string;
+  tone?: 'paper' | 'deep' | 'ink';
+  class?: string;
+}
+
+const { id, number, label, title, intro, tone = 'paper', class: className } = Astro.props;
+const headingId = id && title ? `${id}-titel` : undefined;
+const hasHeader = Boolean(label || title || intro || Astro.slots.has('note'));
+
+const toneClass = {
+  paper: 'bg-paper text-ink',
+  deep: 'bg-paper-deep text-ink',
+  ink: 'bg-ink text-paper',
+}[tone];
+---
+
+<section id={id} aria-labelledby={headingId} class:list={['py-section', toneClass, className]}>
+  <Container>
+    {
+      hasHeader && (
+        <header class="grid gap-6 md:grid-cols-12 md:gap-x-8">
+          <div class="md:col-span-3">
+            <div
+              class:list={['hairline mb-4 md:mb-5', tone === 'ink' && 'bg-paper/20']}
+              data-reveal="rule"
+              aria-hidden="true"
+            />
+            {label && (
+              <Eyebrow number={number} tone={tone === 'ink' ? 'paper' : 'ink'}>
+                {label}
+              </Eyebrow>
+            )}
+            {Astro.slots.has('note') && (
+              <div
+                class:list={[
+                  'mt-4 max-w-[22rem] text-sm italic',
+                  tone === 'ink' ? 'text-paper/60' : 'text-graphite',
+                ]}
+                style="font-family: var(--font-serif)"
+              >
+                <slot name="note" />
+              </div>
+            )}
+          </div>
+          {(title || intro) && (
+            <div class="md:col-span-9 lg:col-span-8">
+              {title && (
+                <h2 id={headingId} class="text-h2 tracking-display" data-reveal>
+                  {title}
+                </h2>
+              )}
+              {intro && (
+                <p
+                  class:list={['mt-5 max-w-[38rem] text-lead', tone === 'ink' ? 'text-paper/75' : 'text-graphite']}
+                  data-reveal
+                >
+                  {intro}
+                </p>
+              )}
+            </div>
+          )}
+        </header>
+      )
+    }
+    <div class:list={[hasHeader && 'mt-12 md:mt-16']}>
+      <slot />
+    </div>
+  </Container>
+</section>

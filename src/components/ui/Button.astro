@@ -1,0 +1,58 @@
+---
+// Renders an <a> when href is set, otherwise a <button>. Internal hrefs get the base path.
+import type { HTMLAttributes } from 'astro/types';
+import Icon, { type IconName } from './Icon.astro';
+import { url } from '../../lib/url';
+
+type Variant = 'primary' | 'secondary' | 'inverse' | 'text';
+
+interface Props {
+  href?: string;
+  variant?: Variant;
+  icon?: IconName;
+  type?: 'button' | 'submit';
+  class?: string;
+  target?: HTMLAttributes<'a'>['target'];
+  rel?: string;
+  'aria-label'?: string;
+}
+
+const { href, variant = 'primary', icon = 'arrow', type = 'button', class: className, ...rest } = Astro.props;
+
+const isInternal = href?.startsWith('/') ?? false;
+const resolvedHref = href && isInternal ? url(href) : href;
+
+const variants: Record<Variant, string> = {
+  primary:
+    'bg-ink text-paper border border-ink hover:bg-oxblood hover:border-oxblood px-5 py-3.5 sm:px-6',
+  secondary:
+    'bg-transparent text-ink border border-ink/80 hover:bg-ink hover:text-paper px-5 py-3.5 sm:px-6',
+  inverse:
+    'bg-paper text-ink border border-paper hover:bg-brass-light hover:border-brass-light px-5 py-3.5 sm:px-6',
+  text: 'text-ink border-b border-ink/40 hover:border-oxblood hover:text-oxblood py-1',
+};
+
+const classes = [
+  'group/btn inline-flex min-h-11 items-center gap-3 rounded-xs font-sans text-[0.9375rem] font-semibold leading-none tracking-[0.01em] transition-colors duration-200',
+  variants[variant],
+  className,
+];
+---
+
+{
+  resolvedHref ? (
+    <a href={resolvedHref} class:list={classes} {...rest}>
+      <span>
+        <slot />
+      </span>
+      <Icon name={icon} size={18} class="shrink-0 transition-transform duration-300 ease-out-quint group-hover/btn:translate-x-1 motion-reduce:transition-none motion-reduce:group-hover/btn:translate-x-0" />
+    </a>
+  ) : (
+    <button type={type} class:list={classes} {...rest}>
+      <span>
+        <slot />
+      </span>
+      <Icon name={icon} size={18} class="shrink-0" />
+    </button>
+  )
+}

@@ -1,0 +1,35 @@
+---
+// Decorative linework: one continuous needle thin stroke with a fine hatch, like a tattoo
+// outline traced on a stencil. Purely ornamental, hidden from assistive technology.
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<svg
+  class:list={['block overflow-visible', className]}
+  viewBox="0 0 320 420"
+  fill="none"
+  aria-hidden="true"
+  focusable="false"
+  data-reveal="draw"
+>
+  <path
+    d="M40 400 C 40 300, 120 300, 120 220 S 40 120, 120 60 S 280 40, 260 140 S 160 230, 210 300 S 300 360, 280 410"
+    stroke="currentColor"
+    stroke-width="1"
+    vector-effect="non-scaling-stroke"
+    pathLength="1"
+  ></path>
+  <path
+    d="M120 60 C 150 90, 180 95, 214 82 M126 220 C 150 214, 168 222, 184 240 M210 300 C 230 290, 248 292, 262 302"
+    stroke="currentColor"
+    stroke-width="1"
+    vector-effect="non-scaling-stroke"
+    pathLength="1"
+  ></path>
+  <circle cx="120" cy="60" r="3" stroke="currentColor" stroke-width="1" pathLength="1"></circle>
+  <circle cx="210" cy="300" r="3" stroke="currentColor" stroke-width="1" pathLength="1"></circle>
+</svg>

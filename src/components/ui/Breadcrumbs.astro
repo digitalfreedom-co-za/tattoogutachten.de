@@ -1,0 +1,35 @@
+---
+// Breadcrumb trail. The last item is the current page and is not linked.
+import { url } from '../../lib/url';
+import type { NavItem } from '../../config/site';
+
+interface Props {
+  items: NavItem[];
+  class?: string;
+}
+
+const { items, class: className } = Astro.props;
+const trail: NavItem[] = [{ label: 'Start', href: '/' }, ...items];
+---
+
+<nav aria-label="Brotkrumen" class:list={['label text-graphite', className]}>
+  <ol class="flex flex-wrap items-center gap-x-3 gap-y-1">
+    {
+      trail.map((item, index) => {
+        const isLast = index === trail.length - 1;
+        return (
+          <li class="flex items-center gap-3">
+            {isLast ? (
+              <span aria-current="page" class="text-ink">{item.label}</span>
+            ) : (
+              <>
+                <a class="link-ink no-underline hover:underline" href={url(item.href)}>{item.label}</a>
+                <span class="h-px w-4 bg-stone" aria-hidden="true" />
+              </>
+            )}
+          </li>
+        );
+      })
+    }
+  </ol>
+</nav>

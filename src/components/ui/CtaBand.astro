@@ -1,0 +1,44 @@
+---
+// Closing call to action on ink: serif statement left, booking and direct contact right.
+import Container from './Container.astro';
+import Button from './Button.astro';
+import Icon from './Icon.astro';
+import MeasureRule from './MeasureRule.astro';
+import { contact, primaryCta } from '../../config/site';
+
+interface Props {
+  title: string;
+  text?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+}
+
+const { title, text, ctaLabel = primaryCta.label, ctaHref = primaryCta.href } = Astro.props;
+---
+
+<section class="relative overflow-hidden bg-ink py-section text-paper" aria-label="Kontakt aufnehmen">
+  <MeasureRule class="absolute top-0 left-0 w-full text-paper/30" />
+  <Container class="grid gap-12 md:grid-cols-12 md:gap-x-8">
+    <div class="md:col-span-7">
+      <h2 class="text-h2 tracking-display" data-reveal>{title}</h2>
+      {text && <p class="mt-6 max-w-[34rem] text-lead text-paper/75" data-reveal>{text}</p>}
+    </div>
+    <div class="flex flex-col gap-8 md:col-span-4 md:col-start-9 md:justify-end" data-reveal>
+      <Button href={ctaHref} variant="inverse" icon="calendar" class="self-start">{ctaLabel}</Button>
+      <ul class="grid gap-4 border-t border-paper/20 pt-6 text-sm">
+        <li class="flex items-center gap-3">
+          <Icon name="phone" size={18} class="shrink-0 text-brass-light" />
+          <a class="link-ink hover:!text-brass-light" href={contact.phone.href}>
+            <span class="sr-only">Telefon </span>{contact.phone.display}
+          </a>
+        </li>
+        <li class="flex items-center gap-3">
+          <Icon name="mail" size={18} class="shrink-0 text-brass-light" />
+          <a class="link-ink break-all hover:!text-brass-light" href={contact.email.href}>
+            <span class="sr-only">E-Mail </span>{contact.email.display}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </Container>
+</section>

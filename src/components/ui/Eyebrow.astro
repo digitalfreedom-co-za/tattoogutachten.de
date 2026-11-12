@@ -1,0 +1,28 @@
+---
+// Report style label, e.g. "01  Leistungen" or "Az.  Randnotiz".
+interface Props {
+  number?: string;
+  tone?: 'ink' | 'paper';
+  class?: string;
+}
+
+const { number, tone = 'ink', class: className } = Astro.props;
+---
+
+<p
+  class:list={[
+    'label flex items-center gap-3',
+    tone === 'ink' ? 'text-graphite' : 'text-paper/70',
+    className,
+  ]}
+>
+  {
+    number && (
+      <span class:list={['numeral text-sm tracking-normal', tone === 'ink' ? 'text-oxblood' : 'text-brass-light']}>
+        {number}
+      </span>
+    )
+  }
+  {number && <span class="h-px w-6 bg-current opacity-40" aria-hidden="true" />}
+  <span><slot /></span>
+</p>

@@ -1,0 +1,43 @@
+---
+// Credentials at a glance: seal, register number, court appointment, years in the trade,
+// association membership, plus the RW badge. Values come from src/config/site.ts.
+import { Image } from 'astro:assets';
+import badge from '../../assets/images/rw-gutachterabzeichen-dgusv-logo.png';
+import Seal from './Seal.astro';
+import Container from './Container.astro';
+import { credentials } from '../../config/site';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+const facts = [
+  { label: 'Bestätigungs-Register', value: `Nr. ${credentials.registerNumber}`, mono: true },
+  { label: 'Zertifiziert durch', value: credentials.associationShort, note: credentials.association },
+  { label: 'Gerichtlich bestellt', value: 'LG Frankfurt am Main', note: 'in einem Gerichtsverfahren' },
+  { label: 'Erfahrung', value: `über ${credentials.yearsInTrade} Jahre`, note: 'Tattoo und Piercing' },
+  { label: 'Mitglied', value: credentials.membership },
+];
+---
+
+<section aria-label="Qualifikation und Nachweise" class:list={['border-y border-ink bg-paper-deep', className]}>
+  <Container class="grid gap-8 py-8 md:py-10 xl:grid-cols-[auto_1fr] xl:items-center xl:gap-12">
+    <div class="flex items-center gap-5" data-reveal>
+      <Seal width={84} class="w-16 md:w-[84px]" />
+      <Image src={badge} alt="Abzeichen geprüfter und zertifizierter Gutachter des DGuSV" width={210} densities={[1, 2]} class="h-auto w-44 md:w-[210px]" />
+    </div>
+    <ul class="grid grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-3 lg:grid-cols-6" data-reveal-group>
+      {
+        facts.map((fact) => (
+          <li class:list={['border-l border-rule pl-4', fact.mono && 'col-span-2 sm:col-span-3 lg:col-span-2']} data-reveal>
+            <p class="label text-[0.6875rem] text-graphite">{fact.label}</p>
+            <p class:list={['mt-2 text-ink', fact.mono ? 'numeral text-base whitespace-nowrap' : 'font-serif text-lg leading-tight']}>{fact.value}</p>
+            {fact.note && <p class="mt-1 text-xs leading-snug text-graphite">{fact.note}</p>}
+          </li>
+        ))
+      }
+    </ul>
+  </Container>
+</section>

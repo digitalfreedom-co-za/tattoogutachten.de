@@ -1,0 +1,39 @@
+---
+// FAQ accordion on native details/summary: works without JS, keyboard and screen reader friendly.
+// Answers may contain trusted inline HTML from our own content files (links, emphasis).
+export interface FaqEntry {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  items: FaqEntry[];
+  /** Same name on all items makes them exclusive (one open at a time) in supporting browsers. */
+  name?: string;
+  class?: string;
+}
+
+const { items, name, class: className } = Astro.props;
+---
+
+<div class:list={['border-t border-ink', className]} data-reveal-group>
+  {
+    items.map((item, index) => (
+      <details class="group/faq border-b border-rule" name={name} data-reveal>
+        <summary class="flex cursor-pointer list-none items-start gap-4 py-5 md:gap-8 md:py-6 [&::-webkit-details-marker]:hidden">
+          <span class="numeral w-7 shrink-0 pt-1 text-sm text-oxblood md:w-10" aria-hidden="true">
+            {String(index + 1).padStart(2, '0')}
+          </span>
+          <span class="flex-1 font-serif text-h4 transition-colors group-hover/faq:text-oxblood">{item.question}</span>
+          <span class="relative mt-2 size-4 shrink-0" aria-hidden="true">
+            <span class="absolute top-1/2 left-0 h-px w-4 bg-current" />
+            <span class="absolute top-0 left-1/2 h-4 w-px bg-current transition-transform duration-300 group-open/faq:scale-y-0 motion-reduce:transition-none" />
+          </span>
+        </summary>
+        <div class="pb-7 pl-11 text-graphite md:pl-18">
+          <p class="max-w-[40rem]" set:html={item.answer} />
+        </div>
+      </details>
+    ))
+  }
+</div>

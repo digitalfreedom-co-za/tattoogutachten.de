@@ -1,0 +1,21 @@
+---
+// The official DGuSV seal. The register number printed on it is repeated as text in the alt.
+import { Image } from 'astro:assets';
+import seal from '../../assets/images/siegel-dgusv-2026.png';
+import { credentials } from '../../config/site';
+
+interface Props {
+  width?: number;
+  class?: string;
+}
+
+const { width = 120, class: className } = Astro.props;
+---
+
+<Image
+  src={seal}
+  alt={`Siegel ${credentials.associationShort} ${credentials.sealYear}, zertifizierter Sachverständiger, Bestätigungs-Register Nr. ${credentials.registerNumber}`}
+  width={width}
+  densities={[1, 2]}
+  class:list={['h-auto', className]}
+/>

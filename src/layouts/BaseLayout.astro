@@ -1,13 +1,20 @@
 ---
+// HTML frame for every page: lang de, fonts, skip link, header, main, footer, motion script.
+// SEO tags go into the "head" slot (SeoHead follows with the SEO ticket).
 import '../styles/global.css';
+import { Font } from 'astro:assets';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
 import { url } from '../lib/url';
 
 interface Props {
   title: string;
   description: string;
+  /** Keep pages out of the index until launch. */
+  noindex?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, noindex = true } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 
@@ -16,13 +23,40 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Enables JS states before paint. Failsafe: if the motion or menu script has not
+         initialised after 3 s (blocked or failed), drop .js so content and the menu stay usable. -->
+    <script is:inline>
+      (function (root) {
+        root.classList.add('js');
+        setTimeout(function () {
+          if (!root.classList.contains('motion-ready') || !root.classList.contains('nav-ready')) root.classList.remove('js');
+        }, 3000);
+      })(document.documentElement);
+    </script>
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href={url('/favicon.svg')} />
-    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#f4efe6" />
+    {noindex && <meta name="robots" content="noindex" />}
+    <Font cssVariable="--font-schibsted" preload={[{ style: 'normal' }]} />
+    <Font cssVariable="--font-newsreader" preload={[{ style: 'normal' }]} />
+    <slot name="head" />
   </head>
-  <body class="min-h-screen bg-white text-neutral-900 antialiased">
-    <slot />
+  <body class="flex min-h-screen flex-col">
+    <a
+      href="#inhalt"
+      class="label fixed top-3 left-3 z-50 -translate-y-24 bg-ink px-4 py-3 text-paper transition-transform focus:translate-y-0 motion-reduce:transition-none"
+    >
+      Zum Inhalt springen
+    </a>
+    <Header />
+    <main id="inhalt" data-inert-when-menu tabindex="-1" class="flex-1 focus:outline-none">
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      import '../scripts/motion';
+    </script>
   </body>
 </html>

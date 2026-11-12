@@ -1,0 +1,36 @@
+---
+// Decorative measuring tape: a hairline with millimetre style ticks, every fifth one longer.
+// Drawn in from the left when it scrolls into view.
+interface Props {
+  ticks?: number;
+  class?: string;
+}
+
+const { ticks = 120, class: className } = Astro.props;
+const step = 1000 / ticks;
+---
+
+<svg
+  class:list={['block h-3 overflow-visible', className]}
+  viewBox="0 0 1000 12"
+  preserveAspectRatio="none"
+  aria-hidden="true"
+  focusable="false"
+  data-reveal="draw"
+>
+  <line x1="0" y1="0.5" x2="1000" y2="0.5" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke" pathLength="1"></line>
+  {
+    Array.from({ length: ticks + 1 }, (_, i) => (
+      <line
+        x1={i * step}
+        y1="0.5"
+        x2={i * step}
+        y2={i % 10 === 0 ? 12 : i % 5 === 0 ? 8 : 4.5}
+        stroke="currentColor"
+        stroke-width="1"
+        vector-effect="non-scaling-stroke"
+        pathLength="1"
+      />
+    ))
+  }
+</svg>

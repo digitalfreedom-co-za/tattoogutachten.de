@@ -1,0 +1,30 @@
+---
+// Definition list in the style of a report cover sheet: label left, value right.
+// Used for the cost explainer and for court reference details.
+export interface Fact {
+  term: string;
+  value: string;
+  note?: string;
+}
+
+interface Props {
+  facts: Fact[];
+  class?: string;
+}
+
+const { facts, class: className } = Astro.props;
+---
+
+<dl class:list={['border-t border-ink', className]} data-reveal-group>
+  {
+    facts.map((fact) => (
+      <div class="grid gap-1 border-b border-rule py-5 sm:grid-cols-[minmax(10rem,1fr)_2fr] sm:gap-8" data-reveal>
+        <dt class="label pt-1 text-graphite">{fact.term}</dt>
+        <dd>
+          <p class="font-serif text-h4">{fact.value}</p>
+          {fact.note && <p class="mt-2 text-sm text-graphite">{fact.note}</p>}
+        </dd>
+      </div>
+    ))
+  }
+</dl>
