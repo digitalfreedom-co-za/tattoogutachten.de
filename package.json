@@ -12,7 +12,8 @@
     "preview": "astro preview",
     "check": "astro check",
     "validate:jsonld": "node scripts/validate-jsonld.mjs dist",
-    "astro": "astro"
+    "astro": "astro",
+    "validate:i18n": "node scripts/validate-i18n.mjs dist"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.8",

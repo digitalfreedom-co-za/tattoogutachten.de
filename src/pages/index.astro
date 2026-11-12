@@ -1,0 +1,310 @@
+---
+// English landing page, the default locale at the root (German: src/pages/de/index.astro). Content lives
+// in src/data/en (services, audiences, process, FAQ) and src/config/site.ts (contact, credentials), so
+// subpages and JSON-LD reuse the same facts.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/ui/Container.astro';
+import Section from '../components/ui/Section.astro';
+import Eyebrow from '../components/ui/Eyebrow.astro';
+import Button from '../components/ui/Button.astro';
+import Card from '../components/ui/Card.astro';
+import Icon from '../components/ui/Icon.astro';
+import Quote from '../components/ui/Quote.astro';
+import Seal from '../components/ui/Seal.astro';
+import Steps from '../components/ui/Steps.astro';
+import Faq from '../components/ui/Faq.astro';
+import CtaBand from '../components/ui/CtaBand.astro';
+import TrustStrip from '../components/ui/TrustStrip.astro';
+import Checklist from '../components/ui/Checklist.astro';
+import KeyFacts from '../components/ui/KeyFacts.astro';
+import CourtReference from '../components/ui/CourtReference.astro';
+import ServiceList from '../components/ui/ServiceList.astro';
+import ArtImage from '../components/ui/ArtImage.astro';
+import NeedleLine from '../components/ui/NeedleLine.astro';
+import ArticleList from '../components/ui/ArticleList.astro';
+import BookingEmbed from '../components/booking/BookingEmbed.astro';
+import { site, contact, credentials, credentialLinesFor } from '../config/site';
+import { practiceFor } from '../config/practice';
+import { services, serviceScopeNote } from '../data/en/services';
+import { audiences } from '../data/en/audiences';
+import { steps, costFacts, preparationChecklist } from '../data/en/process';
+import { featuredFaq } from '../data/en/faq';
+import { t } from '../i18n';
+import { url } from '../lib/url';
+import { getArticles } from '../lib/ratgeber';
+import { ids, ref } from '../lib/schema';
+
+import portrait from '../assets/images/patrick-wolf-portrait-studio-sitzend.jpg';
+import atWork from '../assets/images/patrick-wolf-beim-taetowieren.webp';
+import studio from '../assets/images/patrick-wolf-studio-weit.webp';
+
+const featuredArticles = (await getArticles('en')).slice(0, 3);
+const credentialLines = credentialLinesFor('en');
+const practice = practiceFor('en');
+---
+
+<BaseLayout
+  page={{ mainEntity: ref(ids(Astro.site).office) }}
+  title="Tattoo expert Patrick Wolf | Expert reports on tattoos, DGuSV-certified"
+  description={`Tattoo expert ${site.expert}: independent expert reports on tattoos and piercings, certified by the ${credentials.associationShort}, more than ${credentials.yearsInTrade} years of experience. Throughout Germany, free first consultation.`}
+>
+  <!-- Opening: report title block left, portrait with the seal pinned to it right.
+       Section tones follow the purpose: reference and working material (services, process, court,
+       booking, reading list) on deep paper, narrative on paper. -->
+  <section class="relative overflow-hidden" aria-labelledby="home-title">
+    <!-- Top spacing kept tight so the primary action and its reassurance line sit above the fold at
+         1280 x 850 (bottom of the line at about 755px). -->
+    <Container class="grid gap-12 pt-8 pb-16 md:grid-cols-12 md:gap-x-8 md:pb-24">
+      <div class="relative z-10 flex flex-col md:col-span-7">
+        <div class="border-y border-ink py-3">
+          <p class="label text-ink">{site.office}</p>
+          <p class="mt-1 text-sm text-graphite">{t('en').site.role}, {contact.city}, working throughout Germany</p>
+        </div>
+        <h1 id="home-title" class="mt-6 text-h1 tracking-display">
+          Clarity about your tattoo or piercing, established <em class="text-oxblood">independently</em>.
+        </h1>
+        <p class="mt-5 max-w-[34rem] text-lead text-graphite">
+          An expert report establishes whether there is a defect in the workmanship and records the condition in a way
+          others can follow. Whether a report will help you is something we clarify first, in a free consultation.
+        </p>
+        <div class="mt-6 flex flex-wrap items-center gap-x-8 gap-y-5" data-primary-action>
+          <Button href="/#booking" icon="calendar">Free first consultation</Button>
+          <Button href="/services/" variant="text">Services</Button>
+        </div>
+        <p class="mt-4 flex items-start gap-3 text-sm text-graphite">
+          <Icon name="check" size={18} class="mt-0.5 shrink-0 text-oxblood" />
+          <span>Free of charge and without obligation, up to 60 minutes.</span>
+        </p>
+        <nav aria-label="Information by client" class="mt-6 border-t border-rule pt-4">
+          <p class="label text-graphite">{t('en').nav.audiences}</p>
+          <ul class="mt-1 flex flex-wrap gap-x-6 text-sm">
+            {
+              audiences.map((audience) => (
+                <li>
+                  <a class="link-ink inline-flex min-h-11 items-center font-semibold" href={url(audience.href)}>
+                    {audience.navLabel}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+
+      <figure class="relative md:col-span-5 md:col-start-8">
+        <NeedleLine class="pointer-events-none absolute top-[12%] -left-14 z-0 hidden h-[70%] w-auto text-oxblood/45 md:block" />
+        <div class="relative">
+          <ArtImage
+            src={portrait}
+            alt="Patrick Wolf, tattoo expert certified by the DGuSV, sits in the studio and listens attentively."
+            ratio={4 / 5}
+            position="right top"
+            crops={[{ media: '(min-width: 768px)', ratio: 3 / 4, position: 'right top' }]}
+            sizes="(min-width: 1344px) 520px, (min-width: 768px) 40vw, 100vw"
+            widths={[400, 640, 880, 1037]}
+            loading="eager"
+            fetchpriority="high"
+            reveal={false}
+            parallax
+            class="relative z-10"
+          />
+          <div class="absolute -bottom-10 left-4 z-20 bg-paper p-1.5 shadow-[0_10px_30px_-12px_rgb(23_20_15/0.45)] md:-left-8" data-reveal>
+            <Seal width={112} class="w-20 md:w-28" />
+          </div>
+        </div>
+        <figcaption class="mt-3 pl-30 font-serif text-sm italic text-graphite md:pl-28">
+          Tattoo expert {site.expert}, expert practice in {contact.city}
+        </figcaption>
+      </figure>
+    </Container>
+  </section>
+
+  <TrustStrip />
+
+  <Section
+    id="audiences"
+    label={t('en').nav.audiences}
+    title="For every side, with the same care."
+    intro="Clients, studios, lawyers and courts commission expert reports on tattoos. Their questions differ, the standard stays the same."
+  >
+    <div class="grid gap-x-8 gap-y-4 md:grid-cols-2 xl:grid-cols-4" data-reveal-group>
+      {
+        audiences.map((audience) => (
+          <Card kicker={audience.label} title={audience.title} href={audience.href} linkLabel={`More for ${audience.label.toLowerCase()}`}>
+            <p>{audience.text}</p>
+          </Card>
+        ))
+      }
+    </div>
+  </Section>
+
+  <Section
+    id="services"
+    label="Services"
+    title="What a tattoo expert examines for you."
+    intro="An expert report answers a specific question: was the tattoo or piercing carried out to professional standards, and if not, what went wrong? Which service fits your case is something we clarify in the first consultation."
+    tone="deep"
+  >
+    <p slot="note">{serviceScopeNote}</p>
+    <ServiceList services={services} grouped />
+  </Section>
+
+  <!-- Independence: the expert role is kept apart from the studio work -->
+  <section class="py-section" aria-labelledby="independence-title">
+    <Container class="grid gap-12 md:grid-cols-12 md:items-center md:gap-x-8">
+      <div class="md:col-span-6 lg:col-span-7">
+        <ArtImage
+          src={atWork}
+          alt="Patrick Wolf, wearing gloves, concentrating on work on a tattoo."
+          ratio={4 / 3}
+          position="center"
+          crops={[{ media: '(min-width: 768px)', ratio: 16 / 11, position: 'center' }]}
+          sizes="(min-width: 1344px) 720px, (min-width: 768px) 50vw, 100vw"
+          widths={[480, 720, 960, 1120]}
+          parallax
+        />
+      </div>
+      <div class="md:col-span-6 lg:col-span-5">
+        <Eyebrow>Independence</Eyebrow>
+        <h2 id="independence-title" class="mt-6 text-h2 tracking-display">
+          Practice as the foundation, facts as the standard.
+        </h2>
+        <div class="mt-6 grid gap-4 text-graphite" data-reveal>
+          <p>
+            {site.expert} still tattoos. His {credentials.yearsInTrade} years of practice are the professional foundation
+            of his reports, not their yardstick.
+          </p>
+          <p>
+            The result depends solely on the facts that can be established and on professional standards, not on who
+            commissions the report or which result they hope for. A report written to confirm a particular outcome does
+            not exist.
+          </p>
+          {practice.conflictHandling && <p>{practice.conflictHandling}</p>}
+        </div>
+      </div>
+    </Container>
+  </section>
+
+
+  <Section
+    id="process"
+    label="Process"
+    title="How an expert report on a tattoo works."
+    intro="It starts with a free conversation, not a contract. Fees only arise once you commission a report in writing."
+    tone="deep"
+  >
+    <Steps steps={steps} />
+    <p class="mt-12">
+      <Button href="/process-and-fees/" variant="text">Process and fees in detail</Button>
+    </p>
+  </Section>
+
+  <Section id="fees" label="Fees" title="What does an expert report on a tattoo cost?">
+    <p slot="note">
+      A report has no flat price. A short expert opinion takes less work than a report with several questions to answer and an on-site inspection.
+    </p>
+    <div class="grid gap-12 md:grid-cols-12 md:gap-x-8">
+      <div class="md:col-span-9 md:col-start-4 lg:col-span-5 lg:col-start-4">
+        <p class="mb-8 max-w-[38rem] text-lead text-graphite" data-reveal>
+          The fees depend on the work involved. You know the expected range before you sign anything, and the first
+          hour costs nothing.
+        </p>
+        <KeyFacts facts={costFacts} />
+      </div>
+      <Checklist title="Have ready for the first consultation" items={preparationChecklist} class="self-start md:col-span-9 md:col-start-4 lg:col-span-4 lg:col-start-9" />
+    </div>
+  </Section>
+
+  <Section id="court" label="Courts" tone="deep" density="support">
+    <CourtReference />
+  </Section>
+
+  <!-- About teaser -->
+  <section class="py-section" aria-labelledby="about-title">
+    <Container class="grid gap-12 md:grid-cols-12 md:gap-x-8">
+      <div class="md:col-span-5 md:order-2 md:col-start-8">
+        <ArtImage
+          src={studio}
+          alt="Patrick Wolf sits smiling in his studio in Bad Nauheim between the treatment couches."
+          ratio={1}
+          position="center"
+          crops={[{ media: '(min-width: 768px)', ratio: 4 / 5, position: 'center' }]}
+          sizes="(min-width: 1344px) 520px, (min-width: 768px) 40vw, 100vw"
+          widths={[400, 640, 880]}
+        />
+      </div>
+      <div class="md:col-span-7 md:order-1">
+        <Eyebrow>About</Eyebrow>
+        <h2 id="about-title" class="mt-6 text-h2 tracking-display">
+          From tattoo artist to expert.
+        </h2>
+        <p class="mt-6 max-w-[36rem] text-lead text-graphite" data-reveal>
+          Anyone assessing a tattoo has to understand the craft: working methods, the interplay of needle, ink and skin,
+          and the causes of workmanship defects. {site.expert} has known the trade for more than
+          {credentials.yearsInTrade} years, both as a craftsman and as a studio owner.
+        </p>
+        <ul class="mt-8 grid max-w-[36rem] gap-3 border-t border-ink pt-6 text-sm" data-reveal>
+          {
+            credentialLines.map((item) => (
+              <li class="grid grid-cols-[1.125rem_1fr] gap-3">
+                <Icon name="check" size={18} class="mt-0.5 text-oxblood" />
+                <span>{item}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <Quote author={site.expert} role={`Examined and certified expert of the ${credentials.associationShort}`} size="md" class="mt-12">
+          A good expert report does not convince through assertions, but through findings others can follow, sound
+          professional reasoning and objectivity.
+        </Quote>
+        <p class="mt-10">
+          <Button href="/about/" variant="text">More about {site.expert}</Button>
+        </p>
+      </div>
+    </Container>
+  </section>
+
+  <!-- Booking: compact cal.com calendar, loaded only after consent and once this section scrolls into view. -->
+  <Section
+    id="booking"
+    label="Appointment"
+    title="Book your free first consultation online."
+    intro="Up to 60 minutes, free of charge and without obligation. Choose an available time and the confirmation arrives by email. In the consultation we clarify whether a report makes sense and what it would cost."
+    tone="deep"
+    data-booking-section
+  >
+    <p slot="note">
+      What to have ready and what happens after booking:
+      <a class="link-ink not-italic" href={url('/booking/')}>everything about booking</a>.
+    </p>
+    <BookingEmbed variant="compact" />
+  </Section>
+
+  <Section id="faq" label="FAQ" title="Answers to the most common questions.">
+    <p slot="note">
+      All questions on assessment, commissioning and fees:
+      <a class="link-ink not-italic" href={url('/faq/')}>frequently asked questions about expert reports on tattoos</a>.
+    </p>
+    <Faq items={featuredFaq} name="faq-home" />
+  </Section>
+
+  <Section
+    id="guides"
+    label="Guides"
+    title="Get informed first, then decide."
+    intro="Short, factual articles on the questions that come up most often before an expert report."
+    tone="deep"
+  >
+    <ArticleList articles={featuredArticles} />
+    <div class="mt-10 md:grid md:grid-cols-12 md:gap-x-8" data-reveal>
+      <p class="axis">
+        <Button href="/guides/" variant="text">All guide articles</Button>
+      </p>
+    </div>
+  </Section>
+
+  <CtaBand
+    title="Let us clarify whether an expert report makes sense for you."
+    text="The first consultation lasts up to 60 minutes, is free of charge and commits you to nothing. Expert reports throughout Germany and Europe."
+  />
+</BaseLayout>

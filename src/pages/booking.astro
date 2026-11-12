@@ -1,0 +1,161 @@
+---
+// Booking page: a compact header, then straight to the full cal.com calendar (behind consent, then lazy, see BookingEmbed,
+// which shows the consultation at a glance above the frame), then the consultation in detail, what to
+// prepare, what happens after booking and the booking FAQ. Anchor links in the header reach the
+// explanations first for visitors who want them.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/ui/PageHeader.astro';
+import Section from '../components/ui/Section.astro';
+import Button from '../components/ui/Button.astro';
+import KeyFacts, { type Fact } from '../components/ui/KeyFacts.astro';
+import Checklist from '../components/ui/Checklist.astro';
+import Steps from '../components/ui/Steps.astro';
+import Faq from '../components/ui/Faq.astro';
+import CtaBand from '../components/ui/CtaBand.astro';
+import Icon from '../components/ui/Icon.astro';
+import BookingEmbed from '../components/booking/BookingEmbed.astro';
+import { contact, contentUpdated, site, type NavItem } from '../config/site';
+import { practiceFor } from '../config/practice';
+import { steps, preparationChecklist, afterBookingSteps } from '../data/en/process';
+import { bookingFaq } from '../data/en/faq';
+import { absoluteUrl, ids, ref } from '../lib/schema';
+import { getArticles, articleHref } from '../lib/ratgeber';
+import { url } from '../lib/url';
+import { routes, t } from '../i18n';
+
+const practice = practiceFor('en');
+const title = 'Book a free first consultation on a tattoo expert report | Patrick Wolf';
+const description = `Book online: a free first consultation with tattoo expert ${site.expert}, up to 60 minutes, no obligation, throughout Germany. With a checklist to prepare.`;
+const breadcrumbs: NavItem[] = [{ label: 'Book a consultation', href: routes.booking.en }];
+const areaServed = t('en').site.areaServed;
+
+const consultationFacts: Fact[] = [
+  { term: 'Duration', value: 'Up to 60 minutes' },
+  ...(practice.consultationMethod ? [{ term: 'Consultation', value: practice.consultationMethod }] : []),
+  { term: 'Cost', value: 'None', note: 'A full assessment or a written opinion is not included.' },
+  { term: 'Obligation', value: 'None', note: 'Whether you commission a report afterwards is entirely your decision.' },
+  { term: 'Outcome', value: 'Clarity about the next step', note: 'Whether a report makes sense, what scope it would have and what it is likely to cost.' },
+  { term: 'Area served', value: `${areaServed[0].toUpperCase()}${areaServed.slice(1)}`, note: `The ${site.office} is based in ${contact.city}.` },
+];
+
+const discussed = steps[0].detail?.items ?? [];
+
+const photoGuide = (await getArticles('en')).find(
+  (article) => 'translationOf' in article.data && article.data.translationOf === 'tattoo-fotografieren-fuer-die-begutachtung',
+);
+
+const page = {
+  mainEntity: ref(ids(Astro.site).office),
+  potentialAction: {
+    '@type': 'ReserveAction',
+    name: 'Book a free first consultation',
+    target: absoluteUrl(`${routes.booking.en}#booking`, Astro.site),
+    object: {
+      '@type': 'Service',
+      name: 'Free first consultation on a tattoo expert report',
+      url: absoluteUrl(routes.booking.en, Astro.site),
+      provider: ref(ids(Astro.site).office),
+    },
+  },
+};
+---
+
+<BaseLayout title={title} description={description} breadcrumbs={breadcrumbs} page={page}>
+  <PageHeader
+    label="Book a consultation"
+    heading="Book your free first consultation online."
+    lead={`The first consultation with ${site.expert} lasts up to 60 minutes, is free of charge and commits you to nothing. Pick an available time in the calendar; the confirmation arrives by email.`}
+    breadcrumbs={breadcrumbs}
+    updated={contentUpdated}
+  >
+    <a class="link-ink inline-flex min-h-11 items-center gap-3 font-semibold" href={contact.phone.href}>
+      <Icon name="phone" size={18} class="text-oxblood" />
+      <span><span class="sr-only">Prefer to call: </span>{contact.phone.display}</span>
+    </a>
+    <a class="link-ink inline-flex min-h-11 items-center text-sm" href="#preparation">What to have ready</a>
+    <a class="link-ink inline-flex min-h-11 items-center text-sm" href="#after-booking">What happens after booking</a>
+  </PageHeader>
+
+
+  <Section
+    id="booking"
+    label="Calendar"
+    tone="deep"
+    title="Choose an available time."
+    intro="Pick a day, pick a time, enter your name and email address. That is all the booking needs."
+    data-booking-section
+  >
+    <p slot="note">
+      No suitable time? Call or send an email and we will arrange one with you directly.
+    </p>
+    <BookingEmbed variant="full" />
+  </Section>
+
+  <Section
+    id="first-consultation"
+    label="First consultation"
+    title="What is the free first consultation?"
+    intro="A conversation of up to 60 minutes in which you describe your matter and find out whether a report will help. You only pay for a service that you commission in writing afterwards."
+    tone="paper"
+  >
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-x-8">
+      <KeyFacts facts={consultationFacts} class="lg:col-span-7" />
+      <Checklist title="In the consultation we discuss" items={discussed} class="self-start lg:col-span-5" />
+    </div>
+  </Section>
+
+  <Section
+    id="preparation"
+    label="Preparation"
+    title="What should you have ready for the first consultation?"
+    intro="Photos and documents make the initial assessment more precise. Which of them are really needed is clarified in the conversation."
+    tone="deep"
+  >
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-x-8">
+      <Checklist title="Have ready for the first consultation" items={preparationChecklist} class="self-start lg:col-span-7" />
+      <div class="grid content-start gap-5 lg:col-span-5" data-reveal>
+        <h3 class="text-h4">Good photos are half the assessment.</h3>
+        <p class="text-graphite">
+          Even daylight without flash, no filters, one overview and sharp close-ups of the conspicuous areas, plus the
+          original files.
+          {
+            photoGuide && (
+              <>
+                How to get this right is shown in the guide
+                <a class="link-ink" href={url(articleHref(photoGuide))}>{photoGuide.data.title}</a>.
+              </>
+            )
+          }
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <Section
+    id="after-booking"
+    label="After booking"
+    title="What happens after you book?"
+    intro="Four steps to your decision. No costs arise along the way."
+  >
+    <Steps steps={afterBookingSteps} />
+    <p class="mt-12" data-reveal>
+      <Button href={routes.process.en} variant="text">What happens once you commission a report</Button>
+    </p>
+  </Section>
+
+  <Section id="faq" label="FAQ" title="Questions about booking" tone="deep">
+    <p slot="note">
+      All questions by topic:
+      <a class="link-ink not-italic" href={url(routes.faq.en)}>frequently asked questions about tattoo expert reports</a>.
+    </p>
+    <Faq items={bookingFaq} variant="list" />
+  </Section>
+
+  <CtaBand
+    title="Rather talk briefly first?"
+    text="Call or send an email. The first consultation can just as well be arranged by telephone."
+    action="contact"
+    ctaLabel="Or book online in the calendar"
+    ctaHref={`${routes.booking.en}#booking`}
+  />
+</BaseLayout>

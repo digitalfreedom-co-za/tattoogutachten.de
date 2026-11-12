@@ -1,0 +1,268 @@
+---
+// One page per audience (/for-individuals/, /for-tattoo-studios/, /for-lawyers/, /for-courts/),
+// generated from src/data/en/audiences.ts: first steps where the audience needs them, situation, how the
+// expert helps, fitting services, what to prepare, typical questions, guide articles and the CTA.
+// Private clients and studios are led to the free first consultation; lawyers and courts (primaryAction
+// enquiry) to telephone and email, with the preparation block moved up next to the help block.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/ui/PageHeader.astro';
+import Section from '../components/ui/Section.astro';
+import Button from '../components/ui/Button.astro';
+import Icon from '../components/ui/Icon.astro';
+import ExpertCard from '../components/ui/ExpertCard.astro';
+import ServiceList from '../components/ui/ServiceList.astro';
+import ArticleList from '../components/ui/ArticleList.astro';
+import CourtReference from '../components/ui/CourtReference.astro';
+import CompareTable from '../components/ui/CompareTable.astro';
+import Faq from '../components/ui/Faq.astro';
+import ArtImage from '../components/ui/ArtImage.astro';
+import CtaBand from '../components/ui/CtaBand.astro';
+import AudiencePrepare from '../components/audience/AudiencePrepare.astro';
+import { site, contact, contentUpdated, primaryCtaFor } from '../config/site';
+import { url } from '../lib/url';
+import type { Audience, AudienceSlug } from '../data/audiences';
+import { audiences } from '../data/en/audiences';
+import { serviceBySlug, reportComparison } from '../data/en/services';
+import { faqForAudience } from '../data/en/faq';
+import { audienceSegments, routes } from '../i18n';
+import { getArticles, articlesForAudience } from '../lib/ratgeber';
+import { ref, serviceId } from '../lib/schema';
+import type { ImageMetadata } from 'astro';
+
+import atWork from '../assets/images/patrick-wolf-beim-taetowieren.webp';
+import studio from '../assets/images/patrick-wolf-studio-weit.webp';
+import portrait from '../assets/images/patrick-wolf-portrait-studio-sitzend.jpg';
+
+export function getStaticPaths() {
+  return audiences.map((audience) => ({ params: { audience: audienceSegments[audience.slug].en }, props: { audience } }));
+}
+
+interface Props {
+  audience: Audience;
+}
+
+const { audience } = Astro.props;
+const primaryCta = primaryCtaFor('en');
+const services = audience.services.map(serviceBySlug);
+const questions = faqForAudience(audience.slug);
+const articles = articlesForAudience(await getArticles('en'), audience.slug);
+const forLabel = `For ${audience.label.toLowerCase()}`;
+const breadcrumbs = [{ label: forLabel, href: audience.href }];
+
+const pictures: Record<AudienceSlug, { src: ImageMetadata; alt: string }> = {
+  'fuer-privatpersonen': {
+    src: atWork,
+    alt: `${site.expert} wearing gloves, concentrating on work on a tattoo.`,
+  },
+  'fuer-tattoo-studios': {
+    src: studio,
+    alt: `${site.expert} sitting and smiling in his studio in ${contact.city} between the treatment couches.`,
+  },
+  'fuer-rechtsanwaelte': {
+    src: portrait,
+    alt: `${site.expert}, expert for tattoos and piercings, sitting in the studio and listening attentively.`,
+  },
+  'fuer-gerichte': {
+    src: portrait,
+    alt: `${site.expert}, expert for tattoos and piercings, sitting in the studio and listening attentively.`,
+  },
+};
+const picture = pictures[audience.slug];
+const enquiry = audience.primaryAction === 'enquiry';
+
+// Tones follow the purpose of a block, not its position: narrative on paper, working material
+// (first steps, preparation, court appointment and comparison) on deep paper.
+
+const page = {
+  audience: { '@type': 'Audience', audienceType: audience.label },
+  mentions: services.map((service) => ref(serviceId(service, Astro.site))),
+};
+---
+
+<BaseLayout title={audience.metaTitle} description={audience.metaDescription} breadcrumbs={breadcrumbs} page={page}>
+  <PageHeader
+    label={forLabel}
+    heading={audience.heading}
+    lead={audience.lead}
+    breadcrumbs={breadcrumbs}
+    updated={contentUpdated}
+  >
+    {
+      enquiry ? (
+        <>
+          <Button href={contact.phone.href} icon="phone">
+            <span class="sr-only">Call: </span>{contact.phone.display}
+          </Button>
+          <a class="link-ink inline-flex min-h-11 items-center gap-3 font-semibold" href={contact.email.href}>
+            <Icon name="mail" size={18} class="shrink-0 text-oxblood" />
+            Send an email
+          </a>
+          <Button href="#prepare" variant="text">{audience.prepareTitle}</Button>
+        </>
+      ) : (
+        <>
+          <Button href={primaryCta.href} icon="calendar">Free first consultation</Button>
+          <Button href="#services" variant="text">Suitable services</Button>
+        </>
+      )
+    }
+  </PageHeader>
+
+  {
+    audience.firstSteps && (
+      <Section id="first-steps" label="First steps" title={audience.firstStepsTitle} tone="deep" axis>
+        <ul class="grid gap-x-8 border-t border-ink md:grid-cols-2" data-reveal-group>
+          {audience.firstSteps.map((step) => (
+            <li class="grid content-start gap-3 border-b border-rule py-6" data-reveal>
+              <h3 class="text-h4">{step.title}</h3>
+              <p class="max-w-[34rem] text-graphite">{step.text}</p>
+              {step.link && (
+                <p>
+                  <a class="link-ink inline-flex min-h-11 items-center font-semibold" href={step.link.href.startsWith('#') ? step.link.href : url(step.link.href)}>
+                    {step.link.label}
+                  </a>
+                </p>
+              )}
+            </li>
+          ))}
+        </ul>
+      </Section>
+    )
+  }
+
+  <Section id="situation" label="Situation" title={audience.situationTitle}>
+    <div class="grid gap-12 md:grid-cols-12 md:gap-x-8">
+      <ul class="grid content-start border-t border-ink md:col-span-9 md:col-start-4 lg:col-span-5 lg:col-start-4" data-reveal-group>
+        {
+          audience.situations.map((situation) => (
+            <li class="border-b border-rule py-5 font-serif text-h4 text-ink" data-reveal>
+              {situation}
+            </li>
+          ))
+        }
+      </ul>
+      <figure class="md:col-span-9 md:col-start-4 lg:col-span-4 lg:col-start-9">
+        <ArtImage
+          src={picture.src}
+          alt={picture.alt}
+          ratio={4 / 3}
+          position="center"
+          crops={[{ media: '(min-width: 768px)', ratio: 4 / 5, position: 'center' }]}
+          sizes="(min-width: 1344px) 520px, (min-width: 768px) 40vw, 100vw"
+          widths={[400, 640, 880]}
+        />
+      </figure>
+    </div>
+  </Section>
+
+  <Section id="help" label="Support" title={audience.help.title}>
+    <div class="grid gap-10 md:grid-cols-12 md:gap-x-8">
+      <div class="grid content-start gap-5 md:col-span-9 md:col-start-4 xl:col-span-5 xl:col-start-4" data-reveal>
+        {
+          audience.help.paragraphs.map((paragraph, i) => (
+            <p class:list={['max-w-[40rem]', i === 0 ? 'text-lead text-ink' : 'text-graphite']}>{paragraph}</p>
+          ))
+        }
+        <div class="mt-4 max-w-[40rem] border-t border-rule pt-5">
+          <h3 class="label text-graphite">Where the report ends</h3>
+          <ul class="mt-4 grid gap-3">
+            {
+              audience.limits.map((limit) => (
+                <li class="grid grid-cols-[1.125rem_1fr] gap-3 text-graphite">
+                  <Icon name="close" size={18} class="mt-0.5 text-stone" />
+                  <span>{limit}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+      <ExpertCard class="self-start md:col-span-9 md:col-start-4 lg:col-span-5 lg:col-start-4 xl:col-span-3 xl:col-start-10" />
+    </div>
+  </Section>
+
+  {enquiry && <AudiencePrepare audience={audience} tone="deep" />}
+
+  {
+    audience.court && (
+      <Section
+        id={audience.court === 'comparison' ? 'private-or-court' : 'appointment'}
+        label={audience.court === 'comparison' ? 'Comparison' : 'Judiciary'}
+        title={audience.court === 'comparison' ? 'Private report or court report?' : undefined}
+        intro={
+          audience.court === 'comparison'
+            ? 'The difference lies in who commissions it: you or your client commission a private report, while the court itself obtains a court report.'
+            : undefined
+        }
+        tone={enquiry ? 'paper' : 'deep'}
+        density="support"
+      >
+        <CourtReference class:list={[audience.court === 'comparison' && 'mb-16']} />
+        {audience.court === 'comparison' && (
+          <CompareTable caption="Private report and court report compared" {...reportComparison} />
+        )}
+      </Section>
+    )
+  }
+
+  <Section
+    id="services"
+    label="Services"
+    title="Which services fit?"
+    intro={
+      enquiry
+        ? 'What is examined and what the report contains is set out under each service.'
+        : 'Your case does not clearly fit one service? Then we clarify it in the free first consultation, without you having to decide beforehand.'
+    }
+  >
+    <ServiceList services={services} />
+    <div class="mt-10 md:grid md:grid-cols-12 md:gap-x-8" data-reveal>
+      <p class="axis">
+        <Button href={routes.services.en} variant="text">All services at a glance</Button>
+      </p>
+    </div>
+  </Section>
+
+  {!enquiry && <AudiencePrepare audience={audience} tone="deep" />}
+
+  {
+    questions.length > 0 && (
+      <Section id="faq" label="Typical questions" title={`Frequently asked questions for ${audience.label.toLowerCase()}`} density="support" axis>
+        <p slot="note">
+          All answers by topic on the FAQ page.
+        </p>
+        <Faq items={questions} name={`faq-${audience.slug}`} />
+        <p class="mt-8" data-reveal>
+          <Button href={routes.faq.en} variant="text">All frequently asked questions</Button>
+        </p>
+      </Section>
+    )
+  }
+
+  {
+    articles.length > 0 && (
+      <Section id="guides" label="Guides" title="Further reading" tone="deep" density="support">
+        <ArticleList articles={articles} showLead={false} compact />
+        <div class="mt-8 md:grid md:grid-cols-12 md:gap-x-8" data-reveal>
+          <p class="axis">
+            <Button href={routes.guides.en} variant="text">All articles in the guides</Button>
+          </p>
+        </div>
+      </Section>
+    )
+  }
+
+  {
+    enquiry ? (
+      <CtaBand
+        title={audience.ctaTitle}
+        text={audience.ctaText}
+        action="contact"
+        ctaLabel={`Email ${contact.email.display}`}
+        ctaHref={contact.email.href}
+      />
+    ) : (
+      <CtaBand title={audience.ctaTitle} text={audience.ctaText} />
+    )
+  }
+</BaseLayout>

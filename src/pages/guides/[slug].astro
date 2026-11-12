@@ -1,0 +1,146 @@
+---
+// One page per guide article from src/content/guides: byline with author, date and reading time,
+// the Markdown body, the next step right after it, related services in the margin, then compact,
+// title led further reading and the CTA.
+import { render } from 'astro:content';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import Section from '../../components/ui/Section.astro';
+import NextStep from '../../components/ui/NextStep.astro';
+import ArticleList from '../../components/ui/ArticleList.astro';
+import CtaBand from '../../components/ui/CtaBand.astro';
+import { credentials, ogImage } from '../../config/site';
+import { serviceHref } from '../../data/services';
+import { serviceBySlug, serviceScopeNote } from '../../data/en/services';
+import { getArticles, articleHref, relatedArticles, isoDate, type Article } from '../../lib/ratgeber';
+import { readingMinutes } from '../../lib/reading-time';
+import { absoluteUrl, ids, languageTag, ref, serviceId, webPageId } from '../../lib/schema';
+import { url } from '../../lib/url';
+import { routes, t } from '../../i18n';
+import { getImage } from 'astro:assets';
+import articleImage from '../../assets/images/patrick-wolf-beim-taetowieren.webp';
+
+export async function getStaticPaths() {
+  const articles = await getArticles('en');
+  return articles.map((article) => ({
+    params: { slug: article.id },
+    props: { article, related: relatedArticles(articles, article) },
+  }));
+}
+
+interface Props {
+  article: Article;
+  related: Article[];
+}
+
+const { article, related } = Astro.props;
+const { data } = article;
+const { Content } = await render(article);
+const services = data.services.map(serviceBySlug);
+const published = isoDate(data.published);
+const updated = data.updated ? isoDate(data.updated) : undefined;
+const minutes = readingMinutes(article.body ?? '');
+// Names the article's report type in the next step; disputes are an occasion, not a report.
+const reportType = services.find((service) => service.slug !== 'streitfaelle')?.name.toLowerCase() ?? 'expert report';
+const nextStepText = `Whether a ${reportType} will help in your case is something we clarify in a free first consultation of up to 60 minutes.`;
+const breadcrumbs = [
+  { label: 'Guides', href: routes.guides.en },
+  { label: data.title, href: articleHref(article) },
+];
+
+const image = await getImage({ src: articleImage, width: 1200, format: 'jpeg' });
+const id = ids(Astro.site);
+const path = articleHref(article);
+const schema = [
+  {
+    '@type': 'Article',
+    '@id': `${absoluteUrl(path, Astro.site)}#article`,
+    headline: data.title,
+    description: data.metaDescription,
+    inLanguage: languageTag('en'),
+    datePublished: published,
+    dateModified: updated ?? published,
+    author: ref(id.person),
+    publisher: ref(id.company),
+    isPartOf: ref(id.website),
+    mainEntityOfPage: ref(webPageId(path, Astro.site)),
+    image: [new URL(image.src, Astro.site).href, absoluteUrl(ogImage.path, Astro.site)],
+    timeRequired: `PT${minutes}M`,
+    wordCount: (article.body ?? '').split(/\s+/).filter(Boolean).length,
+    about: services.map((service) => ref(serviceId(service, Astro.site))),
+  },
+];
+---
+
+<ArticleLayout
+  title={data.metaTitle}
+  description={data.metaDescription}
+  heading={data.title}
+  lead={data.lead}
+  label={data.kicker}
+  breadcrumbs={breadcrumbs}
+  updated={updated}
+  byline={{ author: data.author, authorHref: routes.about.en, published, readingMinutes: minutes }}
+  ogType="article"
+  published={published}
+  modified={updated ?? published}
+  schema={schema}
+>
+  <Content />
+  <NextStep text={nextStepText} class="mt-14" />
+
+  <div slot="aside" class="grid gap-8">
+    <!-- Below lg the margin column follows the article: the byline already names the author and the
+         further reading lists the services, so only the scope note stays there. -->
+    <div class="hidden lg:block">
+      <p class="label text-ink">Author</p>
+      <p class="mt-3 font-serif text-h4 text-ink">{data.author}</p>
+      <p class="mt-2">
+        {t('en').site.role}, examined and certified expert of the {credentials.associationShort}.
+      </p>
+      <a class="link-ink mt-1 inline-flex min-h-11 items-center font-semibold" href={url(routes.about.en)}>More about {data.author}</a>
+    </div>
+    <nav aria-label="Related services" class="hidden border-t border-rule pt-5 lg:block">
+      <p class="label text-ink">Related services</p>
+      <ul class="mt-2 grid">
+        {
+          services.map((service) => (
+            <li>
+              <a class="link-ink inline-flex min-h-11 items-center" href={url(serviceHref(service))}>{service.name}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <p class="font-serif italic lg:border-t lg:border-rule lg:pt-5">
+      This article provides general professional information. {serviceScopeNote}
+    </p>
+  </div>
+
+  <Fragment slot="after">
+    <Section id="further-reading" label="Further reading" title="Related services and articles" tone="deep" density="support">
+      <div class="md:grid md:grid-cols-12 md:gap-x-8">
+        <nav aria-labelledby="further-reading-services" class="axis">
+          <h3 id="further-reading-services" class="label text-graphite">Services on this topic</h3>
+          <ul class="mt-3 grid border-t border-ink">
+            {
+              services.map((service) => (
+                <li class="border-b border-rule">
+                  <a class="link-ink flex min-h-11 items-center py-2 font-serif text-lg" href={url(serviceHref(service))}>
+                    {service.name}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+        <h3 class="axis label mt-10 mb-3 text-graphite">More articles in the guides</h3>
+      </div>
+      <ArticleList articles={related} showLead={false} compact />
+    </Section>
+
+    <CtaBand
+      title="Let us clarify whether a report makes sense in your case."
+      text="The first consultation lasts up to 60 minutes, is free of charge and commits you to nothing. Expert reports throughout Germany and Europe."
+    />
+  </Fragment>
+</ArticleLayout>

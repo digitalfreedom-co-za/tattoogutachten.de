@@ -1,40 +1,45 @@
 ---
-// Not found page (GitHub Pages serves dist/404.html for every unknown path). Never indexed, no
-// canonical and no JSON-LD; it points to the main areas and the service index instead.
+// Not found page (GitHub Pages serves dist/404.html for every unknown path, in both locales). Never
+// indexed, no canonical and no JSON-LD. Bilingual: the English block first (the page renders in the
+// default locale), then a German block with lang="de", each leading to home, services and booking of
+// its locale.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Container from '../components/ui/Container.astro';
 import Eyebrow from '../components/ui/Eyebrow.astro';
 import Button from '../components/ui/Button.astro';
 import ServiceList from '../components/ui/ServiceList.astro';
-import { site, contact, mainNav, primaryCta } from '../config/site';
-import { services } from '../data/services';
+import { site, contact, mainNavFor } from '../config/site';
+import { servicesFor } from '../data';
+import { routes } from '../i18n';
 import { url } from '../lib/url';
+
+const mainNav = mainNavFor('en');
 ---
 
 <BaseLayout
-  title={`Seite nicht gefunden | ${site.name}`}
-  description={`Diese Seite gibt es nicht oder nicht mehr. Von hier geht es zu den Leistungen, zum Ablauf und zum Kontakt des ${site.office}.`}
+  title={`Page not found | ${site.name}`}
+  description={`This page does not exist or no longer exists. From here you can go to the services, the process and the contact details of ${site.office}.`}
   noindex
 >
-  <section aria-labelledby="fehler-titel">
+  <section aria-labelledby="error-title">
     <Container class="grid gap-12 pt-12 pb-section md:grid-cols-12 md:gap-x-8 md:pt-20">
       <div class="md:col-span-3">
         <div class="hairline mb-4" aria-hidden="true"></div>
-        <Eyebrow>Seite nicht gefunden</Eyebrow>
+        <Eyebrow>Page not found</Eyebrow>
       </div>
       <div class="md:col-span-9 lg:col-span-8">
-        <h1 id="fehler-titel" class="text-h1 tracking-display">Diese Seite gibt es hier nicht.</h1>
+        <h1 id="error-title" class="text-h1 tracking-display">This page does not exist here.</h1>
         <p class="mt-6 max-w-[38rem] text-lead text-graphite">
-          Der Link ist veraltet oder die Adresse wurde falsch eingegeben. Alle Inhalte zu Gutachten über Tätowierungen
-          und Piercings finden Sie über die Startseite oder direkt in den Bereichen unten.
+          The link is out of date or the address was mistyped. Everything on expert reports about tattoos and piercings
+          can be reached from the home page or directly from the sections below.
         </p>
         <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-5">
-          <Button href="/">Zur Startseite</Button>
-          <Button href={primaryCta.href} variant="secondary" icon="calendar">{primaryCta.label}</Button>
+          <Button href={routes.home.en}>Go to the home page</Button>
+          <Button href={routes.booking.en} variant="secondary" icon="calendar">Book a consultation</Button>
         </div>
 
-        <nav aria-label="Bereiche der Website" class="mt-16 border-t border-ink pt-5">
-          <p class="label text-ink">Bereiche</p>
+        <nav aria-label="Sections of the website" class="mt-16 border-t border-ink pt-5">
+          <p class="label text-ink">Sections</p>
           <ul class="mt-2 grid gap-x-8 sm:grid-cols-2">
             {
               mainNav.map((item) => (
@@ -46,14 +51,27 @@ import { url } from '../lib/url';
           </ul>
         </nav>
 
-        <h2 class="mt-16 text-h3">Gutachten im Überblick</h2>
-        <ServiceList services={services} class="mt-6" />
+        <h2 class="mt-16 text-h3">Expert reports at a glance</h2>
+        <ServiceList services={servicesFor('en')} class="mt-6" />
 
         <p class="mt-12 text-graphite">
-          Lieber direkt fragen? {site.expert} erreichen Sie unter
+          Prefer to ask directly? You can reach {site.expert} on
           <a class="link-ink font-semibold" href={contact.phone.href}>{contact.phone.display}</a>
-          oder per E-Mail an <a class="link-ink font-semibold" href={contact.email.href}>{contact.email.display}</a>.
+          or by email at <a class="link-ink font-semibold break-all" href={contact.email.href}>{contact.email.display}</a>.
         </p>
+
+        <div lang="de" class="mt-16 border-t border-ink pt-8">
+          <h2 class="text-h3">Diese Seite gibt es hier nicht.</h2>
+          <p class="mt-4 max-w-[38rem] text-graphite">
+            Der Link ist veraltet oder die Adresse wurde falsch eingegeben. Alle Inhalte auf Deutsch erreichen Sie über
+            die deutsche Startseite.
+          </p>
+          <ul class="mt-4 flex flex-wrap gap-x-8">
+            <li><a class="link-ink inline-flex min-h-11 items-center font-semibold" href={url(routes.home.de)}>Zur Startseite</a></li>
+            <li><a class="link-ink inline-flex min-h-11 items-center font-semibold" href={url(routes.services.de)}>Leistungen</a></li>
+            <li><a class="link-ink inline-flex min-h-11 items-center font-semibold" href={url(routes.booking.de)}>Termin buchen</a></li>
+          </ul>
+        </div>
       </div>
     </Container>
   </section>

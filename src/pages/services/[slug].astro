@@ -1,0 +1,213 @@
+---
+// English service pages (German: src/pages/de/leistungen/[slug].astro), one per service from
+// src/data/en/services.ts at /services/<segment>/ (segments in src/i18n/routes.ts): answer first
+// definition, scope, result, service specific topics, typical questions, related services, booking CTA.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/ui/PageHeader.astro';
+import Section from '../../components/ui/Section.astro';
+import Button from '../../components/ui/Button.astro';
+import Card from '../../components/ui/Card.astro';
+import Checklist from '../../components/ui/Checklist.astro';
+import ExpertCard from '../../components/ui/ExpertCard.astro';
+import CompareTable from '../../components/ui/CompareTable.astro';
+import CourtReference from '../../components/ui/CourtReference.astro';
+import Faq from '../../components/ui/Faq.astro';
+import Icon from '../../components/ui/Icon.astro';
+import CtaBand from '../../components/ui/CtaBand.astro';
+import { contact, contentUpdated, primaryCtaFor } from '../../config/site';
+import { serviceHref, type Service } from '../../data/services';
+import { services, serviceBySlug, serviceScopeNote, reportComparison } from '../../data/en/services';
+import { faqForService } from '../../data/en/faq';
+import { serviceSegments, t } from '../../i18n';
+import { url } from '../../lib/url';
+import { ref, serviceId, serviceNode } from '../../lib/schema';
+
+export function getStaticPaths() {
+  return services.map((service) => ({ params: { slug: serviceSegments[service.slug].en }, props: { service } }));
+}
+
+interface Props {
+  service: Service;
+}
+
+const { service } = Astro.props;
+const [answer, ...moreIntro] = service.intro;
+const questions = faqForService(service.slug);
+const related = service.related.map(serviceBySlug);
+const primaryCta = primaryCtaFor('en');
+const breadcrumbs = [
+  { label: 'Services', href: '/services/' },
+  { label: service.name, href: serviceHref(service) },
+];
+
+// Tones follow the purpose of a block, not its position: narrative on paper, reference material
+// (scope, court appointment, comparison) on deep paper. Short supporting blocks use the support density.
+---
+
+<BaseLayout
+  title={service.metaTitle}
+  description={service.metaDescription}
+  breadcrumbs={breadcrumbs}
+  page={{ mainEntity: ref(serviceId(service, Astro.site)) }}
+  schema={[serviceNode(service, Astro.site, 'en')]}
+>
+  <PageHeader
+    label={service.kicker}
+    heading={service.title}
+    lead={service.summary}
+    breadcrumbs={breadcrumbs}
+    updated={contentUpdated}
+  >
+    {
+      service.enquiry ? (
+        <>
+          <Button href={contact.phone.href} icon="phone">
+            <span class="sr-only">{t('en').contactLabels.call} </span>{contact.phone.display}
+          </Button>
+          <Button href={service.enquiry.audienceHref} variant="text">{service.enquiry.audienceLabel}</Button>
+        </>
+      ) : (
+        <>
+          <Button href={primaryCta.href} icon="calendar">Free first consultation</Button>
+          <Button href="/process-and-fees/" variant="text">Process and fees</Button>
+        </>
+      )
+    }
+  </PageHeader>
+
+  <Section id="definition" label="In brief" title={service.definitionTitle}>
+    <div class="grid gap-10 md:grid-cols-12 md:gap-x-8">
+      <div class="grid content-start gap-5 md:col-span-9 md:col-start-4 xl:col-span-5 xl:col-start-4" data-reveal>
+        <p class="max-w-[40rem] text-lead text-ink">{answer}</p>
+        {moreIntro.map((paragraph) => <p class="max-w-[40rem] text-graphite">{paragraph}</p>)}
+      </div>
+      <ExpertCard class="self-start md:col-span-9 md:col-start-4 lg:col-span-5 lg:col-start-4 xl:col-span-3 xl:col-start-10" />
+    </div>
+  </Section>
+
+  <Section id="scope" label="Scope" title="What is examined, and what do you receive?" tone="deep" axis>
+    <p slot="note">{serviceScopeNote}</p>
+    <div class="grid gap-8 md:grid-cols-2 md:gap-x-8">
+      <Checklist title={service.assessedTitle ?? 'What is examined'} items={service.assessed} />
+      <Checklist title="What you receive" items={service.deliverables} />
+    </div>
+    {
+      service.note && (
+        <p class="mt-10 max-w-[40rem] border-l border-oxblood pl-4 text-graphite" data-reveal>
+          {service.note}
+        </p>
+      )
+    }
+  </Section>
+
+  {
+    service.topics?.map((topic) => (
+      <Section id={topic.id} label={topic.label} title={topic.title} density="support" axis>
+        <div class="grid max-w-[40rem] gap-5" data-reveal>
+          {topic.paragraphs.map((paragraph, i) => (
+            <p class:list={i === 0 ? 'text-lead text-ink' : 'text-graphite'}>{paragraph}</p>
+          ))}
+          {topic.items && (
+            <ul class="grid gap-3 border-t border-rule pt-5">
+              {topic.items.map((item) => (
+                <li class="grid grid-cols-[1.125rem_1fr] gap-3">
+                  <Icon name="check" size={18} class="mt-0.5 text-oxblood" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+          {topic.link && (
+            <p>
+              <Button href={topic.link.href} variant="text">{topic.link.label}</Button>
+            </p>
+          )}
+        </div>
+      </Section>
+    ))
+  }
+
+  {
+    service.showCourtReference && (
+      <Section id="appointment" label="Courts" tone="deep" density="support">
+        <CourtReference />
+      </Section>
+    )
+  }
+
+  {
+    service.showComparison && (
+      <Section
+        id="private-or-court"
+        label="Comparison"
+        title="Private expert report or court report?"
+        intro="The difference lies in who commissions it: you commission a private expert report yourself, a court report is obtained by the court."
+        tone={service.showCourtReference ? 'paper' : 'deep'}
+        density="support"
+      >
+        <CompareTable caption="Private expert report and court report compared" {...reportComparison} />
+      </Section>
+    )
+  }
+
+  {
+    questions.length > 0 && (
+      <Section id="faq" label="Typical questions" title={`Frequently asked questions: ${service.name}`} density="support" axis>
+        <p slot="note">
+          All answers by topic:
+          <a class="link-ink not-italic" href={url('/faq/')}>frequently asked questions about expert reports on tattoos</a>.
+        </p>
+        <Faq items={questions} name={`faq-${service.slug}`} />
+      </Section>
+    )
+  }
+
+  <Section
+    id="process"
+    label="Process"
+    title="What happens next?"
+    intro={
+      service.enquiry?.nextIntro ??
+      'Everything starts with a free first consultation of up to 60 minutes. Fees only arise once you commission a report in writing.'
+    }
+    density="support"
+    axis
+  >
+    <p class="mb-10" data-reveal>
+      {
+        service.enquiry ? (
+          <Button href={service.enquiry.audienceHref} variant="text">{service.enquiry.audienceLabel}</Button>
+        ) : (
+          <Button href="/process-and-fees/" variant="text">The five steps and the fees in detail</Button>
+        )
+      }
+    </p>
+    <h3 class="label mb-6 text-graphite">Related services</h3>
+    <div class="grid gap-x-8 gap-y-2 md:grid-cols-3" data-reveal-group>
+      {
+        related.map((item) => (
+          <Card kicker={item.kicker} title={item.name} href={serviceHref(item)} linkLabel={`More on ${item.name}`} headingLevel="h4">
+            <p>{item.summary}</p>
+          </Card>
+        ))
+      }
+    </div>
+  </Section>
+
+  {
+    service.enquiry ? (
+      <CtaBand
+        title={service.enquiry.ctaTitle}
+        text={service.enquiry.ctaText}
+        action="contact"
+        ctaLabel={`Email ${contact.email.display}`}
+        ctaHref={contact.email.href}
+      />
+    ) : (
+      <CtaBand
+        title="Let us clarify whether an expert report makes sense in your case."
+        text="The first consultation lasts up to 60 minutes, is free of charge and commits you to nothing. Expert reports throughout Germany and Europe."
+      />
+    )
+  }
+</BaseLayout>

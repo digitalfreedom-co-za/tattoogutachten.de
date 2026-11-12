@@ -1,0 +1,85 @@
+---
+// Guides index: all articles from the English content collection, the audience pages and a CTA.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/ui/PageHeader.astro';
+import Section from '../../components/ui/Section.astro';
+import Card from '../../components/ui/Card.astro';
+import ArticleList from '../../components/ui/ArticleList.astro';
+import CtaBand from '../../components/ui/CtaBand.astro';
+import { site, credentials, contentUpdated } from '../../config/site';
+import { audiences } from '../../data/en/audiences';
+import { getArticles, articleHref } from '../../lib/ratgeber';
+import { absoluteUrl, ids, ref } from '../../lib/schema';
+import { url } from '../../lib/url';
+import { routes } from '../../i18n';
+
+const articles = await getArticles('en');
+const breadcrumbs = [{ label: 'Guides', href: routes.guides.en }];
+const description = `Guides by tattoo expert ${site.expert}: a tattoo gone wrong, defect or taste, private or court report, photos, hygiene, piercing problems.`;
+const firstGuide = articles.find((article) => 'translationOf' in article.data && article.data.translationOf === 'tattoo-misslungen-was-tun');
+
+const page = {
+  author: ref(ids(Astro.site).person),
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: articles.map((article, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: article.data.title,
+      url: absoluteUrl(articleHref(article), Astro.site),
+    })),
+  },
+};
+---
+
+<BaseLayout
+  title="Guides on tattoo expert reports: defects, photos, hygiene, court"
+  description={description}
+  breadcrumbs={breadcrumbs}
+  pageType="CollectionPage"
+  page={page}
+>
+
+  <PageHeader
+    label="Guides"
+    heading="Guides on tattoo expert reports."
+    lead={`Short, factual answers to the questions that come up most often before a report. Written by ${site.expert}, examined and certified expert of the ${credentials.associationShort}. The articles provide general information and are no substitute for legal advice.`}
+    breadcrumbs={breadcrumbs}
+    updated={contentUpdated}
+  />
+
+  <Section id="articles" label="Articles" title="All articles">
+    {
+      firstGuide && (
+        <p slot="note">
+          Only just noticed that something is wrong? Then start with
+          <a class="link-ink not-italic" href={url(articleHref(firstGuide))}>{firstGuide.data.title}</a>
+        </p>
+      )
+    }
+    <ArticleList articles={articles} />
+  </Section>
+
+  <Section
+    id="who-we-work-for"
+    label="Who we work for"
+    title="Information by client"
+    intro="A client asks about the defect, a studio about the allegation, a court about the questions it puts to the expert. Choose your page."
+    tone="deep"
+  >
+    <div class="grid gap-x-8 gap-y-4 md:grid-cols-2 xl:grid-cols-4" data-reveal-group>
+      {
+        audiences.map((audience) => (
+          <Card kicker={audience.label} title={audience.title} href={audience.href} linkLabel={`More for ${audience.label.toLowerCase()}`}>
+            <p>{audience.text}</p>
+          </Card>
+        ))
+      }
+    </div>
+  </Section>
+
+  <CtaBand
+    title="Your case is not covered?"
+    text="Not every case can be settled with a general answer. We are happy to discuss yours in a free first consultation of up to 60 minutes."
+  />
+</BaseLayout>

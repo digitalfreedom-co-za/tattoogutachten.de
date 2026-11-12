@@ -1,0 +1,121 @@
+---
+// English services overview (German: src/pages/de/leistungen/index.astro): all six services, a
+// situation finder, what every report contains and what is out of scope. Content from src/data/en/.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/ui/PageHeader.astro';
+import Section from '../../components/ui/Section.astro';
+import Button from '../../components/ui/Button.astro';
+import ServiceList from '../../components/ui/ServiceList.astro';
+import Checklist from '../../components/ui/Checklist.astro';
+import TrustStrip from '../../components/ui/TrustStrip.astro';
+import CtaBand from '../../components/ui/CtaBand.astro';
+import { site, credentials, contentUpdated, primaryCtaFor } from '../../config/site';
+import { serviceHref } from '../../data/services';
+import { services, serviceExclusions, clients } from '../../data/en/services';
+import { reportContents } from '../../data/en/process';
+import { url } from '../../lib/url';
+import { absoluteUrl, ref, serviceId } from '../../lib/schema';
+
+const primaryCta = primaryCtaFor('en');
+const breadcrumbs = [{ label: 'Services', href: '/services/' }];
+const page = {
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: services.map((service, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      item: { ...ref(serviceId(service, Astro.site)), name: service.name, url: absoluteUrl(serviceHref(service), Astro.site) },
+    })),
+  },
+};
+---
+
+<BaseLayout
+  breadcrumbs={breadcrumbs}
+  pageType="CollectionPage"
+  page={page}
+  title="Services: expert reports on tattoos, piercings and for courts | Patrick Wolf"
+  description={`All services of tattoo expert ${site.expert}: reports on tattoos, piercings and hygiene, private and court reports, support in disputes. Certified by the ${credentials.associationShort}.`}
+>
+  <PageHeader
+    label="Services"
+    heading="Expert reports on tattoos, piercings and studio hygiene."
+    lead={`${site.expert} examines and assesses tattoos, piercings and the working procedures in studios, as an examined and certified expert of the ${credentials.associationShort}. Every case is assessed on its specific circumstances, the available documentation and the professional requirements.`}
+    breadcrumbs={breadcrumbs}
+    updated={contentUpdated}
+  >
+    <Button href={primaryCta.href} icon="calendar">Free first consultation</Button>
+    <Button href="/process-and-fees/" variant="text">Process and fees</Button>
+  </PageHeader>
+
+  <TrustStrip />
+
+
+  <Section
+    id="which-service"
+    label="Orientation"
+    title="Which service fits your case?"
+    intro="Look for the row that comes closest to your case. If several fit, that is normal: which questions the report has to answer is something we clarify in the free first consultation."
+  >
+    <table class="w-full border-t border-ink text-left" data-reveal>
+      <caption class="sr-only">Typical situations and the matching service</caption>
+      <thead class="max-md:sr-only">
+        <tr class="border-b border-ink">
+          <th scope="col" class="label py-4 pr-8 text-ink">Your situation</th>
+          <th scope="col" class="label py-4 text-ink">Matching service</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          services.map((service) => (
+            <tr class="border-b border-rule max-md:grid max-md:gap-2 max-md:py-5">
+              <td class="py-5 pr-8 align-top text-ink-soft max-md:py-0 md:w-3/5">{service.situation}</td>
+              <td class="py-5 align-top max-md:py-0">
+                <a class="link-ink inline-flex min-h-11 items-center font-serif text-h4" href={url(serviceHref(service))}>
+                  {service.name}
+                </a>
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </Section>
+
+  <Section
+    id="overview"
+    label="Overview"
+    title="Which expert reports are there?"
+    intro="The services answer two questions: what is assessed and how the commission comes about. A case often touches both, yet you still commission a single report."
+    tone="deep"
+  >
+    <p slot="note">Clients are {clients.slice(0, -1).join(', ')} and {clients[clients.length - 1]}.</p>
+    <ServiceList services={services} grouped />
+  </Section>
+
+  <Section
+    id="report-contents"
+    label="Result"
+    title="What does an expert report contain?"
+    intro="An expert report contains the facts of the case, the basis of the examination, the professional findings and a reasoned assessment. It is written so that non-specialists can follow it too."
+    axis
+  >
+    <p slot="note">
+      The result depends solely on the facts that can be established, not on who commissions the report.
+    </p>
+    <div class="grid gap-8 md:grid-cols-2 md:gap-x-8">
+      <Checklist title="Contents, depending on the commission" items={reportContents} />
+      <Checklist title="Not part of the service" items={serviceExclusions} icon="close" />
+    </div>
+    <p class="mt-10 max-w-[40rem] text-graphite" data-reveal>
+      Where medical findings or damage to health are involved, a medical assessment may be needed in addition. Legal
+      questions are a matter for a lawyer. More on this in the
+      <a class="link-ink" href={url('/faq/#commissioning')}>frequently asked questions on commissioning and courts</a>.
+    </p>
+  </Section>
+
+  <CtaBand
+    title="Do you need an independent assessment?"
+    text="In the free first consultation we clarify whether an expert examination makes sense for your concern and which approach would be suitable."
+  />
+</BaseLayout>

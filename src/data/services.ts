@@ -402,7 +402,7 @@ export const findService = (list: Service[], slug: ServiceSlug): Service => {
 export const serviceBySlug = (slug: ServiceSlug): Service => findService(services, slug);
 
 /** Scope limit that belongs next to every service listing. */
-export const serviceScopeNote =
+export const serviceScopeNote: string =
   'Rechtsberatung, anwaltliche Vertretung sowie die Diagnose und Behandlung medizinischer Erkrankungen gehören nicht zum Leistungsumfang.';
 
 /** The same limits as a list, for the services overview. */

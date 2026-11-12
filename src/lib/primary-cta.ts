@@ -10,6 +10,8 @@ import type { IconName } from '../components/ui/Icon.astro';
 
 export interface PageCta {
   label: string;
+  /** Label of the header button below sm, where the row has the least room. */
+  shortLabel: string;
   /** Path without base; pass through url() before rendering. */
   href: string;
   icon: IconName;
@@ -40,6 +42,7 @@ export function pageCta(pathWithoutBase: string): PageCta {
   if (enquiryPaths.has(normalize(pathWithoutBase))) {
     return {
       label: copy.enquiry,
+      shortLabel: copy.enquiryShort,
       href: `${routes.contact[locale]}#${anchor('contact-details', locale)}`,
       icon: 'mail',
       note: [copy.enquiryNote[0], copy.enquiryNote[1]],
@@ -47,6 +50,7 @@ export function pageCta(pathWithoutBase: string): PageCta {
   }
   return {
     label: primaryCtaFor(locale).label,
+    shortLabel: copy.bookingShort,
     href: bookingHref(pathWithoutBase),
     icon: 'calendar',
     note: [copy.bookingNote[0], copy.bookingNote[1]],

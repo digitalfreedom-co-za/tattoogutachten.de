@@ -52,9 +52,17 @@
     "writeEmail": "E-Mail schreiben"
   },
   "cta": {
+    "bookingShort": "Termin",
+    "enquiryShort": "Anfrage",
     "enquiry": "Anfrage stellen",
-    "enquiryNote": ["Anfrage per Telefon", "oder E-Mail"],
-    "bookingNote": ["Erstberatung kostenlos,", "bis zu 60 Minuten"],
+    "enquiryNote": [
+      "Anfrage per Telefon",
+      "oder E-Mail"
+    ],
+    "bookingNote": [
+      "Erstberatung kostenlos,",
+      "bis zu 60 Minuten"
+    ],
     "contactBand": "Kontakt aufnehmen"
   },
   "footer": {
@@ -164,7 +172,15 @@
     "conversation": "Gespräch",
     "confirmation": "Bestätigung",
     "confirmationValue": "Per E-Mail, mit Links zum Verschieben und Absagen",
-    "weekdays": ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"],
+    "weekdays": [
+      "Mo",
+      "Di",
+      "Mi",
+      "Do",
+      "Fr",
+      "Sa",
+      "So"
+    ],
     "timezone": "Zeitzone",
     "timezoneDevice": "Die Ihres Geräts",
     "timezoneHint": "Der Kalender zeigt freie Uhrzeiten in dieser Zeitzone.",

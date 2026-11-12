@@ -1,0 +1,327 @@
+---
+// Privacy policy in English, a convenience translation of the German Datenschutzerklärung
+// (src/pages/de/datenschutz.astro), which is the legally binding version. Same facts, same checks:
+// GitHub Pages hosting, self hosted fonts, no cookies or tracking of its own, the consent record and
+// the explicit language choice (locale-explicit) in localStorage, the cal.com embed on the home and
+// booking pages only after consent (incl. Cloudflare __cf_bm cookie and Sentry), plain external
+// links. Change both pages together, whenever a third party service or a storage key is added or
+// removed. While the demo calendar is configured (CAL_IS_DEMO), the booking section names the holder
+// of the demo account as recipient.
+import ArticleLayout from '../layouts/ArticleLayout.astro';
+import { site, company, contact, contentUpdated, type NavItem } from '../config/site';
+import { CAL_IS_DEMO, CAL_DEMO_ACCOUNT_HOLDER } from '../config/booking';
+import { url } from '../lib/url';
+import { CONSENT_STORAGE_KEY } from '../config/consent';
+import { anchor, t } from '../i18n';
+
+const consentId = anchor('consent', 'en');
+const bookingId = anchor('booking-calendar', 'en');
+
+const title = `Privacy policy | ${site.name}`;
+const description = `Privacy policy of ${site.domain}: hosting on GitHub Pages, online booking via cal.com, consent, contact, your rights. No cookies of our own, no tracking.`;
+const breadcrumbs: NavItem[] = [{ label: 'Privacy', href: '/privacy/' }];
+
+const toc: NavItem[] = [
+  { label: 'Controller', href: '#controller' },
+  { label: 'Hosting on GitHub Pages', href: '#hosting' },
+  { label: 'Fonts, cookies and tracking', href: '#cookies' },
+  { label: 'Consent and cookie settings', href: `#${consentId}` },
+  { label: 'Online booking via cal.com', href: `#${bookingId}` },
+  { label: 'Contact by email and telephone', href: '#contact' },
+  { label: 'Links to other services', href: '#links' },
+  { label: 'Your rights', href: '#rights' },
+  { label: 'Complaint to the supervisory authority', href: '#complaint' },
+];
+
+const external = { target: '_blank', rel: 'noopener noreferrer' };
+---
+
+<ArticleLayout
+  title={title}
+  description={description}
+  heading="Privacy policy"
+  lead="These pages work without cookies of their own, without analytics and without advertising services. Besides the hosting on GitHub Pages, one further service only comes into play with your consent: the calendar for online booking."
+  label="Legal"
+  breadcrumbs={breadcrumbs}
+  updated={contentUpdated}
+  asideFirst
+>
+  <p>
+    This English text is a convenience translation. The legally binding version is the German
+    <a href={url('/de/datenschutz/')} hreflang="de">Datenschutzerklärung</a>.
+  </p>
+
+  <h2 id="controller">Controller</h2>
+  <p>The controller responsible for the processing of personal data on this website is:</p>
+  <p>
+    {company.name}<br />
+    {company.street}<br />
+    {contact.postalCode} {contact.city}<br />
+    {t('en').site.country}<br />
+    Represented by the managing director {company.managingDirector}
+  </p>
+  <p>
+    Telephone: <a href={contact.phone.href}>{contact.phone.display}</a><br />
+    Email: <a class="break-all" href={contact.email.href}>{contact.email.display}</a>
+  </p>
+  <p>
+    No data protection officer has been appointed. Please send any questions about data protection to the contact
+    details above.
+  </p>
+
+  <h2 id="hosting">Hosting on GitHub Pages</h2>
+  <p>
+    This website is served via GitHub Pages, a service of GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco,
+    CA 94107, USA. When you open a page, your browser sends technically necessary data to the servers of GitHub. This
+    includes your IP address, the date and time of the request, the address requested, the page visited before
+    (referrer) and details of your browser and operating system.
+  </p>
+  <p>
+    According to GitHub, it stores the IP addresses of visitors to GitHub Pages for security purposes. We have no
+    access to these logs and do not evaluate them. GitHub determines how long it keeps them.
+  </p>
+  <p>
+    The legal basis is Art. 6(1)(f) of the General Data Protection Regulation (GDPR). Our legitimate interest lies in
+    providing the website securely and reliably.
+  </p>
+  <p>
+    This involves a transfer of data to the USA. GitHub is certified under the EU-U.S. Data Privacy Framework, so the
+    transfer is covered by the adequacy decision of the European Commission under Art. 45 GDPR. In addition, GitHub
+    relies on the standard contractual clauses of the European Commission. Details are set out in the
+    <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" {...external}
+      >privacy statement of GitHub<span class="sr-only"> (opens in a new window)</span></a
+    >.
+  </p>
+  <p>All pages are transmitted encrypted via HTTPS.</p>
+
+  <h2 id="cookies">Fonts, cookies and tracking</h2>
+  <p>
+    The fonts of this website are stored on the same server as the website itself. Loading them sends no data to font
+    providers such as Google Fonts.
+  </p>
+  <p>
+    Our own pages set no cookies. In your browser storage they keep at most two entries: your answer to the question
+    about consent and, if you close the language notice or switch the language, that choice. Both are described in
+    the next section. We use no analytics or audience measurement, no advertising services and no social media
+    plugins. One third-party service, the calendar of cal.com, only loads with your consent.
+  </p>
+
+  <h2 id={consentId}>Consent and cookie settings</h2>
+  <p>
+    On your first visit we ask whether the cal.com booking calendar may load. Rejecting is as easy as accepting, and
+    without consent the website works in full. Before you consent, nothing is loaded from cal.com and no connection to
+    cal.com is made. Instead of the calendar you see a placeholder, from which you can load the calendar with your
+    consent or arrange the appointment by telephone or email.
+  </p>
+  <p>
+    We store your answer in your browser so that we do not ask again on every page. Your browser also remembers when
+    you close the notice about the other language version or switch the language yourself:
+  </p>
+  <div class="overflow-x-auto">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Entry</th>
+          <th scope="col">Location</th>
+          <th scope="col">Written</th>
+          <th scope="col">Purpose</th>
+          <th scope="col">Storage period</th>
+          <th scope="col">Consent</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">{CONSENT_STORAGE_KEY}</th>
+          <td>localStorage of this website</td>
+          <td>when you make a choice in the notice or in the cookie settings</td>
+          <td>
+            Stores your choice: the version of the notice, the time and whether the calendar may load. No identifier,
+            read only by this website.
+          </td>
+          <td>until you change your choice or clear your browser storage</td>
+          <td>not required, strictly necessary (§ 25(2) no. 2 TDDDG)</td>
+        </tr>
+        <tr>
+          <th scope="row">locale-explicit</th>
+          <td>localStorage of this website</td>
+          <td>when you close the language notice or choose the language with the language switch</td>
+          <td>Keeps the notice about the other language version from showing again. Value 1, no identifier, read only by this website.</td>
+          <td>until you clear your browser storage</td>
+          <td>not required, strictly necessary (§ 25(2) no. 2 TDDDG)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    TDDDG stands for the German Telecommunications Digital Services Data Protection Act
+    (Telekommunikation-Digitale-Dienste-Datenschutz-Gesetz), which governs storing and reading information on your
+    device. The legal basis for processing these entries is Art. 6(1)(f) GDPR. Our legitimate interest lies in
+    respecting your decisions and being able to demonstrate your consent decision (Art. 7(1) GDPR). The entries never
+    leave your browser. If the notice changes in substance, we ask again.
+  </p>
+  <p>
+    You can withdraw or change your consent at any time with effect for the future, via the Cookie settings link at the
+    bottom of every page or
+    <a href={url(`/privacy/#${consentId}`)} data-consent-open aria-haspopup="dialog">right here</a>. If the calendar has
+    already loaded, the page reloads after the withdrawal so that it is removed. The lawfulness of processing before
+    the withdrawal remains unaffected.
+  </p>
+
+  <h2 id={bookingId}>Online booking via cal.com</h2>
+  <p>
+    To book the free first consultation, we embed a calendar of the cal.com service. The provider is Cal.com, Inc.,
+    2261 Market Street #4382, San Francisco, CA 94114, USA.
+  </p>
+  <h3>When the calendar loads</h3>
+  <p>
+    The calendar is on the <a href={url(`/#${anchor('booking', 'en')}`)}>home page</a> and on the
+    <a href={url('/booking/')}>booking page</a>. It only loads if you have consented, in the privacy notice, in the
+    cookie settings or with the Load calendar and consent button in the booking section. Even then it does not load
+    with the page, but only once the booking section comes into view. From that moment your browser retrieves content
+    from cal.com servers. On all other pages nothing is loaded from cal.com.
+  </p>
+  <h3>Which data is processed</h3>
+  <p>
+    As soon as the calendar loads, cal.com receives technical data: your IP address, details of your browser and
+    device, the address of the page in which the calendar is embedded, and the date and time. Cloudflare, a service
+    provider used by cal.com, sets the cookie __cf_bm, which serves to fend off automated access (bots) and expires
+    after 30 minutes of inactivity. The calendar also sends technical error reports to the Sentry service, which
+    cal.com uses for error analysis.
+  </p>
+  <p>
+    When you book an appointment, cal.com also processes the details you enter in the booking form, in particular your
+    name, email address, the chosen time and your message. cal.com sends the booking confirmation by email.
+  </p>
+  {
+    CAL_IS_DEMO ? (
+      <p>
+        At present, a demo calendar for the preview is embedded on this website. It sits in the cal.com account of the
+        web developer of this website, {CAL_DEMO_ACCOUNT_HOLDER}, not in an account of {company.name}. Details from a
+        booking therefore go to that account and not to us, and no appointment with {site.expert} results from it. For
+        a real first consultation, please call or send an email. As soon as the calendar of {company.name} is embedded,
+        this notice will be removed.
+      </p>
+    ) : (
+      <p>We receive these details in order to hold the appointment with you.</p>
+    )
+  }
+  <h3>Legal basis</h3>
+  <p>
+    Loading the calendar and the associated transfer to cal.com are based on your consent (Art. 6(1)(a) GDPR). Where
+    information is stored on or read from your device in the process, such as the cookie __cf_bm, the legal basis is
+    likewise your consent (§ 25(1) TDDDG). Processing your details when you book serves to take steps prior to
+    entering into a contract at your request (Art. 6(1)(b) GDPR).
+  </p>
+  <p>
+    You can withdraw your consent at any time with effect for the future, via
+    <a href={url(`/privacy/#${consentId}`)} data-consent-open aria-haspopup="dialog">Cookie settings</a>. After that the
+    calendar no longer loads. Cookies that cal.com has set on its own domain expire (__cf_bm after 30 minutes of
+    inactivity) or can be deleted in your browser.
+  </p>
+  <h3>Transfer to the USA</h3>
+  <p>
+    Cal.com processes the data in the USA. Cal.com, Inc. is certified under the EU-U.S. Data Privacy Framework (as
+    checked on 12 November 2026), so the transfer is based on the adequacy decision of the European Commission under
+    Art. 45 GDPR. For transfers outside this framework, cal.com uses the standard contractual clauses of the European
+    Commission. Details are set out in the
+    <a href="https://cal.com/privacy" {...external}
+      >privacy policy of cal.com<span class="sr-only"> (opens in a new window)</span></a
+    >.
+  </p>
+  <h3>Storage period and alternatives</h3>
+  <p>
+    {
+      CAL_IS_DEMO ? (
+        <>
+          We do not receive booking data from the demo calendar. It is held in the cal.com account of{' '}
+          {CAL_DEMO_ACCOUNT_HOLDER} and is stored and deleted under the rules of cal.com.
+        </>
+      ) : (
+        <>
+          We delete booking data as soon as it is no longer needed to hold and follow up the appointment, unless
+          statutory retention obligations apply.
+        </>
+      )
+    }{' '}
+    If you do not consent or do not want to use cal.com, simply arrange your appointment by telephone on{' '}
+    <a href={contact.phone.href}>{contact.phone.display}</a> or by email.
+  </p>
+
+  <h2 id="contact">Contact by email and telephone</h2>
+  <p>
+    If you email or call us, we process your details, such as your name, contact details, your request and any photos
+    or documents you send, in order to handle your enquiry. Where it concerns a report or a commission, the legal basis
+    is Art. 6(1)(b) GDPR, otherwise Art. 6(1)(f) GDPR, with the legitimate interest of answering enquiries.
+  </p>
+  <p>
+    The email mailbox is operated by the provider WEB.DE of 1&amp;1 Mail &amp; Media GmbH, Brauerstraße 48, 76135
+    Karlsruhe, Germany. Your messages are therefore also stored on their servers.
+  </p>
+  <p>
+    We delete your enquiry once it has been dealt with and no statutory retention obligations apply. Business letters
+    and documents relating to commissions are kept for up to ten years under German commercial and tax law (§ 257 HGB,
+    § 147 AO).
+  </p>
+
+  <h2 id="links">Links to other services</h2>
+  <p>
+    Some pages link to other providers, for example to Google Maps for directions to the office or to the cal.com
+    booking page. Such links are plain references: data only goes to the provider once you click the link. From then
+    on, the privacy policy of that provider applies.
+  </p>
+
+  <h2 id="rights">Your rights</h2>
+  <p>You have the right at any time, towards {company.name}, to</p>
+  <ul>
+    <li>access to your stored data (Art. 15 GDPR),</li>
+    <li>rectification of inaccurate data (Art. 16 GDPR),</li>
+    <li>erasure of your data (Art. 17 GDPR),</li>
+    <li>restriction of processing (Art. 18 GDPR),</li>
+    <li>data portability (Art. 20 GDPR),</li>
+    <li>withdraw consent you have given, with effect for the future (Art. 7(3) GDPR).</li>
+  </ul>
+  <p>
+    An email to <a class="break-all" href={contact.email.href}>{contact.email.display}</a> is enough for any request.
+  </p>
+  <h3>Right to object</h3>
+  <p>
+    Where we process data on the basis of Art. 6(1)(f) GDPR, you may object at any time on grounds relating to your
+    particular situation (Art. 21 GDPR). We will then no longer process the data, unless there are compelling
+    legitimate grounds for the processing or it serves the establishment, exercise or defence of legal claims.
+  </p>
+
+  <h2 id="complaint">Complaint to the supervisory authority</h2>
+  <p>
+    You have the right to lodge a complaint with a data protection supervisory authority (Art. 77 GDPR). The authority
+    responsible for {company.name} is:
+  </p>
+  <p>
+    Der Hessische Beauftragte für Datenschutz und Informationsfreiheit (Hessian Commissioner for Data Protection and
+    Freedom of Information)<br />
+    Wilhelmstraße 7<br />
+    65185 Wiesbaden<br />
+    {t('en').site.country}<br />
+    <a href="https://datenschutz.hessen.de" {...external}
+      >datenschutz.hessen.de<span class="sr-only"> (opens in a new window)</span></a
+    >
+  </p>
+
+  <h2>Obligation to provide data and automated decisions</h2>
+  <p>
+    You are under no obligation to provide us with data. Without contact details, however, we cannot handle an enquiry
+    or an appointment. No automated decision making, including profiling, takes place.
+  </p>
+
+  <nav slot="aside" aria-label="Contents of the privacy policy">
+    <p class="label text-ink">On this page</p>
+    <ul class="mt-2 grid">
+      {
+        toc.map((item) => (
+          <li>
+            <a class="link-ink inline-flex min-h-11 items-center" href={item.href}>{item.label}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</ArticleLayout>

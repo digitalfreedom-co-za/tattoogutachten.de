@@ -1,0 +1,39 @@
+---
+// Forwarding stubs for the German addresses from before the site became bilingual, when German pages
+// sat at the root (/leistungen/, /termin/, /ratgeber/<slug>/ ...). They now live under /de/. GitHub
+// Pages has no server redirects: each stub forwards old links and bookmarks with a meta refresh, is
+// never indexed and stays out of the sitemap (astro.config.mjs). The German segments never collide
+// with the English ones.
+import type { GetStaticPaths } from 'astro';
+import { getCollection } from 'astro:content';
+import { staticPairs, articlePath, routes } from '../i18n/routes';
+import { url } from '../lib/url';
+
+export const getStaticPaths = (async () => {
+  const articles = await getCollection('ratgeber');
+  const germanPaths = [...staticPairs().map((pair) => pair.de), ...articles.map((article) => articlePath(article.id, 'de'))];
+  const moved = germanPaths
+    .filter((path) => path !== routes.home.de)
+    .map((path) => ({ legacy: path.replace(/^\/de\//, ''), target: path }));
+  // The combined page for lawyers and courts was split before the move; its stub now forwards directly.
+  moved.push({ legacy: 'fuer-rechtsanwaelte-und-gerichte/', target: '/de/fuer-rechtsanwaelte/' });
+  return moved.map(({ legacy, target }) => ({ params: { legacy: legacy.replace(/\/$/, '') }, props: { target } }));
+}) satisfies GetStaticPaths;
+
+const target = url(Astro.props.target);
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <meta http-equiv="refresh" content={`0; url=${target}`} />
+    <link rel="canonical" href={new URL(target, Astro.site).href} />
+    <title>Seite umgezogen</title>
+  </head>
+  <body>
+    <p>Diese Seite ist umgezogen: <a href={target}>{new URL(target, Astro.site).pathname}</a>.</p>
+  </body>
+</html>

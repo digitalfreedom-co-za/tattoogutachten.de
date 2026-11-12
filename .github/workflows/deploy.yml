@@ -48,6 +48,9 @@ jobs:
       - name: Validate JSON-LD
         run: npm run validate:jsonld
 
+      - name: Validate language versions
+        run: npm run validate:i18n
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

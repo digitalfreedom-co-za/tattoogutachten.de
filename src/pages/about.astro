@@ -1,0 +1,322 @@
+---
+// English about page (German: src/pages/de/ueber-mich.astro). About Patrick Wolf: credentials as a CV style list, the path from tattoo artist to expert,
+// court work, independence and the separation of studio and expert work, working principles.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/ui/Container.astro';
+import Breadcrumbs from '../components/ui/Breadcrumbs.astro';
+import Eyebrow from '../components/ui/Eyebrow.astro';
+import Section from '../components/ui/Section.astro';
+import Button from '../components/ui/Button.astro';
+import KeyFacts, { type Fact } from '../components/ui/KeyFacts.astro';
+import CourtReference from '../components/ui/CourtReference.astro';
+import Quote from '../components/ui/Quote.astro';
+import Seal from '../components/ui/Seal.astro';
+import Icon from '../components/ui/Icon.astro';
+import ArtImage from '../components/ui/ArtImage.astro';
+import CtaBand from '../components/ui/CtaBand.astro';
+import { Image, getImage } from 'astro:assets';
+import { site, contact, credentials, contentUpdated, primaryCtaFor } from '../config/site';
+import { practiceFor } from '../config/practice';
+import { t, formatDate } from '../i18n';
+import { url } from '../lib/url';
+import { ids, ref } from '../lib/schema';
+
+const practice = practiceFor('en');
+const primaryCta = primaryCtaFor('en');
+const breadcrumbs = [{ label: 'About', href: '/about/' }];
+
+import portrait from '../assets/images/patrick-wolf-portrait-studio-sitzend.jpg';
+import atWork from '../assets/images/patrick-wolf-beim-taetowieren.webp';
+import studio from '../assets/images/patrick-wolf-studio-weit.webp';
+import badge from '../assets/images/rw-gutachterabzeichen-dgusv-logo.png';
+import sealImage from '../assets/images/siegel-dgusv-2026.png';
+
+/** The seal at a size where its print (register number, year) is legible, opened from the evidence block. */
+const sealLarge = await getImage({ src: sealImage, width: 1200, format: 'png' });
+
+const updatedText = formatDate(contentUpdated, 'en');
+
+const qualifications: Fact[] = [
+  {
+    term: 'Certification',
+    value: `Examined and certified expert of the ${credentials.associationShort}`,
+    note: `${credentials.association} (German association of experts and assessors), seal ${credentials.sealYear}, confirmation register no. ${credentials.registerNumber}.`,
+  },
+  {
+    term: 'Court appointment',
+    value: `Appointed as expert witness by the ${t('en').court} in court proceedings`,
+    note: 'An appointment by the court in a single case is not a public appointment and swearing in as an expert (öffentliche Bestellung und Vereidigung).',
+  },
+  {
+    term: 'Membership',
+    value: `${credentials.membership} (German federal tattoo association)`,
+  },
+  {
+    term: 'Professional experience',
+    value: `More than ${credentials.yearsInTrade} years in tattooing and piercing`,
+    note: 'As a craftsman and as a studio owner. Still working as a tattoo artist.',
+  },
+  {
+    term: 'Based in',
+    value: `${site.office}, ${contact.city}`,
+    note: `${contact.street}, ${contact.postalCode} ${contact.city}`,
+  },
+  {
+    term: 'Area served',
+    value: 'Throughout Germany and Europe',
+    note: 'For courts, lawyers, studios and individuals.',
+  },
+];
+
+const principles = [
+  'Personal and respectful communication, on an equal footing',
+  'Careful handling of sensitive matters',
+  'Clear explanations, even of complex technical questions',
+  'Findings instead of assertions, every assessment reasoned',
+];
+---
+
+<BaseLayout
+  breadcrumbs={breadcrumbs}
+  pageType="AboutPage"
+  page={{ mainEntity: ref(ids(Astro.site).person) }}
+  title={`About: ${site.expert}, certified tattoo expert (${credentials.associationShort}) in ${contact.city}`}
+  description={`${site.expert}: examined and certified expert of the ${credentials.associationShort}, appointed as expert witness by the Landgericht Frankfurt am Main in court proceedings, more than ${credentials.yearsInTrade} years in the tattoo and piercing trade.`}
+>
+  <section aria-labelledby="about-title">
+    <Container class="pt-10 pb-16 md:pt-14 md:pb-24">
+      <Breadcrumbs items={breadcrumbs} />
+      <div class="mt-12 grid gap-12 md:mt-16 md:grid-cols-12 md:gap-x-8">
+        <div class="md:col-span-7">
+          <div class="hairline mb-4" data-reveal="rule" aria-hidden="true"></div>
+          <Eyebrow>About</Eyebrow>
+          <p class="mt-3 text-sm text-graphite">{t('en').pageHeader.updated} <time datetime={contentUpdated}>{updatedText}</time></p>
+          <h1 id="about-title" class="mt-8 text-h1 tracking-display">
+            {site.expert}, <em class="text-oxblood">expert</em> for tattoos and piercings.
+          </h1>
+          <p class="mt-8 max-w-[36rem] text-lead text-graphite">
+            I am an examined and certified expert of the {credentials.associationShort} and have worked professionally in
+            the tattoo and piercing trade for more than {credentials.yearsInTrade} years. From the {site.office} in
+            {contact.city} I prepare expert reports throughout Germany and Europe, regardless of who commissions them.
+          </p>
+          <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-5" data-primary-action>
+            <Button href={primaryCta.href} icon="calendar">Free first consultation</Button>
+            <Button href="#qualifications" variant="text">Qualifications</Button>
+          </div>
+        </div>
+        <figure class="relative md:col-span-5">
+          <ArtImage
+            src={portrait}
+            alt={`${site.expert}, expert certified by the ${credentials.associationShort}, sits in the studio and listens attentively.`}
+            ratio={4 / 5}
+            position="right top"
+            crops={[{ media: '(min-width: 768px)', ratio: 3 / 4, position: 'right top' }]}
+            sizes="(min-width: 1344px) 520px, (min-width: 768px) 40vw, 100vw"
+            widths={[400, 640, 880, 1037]}
+            loading="eager"
+            fetchpriority="high"
+            reveal={false}
+          />
+          <div class="absolute -bottom-8 left-4 z-20 bg-paper p-1.5 shadow-[0_10px_30px_-12px_rgb(23_20_15/0.45)] md:-left-8" data-reveal>
+            <Seal width={96} class="w-18 md:w-24" />
+          </div>
+        </figure>
+      </div>
+    </Container>
+  </section>
+
+  <Section
+    id="qualifications"
+    label="Qualifications"
+    title="Qualifications and credentials at a glance."
+    intro="Certification, court appointment, membership and professional experience, as documented."
+    tone="deep"
+  >
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-x-8">
+      <KeyFacts facts={qualifications} class="lg:col-span-8" />
+      <div class="grid content-start gap-8 self-start lg:col-span-4" data-reveal>
+        <div class="flex items-center gap-6 lg:flex-col lg:items-start">
+        <a href={sealLarge.src} class="group/seal block shrink-0" target="_blank" rel="noopener">
+          <Seal width={140} class="w-24 transition-opacity group-hover/seal:opacity-85 lg:w-[140px]" />
+          <span class="sr-only">View the seal at full size (opens in a new window)</span>
+        </a>
+        <Image
+          src={badge}
+          alt={`Badge of an examined and certified expert of the ${credentials.associationShort}`}
+          width={240}
+          densities={[1, 2]}
+          class="h-auto w-44 lg:w-60"
+        />
+        </div>
+        <div class="border-t border-ink pt-5 text-sm">
+          <h3 class="label text-graphite">Check the credentials</h3>
+          <ul class="mt-2 grid">
+            <li>
+              <a class="link-ink inline-flex min-h-11 items-center" href={sealLarge.src} target="_blank" rel="noopener">
+                Seal {credentials.sealYear} at full size<span class="sr-only"> (opens in a new window)</span>
+              </a>
+            </li>
+            <li>
+              <a class="link-ink inline-flex min-h-11 items-center" href={credentials.associationUrl} target="_blank" rel="noopener noreferrer">
+                Certifying association: {credentials.associationShort}<span class="sr-only"> (opens in a new window)</span>
+              </a>
+            </li>
+            <li>
+              <a class="link-ink inline-flex min-h-11 items-center" href={credentials.membershipUrl} target="_blank" rel="noopener noreferrer">
+                {credentials.membership}<span class="sr-only"> (opens in a new window)</span>
+              </a>
+            </li>
+          </ul>
+          <p class="mt-3 text-graphite">
+            The register number <span class="numeral whitespace-nowrap text-ink">{credentials.registerNumber}</span> is
+            printed on the seal.
+          </p>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <section class="py-section" aria-labelledby="career-title">
+    <Container class="grid gap-12 md:grid-cols-12 md:items-center md:gap-x-8">
+      <div class="md:col-span-6 lg:col-span-7">
+        <ArtImage
+          src={atWork}
+          alt={`${site.expert}, wearing gloves, concentrating on work on a tattoo.`}
+          ratio={4 / 3}
+          position="center"
+          crops={[{ media: '(min-width: 768px)', ratio: 16 / 11, position: 'center' }]}
+          sizes="(min-width: 1344px) 720px, (min-width: 768px) 50vw, 100vw"
+          widths={[480, 720, 960, 1120]}
+          parallax
+        />
+      </div>
+      <div class="md:col-span-6 lg:col-span-5">
+        <Eyebrow>Career</Eyebrow>
+        <h2 id="career-title" class="mt-6 text-h2 tracking-display">From tattoo artist to expert.</h2>
+        <div class="mt-6 grid gap-4 text-graphite" data-reveal>
+          <p class="text-ink">
+            Anyone who wants to assess a tattoo properly has to understand the craft. The assessment takes more than a look
+            at the finished design.
+          </p>
+          <p>
+            What began as a passion for tattooing has grown over more than two decades into a broad body of experience:
+            different tattooing techniques, skin types, materials, hygiene requirements and the particular challenges of the
+            craft.
+          </p>
+          <p>
+            What matters is knowledge of working methods, the interplay of needle, ink and skin, and the causes of
+            workmanship defects. I know the trade as a craftsman and as a studio owner. To put this knowledge to use in
+            independent assessments, I also qualified as an expert.
+          </p>
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <Section
+    id="courts"
+    label="Courts"
+    title="Expert work for the courts."
+    intro="The Regional Court (Landgericht) Frankfurt am Main first appointed me as expert witness in court proceedings. Questions from a court must be answered precisely, and the findings documented in a way others can follow."
+    tone="deep"
+  >
+    <p slot="note">
+      My task is to bring practical experience and expertise into an objective, traceable and impartial assessment.
+    </p>
+    <CourtReference />
+    <p class="mt-10" data-reveal>
+      <Button href="/services/court-reports/" variant="text">Expert reports for courts</Button>
+    </p>
+  </Section>
+
+  <section class="py-section" aria-labelledby="independence-title">
+    <Container class="grid gap-12 md:grid-cols-12 md:gap-x-8">
+      <div class="md:col-span-6 lg:col-span-6">
+        <Eyebrow>Independence</Eyebrow>
+        <h2 id="independence-title" class="mt-6 text-h2 tracking-display">
+          Independence is my highest priority.
+        </h2>
+        <div class="mt-6 grid gap-4 text-graphite" data-reveal>
+          <p class="text-ink">
+            I hold no preconceived positions. Whether I am commissioned by an individual, a tattoo studio, a lawyer or a
+            court, the assessment rests solely on facts that can be established, physical conditions and objective
+            professional standards.
+          </p>
+          <p>
+            An expert report must neither favour a client nor confirm a desired result. It serves a reliable, impartial
+            clarification of the facts.
+          </p>
+        </div>
+        <h3 class="mt-12 text-h3">Tattoo artist and expert.</h3>
+        <div class="mt-4 grid gap-4 text-graphite" data-reveal>
+          <p>
+            Alongside my work as an expert I continue to work as a tattoo artist. Practical experience remains the
+            foundation of my expertise, but the standard for a report is solely the facts that can be established.
+          </p>
+          <p>
+            The assessment is independent and impartial, whether the commission comes from a client, a studio, a lawyer or
+            a court.
+          </p>
+          {practice.conflictHandling && <p>{practice.conflictHandling}</p>}
+        </div>
+      </div>
+      <div class="grid content-start gap-8 md:col-span-5 md:col-start-8">
+        <ArtImage
+          src={studio}
+          alt={`${site.expert} sits smiling in his studio in ${contact.city} between the treatment couches.`}
+          ratio={4 / 3}
+          position="center"
+          sizes="(min-width: 1344px) 520px, (min-width: 768px) 40vw, 100vw"
+          widths={[400, 640, 880, 1286]}
+        />
+      </div>
+    </Container>
+  </section>
+
+  <Section
+    id="approach"
+    label="Approach"
+    title="How I work."
+    intro="Behind every commission there is a person, a business or a case, often bound up with disappointment, pain or a legal dispute. My way of working is geared to that."
+    tone="deep"
+  >
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-x-8">
+      <Quote author={site.expert} role={`Examined and certified expert of the ${credentials.associationShort} for tattoos and piercings`} class="lg:col-span-7">
+        A good expert report does not convince through assertions, but through findings others can follow, sound
+        professional reasoning and objectivity.
+      </Quote>
+      <ul class="grid content-start gap-4 border-t border-ink pt-6 lg:col-span-5" data-reveal>
+        {
+          principles.map((item) => (
+            <li class="grid grid-cols-[1.125rem_1fr] gap-3">
+              <Icon name="check" size={18} class="mt-0.5 text-oxblood" />
+              <span>{item}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </Section>
+
+  <Section id="read-on" label="Read on" title="What I examine for you and how it works.">
+    <ul class="grid gap-4 border-t border-ink pt-6 md:grid-cols-3 md:gap-x-8" data-reveal-group>
+      <li data-reveal>
+        <a class="link-ink inline-flex min-h-11 items-center font-serif text-h4" href={url('/services/')}>All services</a>
+        <p class="mt-1 text-sm text-graphite">Reports on tattoos, hygiene and piercings, private and court reports, disputes.</p>
+      </li>
+      <li data-reveal>
+        <a class="link-ink inline-flex min-h-11 items-center font-serif text-h4" href={url('/process-and-fees/')}>Process and fees</a>
+        <p class="mt-1 text-sm text-graphite">Five steps, free first consultation, fees based on the work involved.</p>
+      </li>
+      <li data-reveal>
+        <a class="link-ink inline-flex min-h-11 items-center font-serif text-h4" href={url('/faq/')}>Frequently asked questions</a>
+        <p class="mt-1 text-sm text-graphite">Answers on assessment, commissioning, courts and fees.</p>
+      </li>
+    </ul>
+  </Section>
+
+  <CtaBand
+    title="Let us talk about your case."
+    text="The first consultation lasts up to 60 minutes, is free of charge and commits you to nothing. Expert reports throughout Germany and Europe."
+  />
+</BaseLayout>

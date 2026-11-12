@@ -20,7 +20,7 @@ const locale = pageLocale(Astro.url);
 
 <a
   href={url(routes.home[locale])}
-  class="group/logo inline-flex min-h-11 min-w-11 items-center gap-2 rounded-xs min-[500px]:gap-3"
+  class="group/logo inline-flex shrink-0 min-h-11 min-w-11 items-center gap-2 rounded-xs min-[500px]:gap-3"
   aria-label={fill(t(locale).site.logoLabel, { name: site.name, office: site.office })}
 >
   <Image

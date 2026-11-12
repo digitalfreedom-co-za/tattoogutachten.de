@@ -1,0 +1,79 @@
+---
+// All FAQ entries grouped by topic, every answer visible. The entries come from src/data/en/faq.ts,
+// the same list the landing page teaser and the FAQPage JSON-LD use.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/ui/PageHeader.astro';
+import Section from '../components/ui/Section.astro';
+import Container from '../components/ui/Container.astro';
+import Button from '../components/ui/Button.astro';
+import Faq from '../components/ui/Faq.astro';
+import CtaBand from '../components/ui/CtaBand.astro';
+import { contentUpdated, primaryCtaFor, type NavItem } from '../config/site';
+import type { FaqTopic } from '../data/faq';
+import { faq, faqTopics, faqByTopic } from '../data/en/faq';
+import { faqQuestions } from '../lib/schema';
+import { routes, servicePath, translateAnchor } from '../i18n';
+
+const primaryCta = primaryCtaFor('en');
+const breadcrumbs: NavItem[] = [{ label: 'Frequently asked questions', href: routes.faq.en }];
+
+/** Where each topic continues in depth. */
+const topicLinks: Record<FaqTopic, NavItem> = {
+  grundlagen: { label: 'Tattoo reports on defective workmanship', href: servicePath('tattoo-gutachten', 'en') },
+  begutachtung: { label: 'All services at a glance', href: routes.services.en },
+  auftrag: { label: 'Private report or court report', href: `${servicePath('privatgutachten', 'en')}#private-or-court` },
+  kosten: { label: 'Process and fees in detail', href: routes.process.en },
+  person: { label: 'More about Patrick Wolf', href: routes.about.en },
+};
+---
+
+<BaseLayout
+  breadcrumbs={breadcrumbs}
+  pageType="FAQPage"
+  page={{ mainEntity: faqQuestions(faq) }}
+  title="Tattoo expert report FAQ: fees, process, court | Tattoogutachten"
+  description="Answers on tattoo expert reports: defect or matter of taste, photos, piercings, private and court reports, fees and the free first consultation."
+>
+  <PageHeader
+    label="FAQ"
+    heading="Frequently asked questions about tattoo expert reports."
+    lead="Whether a report will help, what it costs and who can commission it: the short answers are here, sorted by topic. If your question is missing, we will answer it in the free first consultation."
+    breadcrumbs={breadcrumbs}
+    updated={contentUpdated}
+  />
+
+  <nav aria-label="Topics" class="border-y border-ink bg-paper-deep">
+    <Container class="py-2">
+      <ul class="flex flex-wrap gap-x-8">
+        {
+          faqTopics.map((topic) => (
+            <li>
+              <a class="label link-ink inline-flex min-h-11 items-center no-underline hover:underline" href={`#${translateAnchor(topic.id, 'en')}`}>
+                {topic.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </Container>
+  </nav>
+
+  {
+    faqTopics.map((topic, index) => (
+      <Section id={translateAnchor(topic.id, 'en')} label={topic.label} title={topic.title} tone={index % 2 === 0 ? 'paper' : 'deep'}>
+        <Faq items={faqByTopic(topic.id)} variant="list" />
+        <p class="mt-8" data-reveal>
+          <Button href={topicLinks[topic.id].href} variant="text">
+            {topicLinks[topic.id].label}
+          </Button>
+        </p>
+      </Section>
+    ))
+  }
+
+  <CtaBand
+    title="Any questions left?"
+    text="Not every case can be settled with a general answer. We are happy to discuss yours in a free first consultation of up to 60 minutes."
+    ctaLabel={primaryCta.label}
+  />
+</BaseLayout>

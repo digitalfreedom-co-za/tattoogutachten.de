@@ -21,6 +21,7 @@ Website des Sachverständigenbüros Wolf (Patrick Wolf, Bad Nauheim), Gutachten 
 | `npm run build` | Produktionsbuild nach `dist/` |
 | `npm run preview` | Build lokal ansehen |
 | `npm run validate:jsonld` | JSON-LD in `dist/` prüfen (nach dem Build, läuft auch im Deploy) |
+| `npm run validate:i18n` | Sprachfassungen in `dist/` prüfen: Seitenpaare, hreflang, Sitemap, `lang`, Schreibregeln (nach dem Build, läuft auch im Deploy) |
 
 ## Struktur
 
@@ -32,7 +33,8 @@ Website des Sachverständigenbüros Wolf (Patrick Wolf, Bad Nauheim), Gutachten 
 | `src/config/practice.ts` | Angaben, die nur der Betreiber bestätigen kann (Gesprächsform, Antwortzeit, Fahrtkosten und mehr). Felder bleiben `null`, bis sie bestätigt sind; erst dann erscheinen sie auf der Seite |
 | `src/lib/primary-cta.ts` | Ziel und Text des Seiten-CTA in Header, Menü und mobiler Leiste: Terminbuchung, auf den Seiten für Rechtsanwälte, Gerichte und Gerichtsgutachten die Anfrage über die Kontaktdaten |
 | `src/data/enquiry.ts` | Hinweise vor der Anfrage (Frist, Vertraulichkeit, Unterlagen), gezeigt neben Kalender und Kontaktwegen |
-| `src/layouts/BaseLayout.astro` | HTML-Gerüst mit `lang="de"`, Schriften, Sprunglink, Header, Footer, Slot `head` für SEO |
+| `src/i18n/` | Sprachen: `routes.ts` (Locales, übersetzte Pfade, Anker), `alternates.ts` (Seitenpaare inkl. Ratgeber), `de.json` und `en.json` (Texte der gemeinsamen Komponenten), `index.ts` (`pageLocale`, `t`, `fill`, `formatDate`) |
+| `src/layouts/BaseLayout.astro` | HTML-Gerüst mit `lang` der Seite, Schriften, Sprunglink, Header, Sprachhinweis, Footer, Slot `head` für SEO |
 | `src/layouts/ArticleLayout.astro` | Langtext (Ratgeber, Rechtstexte) mit Brotkrumen, Randspalte und `prose-report` |
 | `src/components/layout/` | `Header` (mit mobilem Menü), `Footer`, `Logo` |
 | `src/components/ui/` | Bausteine, siehe Designsystem |
@@ -41,9 +43,12 @@ Website des Sachverständigenbüros Wolf (Patrick Wolf, Bad Nauheim), Gutachten 
 | `src/assets/images/` | Fotos, Siegel, Abzeichen für `astro:assets` (nie das KI-Banner aus `docs/`) |
 | `src/components/seo/SeoHead.astro` | Title, Description, Canonical, Robots, Open Graph, Twitter, JSON-LD Graph |
 | `src/lib/schema.ts` | JSON-LD Entitäten und Bausteine, verknüpft über `@id` |
-| `src/lib/llms.ts` | Inhalt von `llms.txt` und `llms-full.txt` |
-| `src/pages/` | Seiten, dazu `robots.txt.ts`, `llms.txt.ts`, `llms-full.txt.ts`, `404.astro` |
+| `src/data/en/` | Englische Inhalte mit denselben Exporten wie `src/data/*.ts`; `src/data/index.ts` wählt je Sprache |
+| `src/lib/llms.ts`, `src/lib/llms-en.ts` | Inhalt von `llms.txt` und `llms-full.txt`, deutsch unter `/de/`, englisch im Stamm |
+| `src/pages/` | Englische Seiten im Stamm, deutsche unter `src/pages/de/`, dazu `robots.txt.ts`, `llms.txt.ts`, `llms-full.txt.ts`, `404.astro` (zweisprachig) |
+| `src/content/ratgeber/`, `src/content/guides/` | Ratgeber deutsch und englisch; ein englischer Beitrag nennt sein deutsches Original in `translationOf` |
 | `scripts/validate-jsonld.mjs` | Prüft das JSON-LD im Build |
+| `scripts/validate-i18n.mjs` | Prüft Seitenpaare, hreflang, Sitemap-Alternativen und Schreibregeln im Build |
 | `scripts/og-image/` | Vorlage und Renderskript des Vorschaubilds `public/og/tattoogutachten-og.png` |
 | `docs/source-content/` | Inhalte und Bilder der alten Seite, nur als Quelle |
 
@@ -139,6 +144,27 @@ Diese Angaben fehlen, weil nur Patrick Wolf sie liefern kann. Nichts davon wird 
 | Eigenes Postfach des Sachverständigenbüros statt der Studioadresse | `contact.email` in `src/config/site.ts` | überall |
 | Datum der Zertifizierung, Link auf einen offiziellen Registereintrag | `credentials` in `src/config/site.ts` | Nachweise auf `/ueber-mich/`. Der Eintrag auf deutsche-gutachterauskunft.de nennt eine andere Anschrift und Rechtsberatung als Schwerpunkt und wird deshalb nicht verlinkt |
 | Antwort zu Piercing-Fotos und Unterlagen bei Hygienefragen bestätigen | `faqVariants` in `src/data/faq.ts` | Fragen auf Piercing- und Hygieneseite |
+
+## Sprachen
+
+Die Seite ist zweisprachig nach den i18n-Regeln im Wiki (`websites.md`): Englisch ist die Standardsprache im Stamm ohne Präfix, Deutsch liegt unter `/de/`. Jedes Pfadsegment ist übersetzt, zum Beispiel `/services/tattoo-reports/` und `/de/leistungen/tattoo-gutachten/`. Es gibt keine automatische Weiterleitung nach Browsersprache; auf den beiden Startseiten bietet ein Sprachhinweis die andere Fassung an.
+
+```mermaid
+flowchart LR
+  routes[src/i18n/routes.ts] --> alternates[src/i18n/alternates.ts]
+  guides[Ratgeber: translationOf] --> alternates
+  alternates --> SeoHead[SeoHead: hreflang en, de, x-default] & switch[LanguageSwitch: Header und Menü]
+  SeoHead --> dist[dist/**.html] --> sitemap[Sitemap: xhtml:link aus dem Seitenkopf]
+  dist --> validate[scripts/validate-i18n.mjs]
+  dict[src/i18n/de.json + en.json] --> components[gemeinsame Komponenten]
+```
+
+- Neue Seite: in beiden Sprachen anlegen, das Pfadpaar in `routes` (`src/i18n/routes.ts`) eintragen. Leistungen und Zielgruppen bekommen ihr englisches Segment in `serviceSegments` und `audienceSegments`.
+- Neuer Ratgeber: deutsche Datei in `src/content/ratgeber/`, englische in `src/content/guides/` mit `translationOf: <deutscher Dateiname>`.
+- Gemeinsame Komponenten lesen die Sprache aus der URL (`pageLocale(Astro.url)`) und ihre Texte aus `src/i18n/{de,en}.json`. Beide Dateien haben dieselbe Struktur, `astro check` prüft das.
+- Abschnittsanker, die sich je Sprache unterscheiden, stehen in `anchorPairs`; der Sprachwechsel behält so den Abschnitt.
+- `x-default` zeigt auf die englische Fassung jeder Seite. Sprachwahl und geschlossener Sprachhinweis landen in `localStorage` unter `locale-explicit` (in beiden Datenschutzerklärungen genannt).
+- Impressum und Datenschutzerklärung auf Englisch sind Übersetzungen zur Information; verbindlich ist die deutsche Fassung.
 
 ## Basispfad und Links
 

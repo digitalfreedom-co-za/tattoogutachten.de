@@ -64,6 +64,11 @@ function sitemapAlternates(base) {
   };
 }
 
+/** Forwarding stubs of the former German root addresses (src/pages/[...legacy].astro). */
+const LEGACY = new RegExp(
+  `^${SITE.url}${SITE.base}/(leistungen|ablauf-kosten|ueber-mich|ratgeber|haeufige-fragen|kontakt|termin|impressum|datenschutz|fuer-[a-z-]+)/`,
+);
+
 export default defineConfig({
   site: SITE.url,
   base: SITE.base,
@@ -74,7 +79,7 @@ export default defineConfig({
   // The sitemap lists every page except the 404 and the redirect stub, in preview and launch mode alike
   // (see indexable in src/config/site.ts), with the hreflang alternates of each page.
   integrations: [
-    sitemap({ filter: (page) => !/\/(404|fuer-rechtsanwaelte-und-gerichte)\/?$/.test(page) }),
+    sitemap({ filter: (page) => !/\/404\/?$/.test(page) && !LEGACY.test(page) }),
     sitemapAlternates(SITE.base),
   ],
   // Ratgeber Markdown: internal links get the base path, table rows get row headers; SmartyPants stays off because the

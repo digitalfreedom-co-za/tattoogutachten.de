@@ -1,7 +1,8 @@
 ---
 // Link to the same page in the other language (two locales, so a single link instead of a menu).
-// In the header it is icon only below sm (36 x 36, aria-label and title from the dictionary) and shows
-// the name of the other language from sm up; in the menu panel it always shows the name. The link
+// In the header it is icon only (36 x 36, aria-label and title from the dictionary) and shows the name
+// of the other language between md and lg, where the navigation sits in the menu and the row has room;
+// below md the booking button needs the width, from lg the navigation row; in the menu panel it always shows the name. The link
 // carries the target's hreflang, and its text the target's lang. A click records an explicit choice
 // (localStorage locale-explicit), so the language hint does not come back, and keeps the section
 // when the current hash has a translated anchor (src/i18n/routes.ts, anchorPairs).
@@ -33,13 +34,13 @@ const anchors = anchorMap(locale, target);
   data-anchors={JSON.stringify(anchors)}
   class:list={[
     variant === 'header'
-      ? 'inline-flex size-9 shrink-0 items-center justify-center gap-2 border border-ink/30 text-ink transition-colors hover:border-ink hover:text-oxblood sm:size-auto sm:min-h-11 sm:px-3'
+      ? 'inline-flex size-9 shrink-0 items-center justify-center gap-2 border border-ink/30 text-ink transition-colors hover:border-ink hover:text-oxblood md:max-lg:size-auto md:max-lg:min-h-11 md:max-lg:px-3'
       : 'link-ink inline-flex min-h-11 items-center gap-3',
     className,
   ]}
 >
-  <Icon name="globe" size={18} class:list={['shrink-0', variant === 'header' ? 'h-[18px] w-[18px] sm:h-4 sm:w-4' : 'text-oxblood']} />
-  <span lang={localeMeta[target].lang} class:list={[variant === 'header' && 'hidden text-[0.875rem] font-medium sm:inline']}>{name}</span>
+  <Icon name="globe" size={18} class:list={['shrink-0', variant === 'header' ? 'h-[18px] w-[18px] md:max-lg:h-4 md:max-lg:w-4' : 'text-oxblood']} />
+  <span lang={localeMeta[target].lang} class:list={[variant === 'header' && 'hidden text-[0.875rem] font-medium md:max-lg:inline']}>{name}</span>
 </a>
 
 <script>

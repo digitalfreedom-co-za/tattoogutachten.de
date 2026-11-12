@@ -25,7 +25,7 @@
     "booking": "Book a consultation",
     "imprint": "Imprint",
     "privacy": "Privacy",
-    "audiences": "Who we work for",
+    "audiences": "Who we help",
     "main": "Main navigation",
     "mainMobile": "Main navigation, mobile",
     "menuOpen": "Open menu",
@@ -52,15 +52,23 @@
     "writeEmail": "Send an email"
   },
   "cta": {
+    "bookingShort": "Book",
+    "enquiryShort": "Enquire",
     "enquiry": "Send an enquiry",
-    "enquiryNote": ["Enquiries by telephone", "or email"],
-    "bookingNote": ["First consultation free,", "up to 60 minutes"],
+    "enquiryNote": [
+      "Enquiries by telephone",
+      "or email"
+    ],
+    "bookingNote": [
+      "First consultation free,",
+      "up to 60 minutes"
+    ],
     "contactBand": "Get in touch"
   },
   "footer": {
     "label": "Footer",
     "pages": "Pages",
-    "audiences": "Who we work for",
+    "audiences": "Who we help",
     "audiencePrefix": "For",
     "certification": "Certification",
     "certified": "Examined and certified expert of the {associationShort}",
@@ -95,7 +103,7 @@
     "experience": "Experience",
     "experienceValue": "More than {years} years",
     "experienceNote": "in the tattoo and piercing trade",
-    "appointed": "Court appointed",
+    "appointed": "Court-appointed",
     "appointedValue": "Landgericht Frankfurt",
     "appointedNote": "as expert witness in court proceedings",
     "member": "Member",
@@ -164,7 +172,15 @@
     "conversation": "Consultation",
     "confirmation": "Confirmation",
     "confirmationValue": "By email, with links to reschedule or cancel",
-    "weekdays": ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
+    "weekdays": [
+      "Mo",
+      "Tu",
+      "We",
+      "Th",
+      "Fr",
+      "Sa",
+      "Su"
+    ],
     "timezone": "Time zone",
     "timezoneDevice": "That of your device",
     "timezoneHint": "The calendar shows available times in this time zone.",

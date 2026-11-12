@@ -1,0 +1,164 @@
+---
+// Contact: office address with a plain maps link, phone, email, area served and the booking CTA.
+// No form and no embedded map on purpose, so nothing loads from third parties on this page.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/ui/PageHeader.astro';
+import Section from '../components/ui/Section.astro';
+import Button from '../components/ui/Button.astro';
+import Icon, { type IconName } from '../components/ui/Icon.astro';
+import Seal from '../components/ui/Seal.astro';
+import CtaBand from '../components/ui/CtaBand.astro';
+import EnquiryNote from '../components/ui/EnquiryNote.astro';
+import { site, contact, credentials, contentUpdated, primaryCtaFor, type NavItem } from '../config/site';
+import { practiceFor } from '../config/practice';
+import { audiences } from '../data/en/audiences';
+import { ids, ref } from '../lib/schema';
+import { url } from '../lib/url';
+import { routes, t } from '../i18n';
+
+const practice = practiceFor('en');
+const primaryCta = primaryCtaFor('en');
+const title = `Contact: ${site.office}, tattoo expert in ${contact.city}`;
+const description = `Tattoo expert ${site.expert}: ${site.office}, ${contact.street}, ${contact.postalCode} ${contact.city}, Germany. Telephone ${contact.phone.display}, email or online booking.`;
+const breadcrumbs: NavItem[] = [{ label: 'Contact', href: routes.contact.en }];
+
+interface Channel {
+  icon: IconName;
+  term: string;
+  value: string;
+  href: string;
+  note: string;
+  external?: boolean;
+}
+
+const channels: Channel[] = [
+  {
+    icon: 'phone',
+    term: 'Telephone',
+    value: contact.phone.display,
+    href: contact.phone.href,
+    note: 'For short questions and to arrange an appointment.',
+  },
+  {
+    icon: 'mail',
+    term: 'Email',
+    value: contact.email.display,
+    href: contact.email.href,
+    note: 'For enquiries with photos and documents, and for law firms and courts.',
+  },
+  {
+    icon: 'pin',
+    term: 'Office address',
+    value: `${contact.street}, ${contact.postalCode} ${contact.city}, ${t('en').site.country}`,
+    href: contact.mapsUrl,
+    note: [practice.officeVisits, 'The link opens the route in Google Maps.'].filter(Boolean).join(' '),
+    external: true,
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  breadcrumbs={breadcrumbs}
+  pageType="ContactPage"
+  page={{ mainEntity: ref(ids(Astro.site).office) }}
+>
+  <PageHeader
+    label="Contact"
+    heading={`Contact tattoo expert ${site.expert}.`}
+    lead={`You can reach ${site.expert} by telephone on ${contact.phone.display}, by email or through online booking. The office is in ${contact.city}, Germany, and reports are prepared ${t('en').site.areaServed}.`}
+    breadcrumbs={breadcrumbs}
+    updated={contentUpdated}
+  >
+    <Button href={contact.phone.href} icon="phone">
+      <span class="sr-only">Call: </span>{contact.phone.display}
+    </Button>
+    <Button href={contact.email.href} variant="secondary" icon="mail">Send an email</Button>
+    <Button href={routes.booking.en} variant="text" icon="calendar">{primaryCta.label}</Button>
+  </PageHeader>
+
+  <Section
+    id="contact-details"
+    label="Contact details"
+    title="Telephone, email and office address."
+    intro="Call, send an email or book the free first consultation online."
+    tone="deep"
+  >
+    <dl class="border-t border-ink" data-reveal-group>
+        {
+          channels.map((channel) => (
+            <div class="grid gap-2 border-b border-rule py-6 md:grid-cols-12 md:gap-x-8" data-reveal>
+              <dt class="label flex items-center gap-3 pt-1 text-graphite md:col-span-3">
+                <Icon name={channel.icon} size={18} class="shrink-0 text-oxblood" />
+                {channel.term}
+              </dt>
+              <dd class="min-w-0 md:col-span-9 lg:col-span-8">
+                <a
+                  class="link-ink inline-flex min-h-11 items-center font-serif text-h4 break-words"
+                  href={channel.href}
+                  {...(channel.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                >
+                  {channel.value}
+                  {channel.external && <span class="sr-only"> (opens Google Maps in a new window)</span>}
+                </a>
+                <p class="mt-2 text-sm text-graphite">{channel.note}</p>
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+
+    <div class="mt-12 grid gap-10 md:grid-cols-12 md:gap-x-8">
+      <EnquiryNote class="md:col-span-9 md:col-start-4 lg:col-span-4 lg:col-start-4" />
+      <aside class="border border-ink bg-paper p-6 md:col-span-9 md:col-start-4 md:p-8 lg:col-span-4 lg:col-start-8" data-reveal>
+          <p class="label text-graphite">First consultation</p>
+          <p class="mt-4 font-serif text-h3 tracking-tightish">Free, up to 60 minutes.</p>
+          <p class="mt-4 text-graphite">
+            Available times are shown directly in the calendar. The confirmation arrives by email.
+          </p>
+          <div class="mt-6">
+            <Button href={routes.booking.en} variant="secondary" icon="calendar">Book online</Button>
+          </div>
+      </aside>
+    </div>
+  </Section>
+
+  <Section
+    id="area-served"
+    label="Area served"
+    title="Where does Patrick Wolf work as an expert?"
+    intro={`Throughout Germany and Europe. The ${site.office} is based in ${contact.city} in Hesse and works for clients across Germany and in other European countries.`}
+    density="support"
+  >
+    <div class="grid gap-10 md:grid-cols-12 md:gap-x-8">
+      <div class="grid content-start gap-4 text-graphite md:col-span-9 md:col-start-4 lg:col-span-5 lg:col-start-4" data-reveal>
+        <p>
+          With meaningful photos, an initial assessment is often possible without travel. Whether the report needs an
+          in person examination or an inspection of premises is clarified in the first consultation.
+        </p>
+        <p>
+          Reports are prepared for individuals, tattoo and piercing studios, lawyers and courts. More on the pages
+          {
+            audiences.map((audience, index) => (
+              <><a class="link-ink" href={url(audience.href)}>for {audience.label.toLowerCase()}</a>{index < audiences.length - 2 ? ', ' : index === audiences.length - 2 ? ' and ' : '.'}</>
+            ))
+          }
+        </p>
+      </div>
+      <div class="flex flex-wrap items-start gap-6 md:col-span-9 md:col-start-4 lg:col-span-4 lg:col-start-9" data-reveal>
+        <Seal width={96} class="w-20 shrink-0 md:w-24" />
+        <p class="min-w-0 flex-1 basis-64 text-sm text-graphite">
+          Examined and certified expert of the {credentials.associationShort}, confirmation register
+          <span class="numeral whitespace-nowrap text-ink">no. {credentials.registerNumber}</span>. More about his qualifications on the page
+          <a class="link-ink" href={url(routes.about.en)}>about {site.expert}</a>.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <CtaBand
+    title="Let us clarify your matter in a free conversation."
+    text="The first consultation lasts up to 60 minutes and commits you to nothing. What a report costs and how it works is set out in advance on the page Process and fees."
+  />
+</BaseLayout>

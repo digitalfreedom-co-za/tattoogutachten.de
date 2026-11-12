@@ -43,11 +43,11 @@ const [firstNav, ...restNav] = mainNav;
 ---
 
 <header id="site-header" class="relative z-40 border-b border-ink/15 bg-paper">
-  <Container class="header-row flex min-h-(--header-height) items-center justify-between gap-2 min-[360px]:gap-4">
+  <Container class="header-row flex min-h-(--header-height) items-center justify-between gap-2 min-[360px]:gap-3 min-[420px]:gap-4">
     <Logo />
 
     <nav aria-label={nav.main} class="desktop-nav hidden lg:block">
-      <ul class="flex flex-wrap items-center gap-x-4 xl:gap-x-9">
+      <ul class="flex flex-wrap items-center gap-x-4 xl:gap-x-7">
         {
           [firstNav, null, ...restNav].map((item) =>
             item ? (
@@ -96,7 +96,9 @@ const [firstNav, ...restNav] = mainNav;
 
     <div class="flex items-center gap-1.5 min-[360px]:gap-2">
       <LanguageSwitch alternates={alternates} class="header-lang" />
-      <Button href={cta.href} icon={cta.icon} class="header-cta whitespace-nowrap">{cta.label}</Button>
+      <Button href={cta.href} icon={cta.icon} class="header-cta whitespace-nowrap" aria-label={cta.shortLabel === cta.label ? undefined : cta.label}>
+        <span class="sm:hidden">{cta.shortLabel}</span><span class="max-sm:hidden">{cta.label}</span>
+      </Button>
       <button
         type="button"
         class="menu-toggle hidden size-11 items-center justify-center bg-ink text-paper transition-colors hover:bg-oxblood"

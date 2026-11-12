@@ -29,7 +29,7 @@ const anchors = anchorMap(here, target);
     >
       <p class="flex-1 text-sm leading-snug text-ink">
         {copy.hint}{' '}
-        <a href={url(routes.home[target])} hreflang={localeMeta[target].lang} data-locale-choice data-language-hint-link class="link-ink font-semibold">
+        <a href={url(routes.home[target])} hreflang={localeMeta[target].lang} data-locale-choice data-anchors={JSON.stringify(anchors)} data-language-hint-link class="link-ink font-semibold">
           {copy.hintAction}
         </a>
       </p>
