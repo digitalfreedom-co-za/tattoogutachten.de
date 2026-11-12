@@ -1,7 +1,8 @@
 ---
-// Credentials at a glance: seal, register number, court appointment, years in the trade,
-// association membership, area served and independence, plus the RW badge.
-// Values come from src/config/site.ts.
+// Credentials at a glance. The principal qualifications lead: certification (with the register number
+// as its secondary detail), experience and the court appointment, which keeps "in einem
+// Gerichtsverfahren" directly under the court. Membership, area served and independence follow as a
+// quieter second row; the seal and the RW badge sit beside them. Values come from src/config/site.ts.
 import { Image } from 'astro:assets';
 import badge from '../../assets/images/rw-gutachterabzeichen-dgusv-logo.png';
 import Seal from './Seal.astro';
@@ -14,11 +15,25 @@ interface Props {
 
 const { class: className } = Astro.props;
 
-const facts = [
-  { label: 'Bestätigungs-Register', value: `Nr. ${credentials.registerNumber}`, mono: true },
-  { label: 'Zertifiziert durch', value: credentials.associationShort, note: credentials.association },
-  { label: 'Gerichtlich bestellt', value: 'LG Frankfurt am Main', note: 'in einem Gerichtsverfahren' },
-  { label: 'Erfahrung', value: `über ${credentials.yearsInTrade} Jahre`, note: 'Tattoo und Piercing' },
+interface Fact {
+  label: string;
+  value: string;
+  note?: string;
+  detail?: string;
+}
+
+const principal: Fact[] = [
+  {
+    label: 'Zertifiziert durch',
+    value: credentials.associationShort,
+    note: credentials.association,
+    detail: `Bestätigungs-Register Nr. ${credentials.registerNumber}`,
+  },
+  { label: 'Erfahrung', value: `Über ${credentials.yearsInTrade} Jahre`, note: 'in der Tattoo- und Piercingbranche' },
+  { label: 'Gerichtlich bestellt', value: 'LG Frankfurt am Main', note: 'in einem Gerichtsverfahren als Sachverständiger' },
+];
+
+const secondary: Fact[] = [
   { label: 'Mitglied', value: credentials.membership },
   { label: 'Einsatzgebiet', value: 'Bundesweit', note: 'und europaweit' },
   { label: 'Unabhängig', value: 'Nach Tatsachen', note: 'nicht nach dem Auftraggeber' },
@@ -26,21 +41,37 @@ const facts = [
 ---
 
 <section aria-label="Qualifikation und Nachweise" class:list={['border-y border-ink bg-paper-deep', className]}>
-  <Container class="grid gap-8 py-8 md:py-10 xl:grid-cols-[auto_minmax(0,1fr)] xl:items-center xl:gap-12">
+  <Container class="grid gap-8 py-8 md:py-10 xl:grid-cols-[auto_minmax(0,1fr)] xl:items-start xl:gap-12">
     <div class="flex flex-wrap items-center gap-5" data-reveal>
       <Seal width={84} class="w-16 md:w-[84px]" />
       <Image src={badge} alt="Abzeichen geprüfter und zertifizierter Gutachter des DGuSV" width={210} densities={[1, 2]} class="h-auto w-44 max-w-full md:w-[210px]" />
     </div>
-    <ul class="grid grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-3 lg:grid-cols-4" data-reveal-group>
-      {
-        facts.map((fact) => (
-          <li class:list={['min-w-0 border-l border-rule pl-4 hyphens-auto break-words', fact.mono && 'col-span-2 sm:col-span-3 lg:col-span-2']} data-reveal>
-            <p class="label text-[0.6875rem] text-graphite">{fact.label}</p>
-            <p class:list={['mt-2 text-ink', fact.mono ? 'numeral text-base whitespace-nowrap' : 'font-serif text-lg leading-tight']}>{fact.value}</p>
-            {fact.note && <p class="mt-1 text-xs leading-snug text-graphite">{fact.note}</p>}
-          </li>
-        ))
-      }
-    </ul>
+    <div class="grid gap-6">
+      <ul class="grid gap-6 md:grid-cols-3 md:gap-x-8" data-reveal-group>
+        {
+          principal.map((fact) => (
+            <li class="min-w-0 border-l-2 border-oxblood pl-4 hyphens-auto break-words" data-reveal>
+              <p class="label text-graphite">{fact.label}</p>
+              <p class="mt-2 font-serif text-h4 text-ink">{fact.value}</p>
+              {fact.note && <p class="text-sm leading-snug text-ink-soft">{fact.note}</p>}
+              {fact.detail && <p class="numeral mt-1.5 text-sm text-graphite">{fact.detail}</p>}
+            </li>
+          ))
+        }
+      </ul>
+      <ul class="grid gap-4 border-t border-rule pt-5 min-[420px]:grid-cols-2 md:grid-cols-3 md:gap-x-8" data-reveal-group>
+        {
+          secondary.map((fact) => (
+            <li class="min-w-0 border-l border-rule pl-4 hyphens-auto break-words" data-reveal>
+              <p class="label text-graphite">{fact.label}</p>
+              <p class="mt-1 text-ink">
+                <span class="font-serif text-lg leading-tight">{fact.value}</span>
+                {fact.note && <span class="text-sm text-graphite"> {fact.note}</span>}
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
   </Container>
 </section>

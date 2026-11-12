@@ -20,7 +20,7 @@ const { columns, rows, caption, class: className } = Astro.props;
   <caption class="sr-only">{caption}</caption>
   <thead class="max-sm:sr-only">
     <tr class="border-b border-ink">
-      <td class="py-4 pr-6"></td>
+      <td class="py-4 pr-6 sm:w-1/4"></td>
       {columns.map((column) => <th scope="col" class="label py-4 pr-6 align-bottom text-ink">{column}</th>)}
     </tr>
   </thead>
@@ -28,7 +28,7 @@ const { columns, rows, caption, class: className } = Astro.props;
     {
       rows.map((row) => (
         <tr class="border-b border-rule max-sm:grid max-sm:gap-3 max-sm:py-5">
-          <th scope="row" class="label py-5 pr-6 align-top font-semibold text-graphite max-sm:py-0 sm:w-[11rem]">
+          <th scope="row" class="label py-5 pr-6 align-top font-semibold text-graphite max-sm:py-0 sm:w-1/4">
             {row.label}
           </th>
           {row.values.map((value, index) => (

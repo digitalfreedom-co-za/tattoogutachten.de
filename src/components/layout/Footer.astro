@@ -12,7 +12,10 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="bg-ink text-paper" data-inert-when-menu>
-  <Container class="grid gap-12 pt-16 pb-10 md:grid-cols-12 md:gap-x-8 md:pt-20">
+  <Container>
+    <div class="border-t border-paper/25" aria-hidden="true"></div>
+  </Container>
+  <Container class="grid gap-12 pt-12 pb-10 md:grid-cols-12 md:gap-x-8 md:pt-16">
     <div class="md:col-span-12 lg:col-span-4">
       <p class="font-serif text-h3 tracking-tightish">{site.office}</p>
       <p class="mt-2 text-sm text-paper/60">{site.expert}, {site.role}</p>
@@ -22,16 +25,17 @@ const year = new Date().getFullYear();
           <span>
             {contact.street}<br />
             {contact.postalCode} {contact.city}
+            <span class="mt-1 block text-sm text-paper/60">Einsatzgebiet {credentials.areaServed}</span>
           </span>
         </p>
         <p>
-          <a class="link-ink inline-flex min-h-11 items-center gap-3 hover:!text-brass-light" href={contact.phone.href}>
+          <a class="link-ink inline-flex min-h-11 min-w-11 items-center gap-3 hover:!text-brass-light" href={contact.phone.href}>
             <Icon name="phone" size={18} class="shrink-0 text-brass-light" />
             <span><span class="sr-only">Telefon </span>{contact.phone.display}</span>
           </a>
         </p>
         <p>
-          <a class="link-ink inline-flex min-h-11 items-center gap-3 hover:!text-brass-light" href={contact.email.href}>
+          <a class="link-ink inline-flex min-h-11 min-w-11 items-center gap-3 hover:!text-brass-light" href={contact.email.href}>
             <Icon name="mail" size={18} class="shrink-0 text-brass-light" />
             <span class="break-all"><span class="sr-only">E-Mail </span>{contact.email.display}</span>
           </a>
@@ -46,12 +50,12 @@ const year = new Date().getFullYear();
           {
             mainNav.map((item) => (
               <li>
-                <a class="link-ink inline-flex min-h-11 items-center no-underline hover:!text-brass-light hover:underline" href={url(item.href)}>{item.label}</a>
+                <a class="link-ink inline-flex min-h-11 min-w-11 items-center no-underline hover:!text-brass-light hover:underline" href={url(item.href)}>{item.label}</a>
               </li>
             ))
           }
           <li>
-            <a class="link-ink inline-flex min-h-11 items-center no-underline hover:!text-brass-light hover:underline" href={url(primaryCta.href)}>{primaryCta.label}</a>
+            <a class="link-ink inline-flex min-h-11 min-w-11 items-center no-underline hover:!text-brass-light hover:underline" href={url(primaryCta.href)}>{primaryCta.label}</a>
           </li>
         </ul>
       </div>
@@ -61,7 +65,7 @@ const year = new Date().getFullYear();
           {
             audiences.map((audience) => (
               <li>
-                <a class="link-ink inline-flex min-h-11 items-center no-underline hover:!text-brass-light hover:underline" href={url(audienceHref(audience))}>
+                <a class="link-ink inline-flex min-h-11 min-w-11 items-center no-underline hover:!text-brass-light hover:underline" href={url(audienceHref(audience))}>
                   Für {audience.label}
                 </a>
               </li>
@@ -88,7 +92,7 @@ const year = new Date().getFullYear();
         {
           legalNav.map((item) => (
             <li>
-              <a class="link-ink inline-flex min-h-11 items-center hover:!text-brass-light" href={url(item.href)}>{item.label}</a>
+              <a class="link-ink inline-flex min-h-11 min-w-11 items-center hover:!text-brass-light" href={url(item.href)}>{item.label}</a>
             </li>
           ))
         }

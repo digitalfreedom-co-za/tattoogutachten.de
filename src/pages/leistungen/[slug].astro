@@ -36,9 +36,8 @@ const breadcrumbs = [
   { label: service.name, href: serviceHref(service) },
 ];
 
-// Sections alternate between paper and deep paper in render order, whatever blocks a service has.
-let toneIndex = 0;
-const nextTone = () => (toneIndex++ % 2 === 0 ? 'deep' : 'paper');
+// Tones follow the purpose of a block, not its position: narrative on paper, reference material
+// (scope, court appointment, comparison) on deep paper. Short supporting blocks use the support density.
 ---
 
 <BaseLayout
@@ -72,17 +71,17 @@ const nextTone = () => (toneIndex++ % 2 === 0 ? 'deep' : 'paper');
     }
   </PageHeader>
 
-  <Section id="definition" label="Kurz erklärt" title={service.definitionTitle} tone={nextTone()}>
-    <div class="grid gap-12 lg:grid-cols-12 lg:gap-x-8">
-      <div class="grid content-start gap-5 lg:col-span-7" data-reveal>
+  <Section id="definition" label="Kurz erklärt" title={service.definitionTitle}>
+    <div class="grid gap-10 md:grid-cols-12 md:gap-x-8">
+      <div class="grid content-start gap-5 md:col-span-9 md:col-start-4 xl:col-span-5 xl:col-start-4" data-reveal>
         <p class="max-w-[40rem] text-lead text-ink">{answer}</p>
         {moreIntro.map((paragraph) => <p class="max-w-[40rem] text-graphite">{paragraph}</p>)}
       </div>
-      <ExpertCard class="self-start lg:col-span-5 xl:col-span-4 xl:col-start-9" />
+      <ExpertCard class="self-start md:col-span-9 md:col-start-4 lg:col-span-5 lg:col-start-4 xl:col-span-3 xl:col-start-10" />
     </div>
   </Section>
 
-  <Section id="pruefumfang" label="Prüfumfang" title="Was wird geprüft, und was erhalten Sie?" tone={nextTone()}>
+  <Section id="pruefumfang" label="Prüfumfang" title="Was wird geprüft, und was erhalten Sie?" tone="deep" axis>
     <p slot="note">{serviceScopeNote}</p>
     <div class="grid gap-8 md:grid-cols-2 md:gap-x-8">
       <Checklist title={service.assessedTitle ?? 'Geprüft wird'} items={service.assessed} />
@@ -99,9 +98,8 @@ const nextTone = () => (toneIndex++ % 2 === 0 ? 'deep' : 'paper');
 
   {
     service.topics?.map((topic) => (
-      <Section id={topic.id} label={topic.label} title={topic.title} tone={nextTone()}>
-        <div class="grid gap-5 md:grid-cols-12 md:gap-x-8" data-reveal>
-          <div class="grid max-w-[40rem] gap-5 md:col-span-9 md:col-start-4 lg:col-span-8 lg:col-start-4">
+      <Section id={topic.id} label={topic.label} title={topic.title} density="support" axis>
+        <div class="grid max-w-[40rem] gap-5" data-reveal>
           {topic.paragraphs.map((paragraph, i) => (
             <p class:list={i === 0 ? 'text-lead text-ink' : 'text-graphite'}>{paragraph}</p>
           ))}
@@ -120,7 +118,6 @@ const nextTone = () => (toneIndex++ % 2 === 0 ? 'deep' : 'paper');
               <Button href={topic.link.href} variant="text">{topic.link.label}</Button>
             </p>
           )}
-          </div>
         </div>
       </Section>
     ))
@@ -128,7 +125,7 @@ const nextTone = () => (toneIndex++ % 2 === 0 ? 'deep' : 'paper');
 
   {
     service.showCourtReference && (
-      <Section id="bestellung" label="Justiz" tone={nextTone()}>
+      <Section id="bestellung" label="Justiz" tone="deep" density="support">
         <CourtReference />
       </Section>
     )
@@ -141,7 +138,8 @@ const nextTone = () => (toneIndex++ % 2 === 0 ? 'deep' : 'paper');
         label="Vergleich"
         title="Privatgutachten oder Gerichtsgutachten?"
         intro="Den Unterschied macht der Auftraggeber: Ein Privatgutachten geben Sie selbst in Auftrag, ein Gerichtsgutachten holt das Gericht ein."
-        tone={nextTone()}
+        tone={service.showCourtReference ? 'paper' : 'deep'}
+        density="support"
       >
         <CompareTable caption="Privatgutachten und Gerichtsgutachten im Vergleich" {...reportComparison} />
       </Section>
@@ -150,7 +148,7 @@ const nextTone = () => (toneIndex++ % 2 === 0 ? 'deep' : 'paper');
 
   {
     questions.length > 0 && (
-      <Section id="fragen" label="Typische Fragen" title={`Häufige Fragen zum Thema ${service.name}`} tone={nextTone()}>
+      <Section id="fragen" label="Typische Fragen" title={`Häufige Fragen zum Thema ${service.name}`} density="support" axis>
         <p slot="note">
           Alle Antworten nach Themen:
           <a class="link-ink not-italic" href={url('/haeufige-fragen/')}>häufige Fragen zum Tattoogutachten</a>.
@@ -168,9 +166,10 @@ const nextTone = () => (toneIndex++ % 2 === 0 ? 'deep' : 'paper');
       service.enquiry?.nextIntro ??
       'Am Anfang steht eine kostenlose Erstberatung von bis zu 60 Minuten. Kostenpflichtig wird es erst, wenn Sie ein Gutachten schriftlich beauftragen.'
     }
-    tone={nextTone()}
+    density="support"
+    axis
   >
-    <p class="mb-12" data-reveal>
+    <p class="mb-10" data-reveal>
       {
         service.enquiry ? (
           <Button href={service.enquiry.audienceHref} variant="text">{service.enquiry.audienceLabel}</Button>
@@ -180,7 +179,7 @@ const nextTone = () => (toneIndex++ % 2 === 0 ? 'deep' : 'paper');
       }
     </p>
     <h3 class="label mb-6 text-graphite">Verwandte Leistungen</h3>
-    <div class="grid gap-x-8 gap-y-4 md:grid-cols-3" data-reveal-group>
+    <div class="grid gap-x-8 gap-y-2 md:grid-cols-3" data-reveal-group>
       {
         related.map((item) => (
           <Card kicker={item.kicker} title={item.name} href={serviceHref(item)} linkLabel={`Mehr zum Thema ${item.name}`} headingLevel="h4">

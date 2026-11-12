@@ -1,13 +1,15 @@
 ---
-// Closing call to action on ink: serif statement left, the primary action, direct contact and office
-// address right. action="booking" leads with the calendar, action="contact" with the telephone and keeps
-// the calendar as a secondary link. Default: contact while the calendar is the preview demo.
+// Closing call to action on ink: serif statement left, the primary action and one compact alternative
+// contact line right. The full address and contact directory stay in the footer, which follows below a
+// rule. action="booking" leads with the calendar and offers the telephone; action="contact" leads with
+// the telephone and offers the given link (calendar or email). Default: contact while the calendar is the
+// preview demo. data-cta-band lets the mobile booking bar step aside while this band is on screen.
 import Container from './Container.astro';
 import Button from './Button.astro';
 import Icon from './Icon.astro';
 import MeasureRule from './MeasureRule.astro';
 import { url } from '../../lib/url';
-import { contact, credentials, primaryCta, site } from '../../config/site';
+import { contact, primaryCta } from '../../config/site';
 import { CAL_IS_DEMO } from '../../config/booking';
 
 interface Props {
@@ -27,53 +29,38 @@ const {
 } = Astro.props;
 ---
 
-<section class="relative overflow-hidden bg-ink py-section text-paper" aria-label="Kontakt aufnehmen">
+<section class="relative overflow-hidden bg-ink pt-section pb-16 text-paper md:pb-20" aria-label="Kontakt aufnehmen" data-cta-band>
   <MeasureRule class="absolute top-0 left-0 w-full text-paper/30" />
-  <Container class="grid gap-12 md:grid-cols-12 md:gap-x-8">
+  <Container class="grid gap-10 md:grid-cols-12 md:gap-x-8">
     <div class="md:col-span-7">
       <h2 class="text-h2 tracking-display">{title}</h2>
       {text && <p class="mt-6 max-w-[34rem] text-lead text-paper/75" data-reveal>{text}</p>}
     </div>
-    <div class="flex flex-col gap-8 md:col-span-4 md:col-start-9 md:justify-end">
+    <div class="flex flex-col gap-5 md:col-span-4 md:col-start-9 md:justify-end">
       {
         action === 'booking' ? (
-          <Button href={ctaHref} variant="inverse" icon="calendar" class="self-start">{ctaLabel}</Button>
-        ) : (
-          <div class="flex flex-wrap items-center gap-x-6 gap-y-4">
-            <Button href={contact.phone.href} variant="inverse" icon="phone">
-              <span class="sr-only">Anrufen: </span>{contact.phone.display}
-            </Button>
-            <a class="link-ink inline-flex min-h-11 items-center text-sm font-semibold hover:!text-brass-light" href={ctaHref.startsWith('/') ? url(ctaHref) : ctaHref}>
-              {ctaLabel}
-            </a>
-          </div>
-        )
-      }
-      <ul class="grid gap-1 border-t border-paper/20 pt-4 text-sm">
-        {
-          action === 'booking' && (
-            <li>
-              <a class="link-ink inline-flex min-h-11 items-center gap-3 hover:!text-brass-light" href={contact.phone.href}>
-                <Icon name="phone" size={18} class="shrink-0 text-brass-light" />
+          <>
+            <Button href={ctaHref} variant="inverse" icon="calendar" class="self-start">{ctaLabel}</Button>
+            <p class="text-sm">
+              <a class="link-ink inline-flex min-h-11 items-center gap-2 font-semibold hover:!text-brass-light" href={contact.phone.href}>
+                <Icon name="phone" size={16} class="shrink-0 text-brass-light" />
                 <span><span class="sr-only">Telefon </span>{contact.phone.display}</span>
               </a>
-            </li>
-          )
-        }
-        <li>
-          <a class="link-ink inline-flex min-h-11 items-center gap-3 hover:!text-brass-light" href={contact.email.href}>
-            <Icon name="mail" size={18} class="shrink-0 text-brass-light" />
-            <span class="break-all"><span class="sr-only">E-Mail </span>{contact.email.display}</span>
-          </a>
-        </li>
-        <li class="mt-2 flex gap-3">
-          <Icon name="pin" size={18} class="mt-0.5 shrink-0 text-brass-light" />
-          <span class="text-paper/80">
-            {site.office}, {contact.street}, {contact.postalCode} {contact.city}
-            <span class="mt-1 block text-paper/60">Einsatzgebiet {credentials.areaServed}</span>
-          </span>
-        </li>
-      </ul>
+            </p>
+          </>
+        ) : (
+          <>
+            <Button href={contact.phone.href} variant="inverse" icon="phone" class="self-start">
+              <span class="sr-only">Anrufen: </span>{contact.phone.display}
+            </Button>
+            <p class="text-sm">
+              <a class="link-ink inline-flex min-h-11 items-center font-semibold break-all hover:!text-brass-light" href={ctaHref.startsWith('/') ? url(ctaHref) : ctaHref}>
+                {ctaLabel}
+              </a>
+            </p>
+          </>
+        )
+      }
     </div>
   </Container>
 </section>

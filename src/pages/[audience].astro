@@ -66,9 +66,8 @@ const pictures: Record<AudienceSlug, { src: ImageMetadata; alt: string }> = {
 const picture = pictures[audience.slug];
 const enquiry = audience.primaryAction === 'enquiry';
 
-// Sections alternate between paper and deep paper in render order.
-let toneIndex = 0;
-const nextTone = () => (toneIndex++ % 2 === 0 ? 'paper' : 'deep');
+// Tones follow the purpose of a block, not its position: narrative on paper, working material
+// (first steps, preparation, court appointment and comparison) on deep paper.
 
 const page = {
   audience: { '@type': 'Audience', audienceType: audience.label },
@@ -107,7 +106,7 @@ const page = {
 
   {
     audience.firstSteps && (
-      <Section id="erste-schritte" label="Erste Schritte" title={audience.firstStepsTitle} tone={nextTone()}>
+      <Section id="erste-schritte" label="Erste Schritte" title={audience.firstStepsTitle} tone="deep" axis>
         <ul class="grid gap-x-8 border-t border-ink md:grid-cols-2" data-reveal-group>
           {audience.firstSteps.map((step) => (
             <li class="grid content-start gap-3 border-b border-rule py-6" data-reveal>
@@ -127,9 +126,9 @@ const page = {
     )
   }
 
-  <Section id="ausgangslage" label="Ausgangslage" title={audience.situationTitle} tone={nextTone()}>
+  <Section id="ausgangslage" label="Ausgangslage" title={audience.situationTitle}>
     <div class="grid gap-12 md:grid-cols-12 md:gap-x-8">
-      <ul class="grid content-start border-t border-ink md:col-span-7" data-reveal-group>
+      <ul class="grid content-start border-t border-ink md:col-span-9 md:col-start-4 lg:col-span-5 lg:col-start-4" data-reveal-group>
         {
           audience.situations.map((situation) => (
             <li class="border-b border-rule py-5 font-serif text-h4 text-ink" data-reveal>
@@ -138,7 +137,7 @@ const page = {
           ))
         }
       </ul>
-      <figure class="md:col-span-5 md:col-start-8">
+      <figure class="md:col-span-9 md:col-start-4 lg:col-span-4 lg:col-start-9">
         <ArtImage
           src={picture.src}
           alt={picture.alt}
@@ -152,9 +151,9 @@ const page = {
     </div>
   </Section>
 
-  <Section id="hilfe" label="Unterstützung" title={audience.help.title} tone={nextTone()}>
-    <div class="grid gap-12 lg:grid-cols-12 lg:gap-x-8">
-      <div class="grid content-start gap-5 lg:col-span-7" data-reveal>
+  <Section id="hilfe" label="Unterstützung" title={audience.help.title}>
+    <div class="grid gap-10 md:grid-cols-12 md:gap-x-8">
+      <div class="grid content-start gap-5 md:col-span-9 md:col-start-4 xl:col-span-5 xl:col-start-4" data-reveal>
         {
           audience.help.paragraphs.map((paragraph, i) => (
             <p class:list={['max-w-[40rem]', i === 0 ? 'text-lead text-ink' : 'text-graphite']}>{paragraph}</p>
@@ -174,11 +173,11 @@ const page = {
           </ul>
         </div>
       </div>
-      <ExpertCard class="self-start lg:col-span-5 xl:col-span-4 xl:col-start-9" />
+      <ExpertCard class="self-start md:col-span-9 md:col-start-4 lg:col-span-5 lg:col-start-4 xl:col-span-3 xl:col-start-10" />
     </div>
   </Section>
 
-  {enquiry && <AudiencePrepare audience={audience} tone={nextTone()} />}
+  {enquiry && <AudiencePrepare audience={audience} tone="deep" />}
 
   {
     audience.court && (
@@ -191,7 +190,8 @@ const page = {
             ? 'Den Unterschied macht der Auftraggeber: Ein Privatgutachten beauftragen Sie oder Ihr Mandant, ein Gerichtsgutachten holt das Gericht ein.'
             : undefined
         }
-        tone={nextTone()}
+        tone={enquiry ? 'paper' : 'deep'}
+        density="support"
       >
         <CourtReference class:list={[audience.court === 'comparison' && 'mb-16']} />
         {audience.court === 'comparison' && (
@@ -210,19 +210,20 @@ const page = {
         ? 'Was geprüft wird und was das Gutachten enthält, steht bei der jeweiligen Leistung.'
         : 'Ihr Fall passt nicht eindeutig zu einer Leistung? Dann klären wir es in der kostenlosen Erstberatung, ohne dass Sie sich vorher festlegen.'
     }
-    tone={nextTone()}
   >
     <ServiceList services={services} />
-    <p class="mt-10" data-reveal>
-      <Button href="/leistungen/" variant="text">Alle Leistungen im Überblick</Button>
-    </p>
+    <div class="mt-10 md:grid md:grid-cols-12 md:gap-x-8" data-reveal>
+      <p class="axis">
+        <Button href="/leistungen/" variant="text">Alle Leistungen im Überblick</Button>
+      </p>
+    </div>
   </Section>
 
-  {!enquiry && <AudiencePrepare audience={audience} tone={nextTone()} />}
+  {!enquiry && <AudiencePrepare audience={audience} tone="deep" />}
 
   {
     questions.length > 0 && (
-      <Section id="fragen" label="Typische Fragen" title={`Häufige Fragen für ${audience.label}`} tone={nextTone()}>
+      <Section id="fragen" label="Typische Fragen" title={`Häufige Fragen für ${audience.label}`} density="support" axis>
         <p slot="note">
           Alle Antworten nach Themen auf der Seite häufige Fragen.
         </p>
@@ -236,11 +237,13 @@ const page = {
 
   {
     articles.length > 0 && (
-      <Section id="ratgeber" label="Ratgeber" title="Zum Weiterlesen" tone={nextTone()}>
-        <ArticleList articles={articles} showLead={false} />
-        <p class="mt-10" data-reveal>
-          <Button href="/ratgeber/" variant="text">Alle Beiträge im Ratgeber</Button>
-        </p>
+      <Section id="ratgeber" label="Ratgeber" title="Zum Weiterlesen" tone="deep" density="support">
+        <ArticleList articles={articles} showLead={false} compact />
+        <div class="mt-8 md:grid md:grid-cols-12 md:gap-x-8" data-reveal>
+          <p class="axis">
+            <Button href="/ratgeber/" variant="text">Alle Beiträge im Ratgeber</Button>
+          </p>
+        </div>
       </Section>
     )
   }

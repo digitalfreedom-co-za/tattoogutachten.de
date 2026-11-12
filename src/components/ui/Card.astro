@@ -1,6 +1,8 @@
 ---
-// Audience or service card: hairline frame, kicker label, serif title.
-// The whole card is clickable when href is set; the title link carries the accessible name.
+// Audience or service card: kicker label, serif title. The whole card is clickable when href is set;
+// the title link carries the accessible name. Two explicit presentations, one per group:
+// rule (default) is a transparent editorial card under a top rule, without lateral padding, on any
+// background; panel is a filled paper panel with its own inner padding, for deliberate enclosures.
 import Icon from './Icon.astro';
 import { url } from '../../lib/url';
 
@@ -11,23 +13,31 @@ interface Props {
   linkLabel?: string;
   /** Heading level of the title inside the surrounding outline. */
   headingLevel?: 'h3' | 'h4';
+  variant?: 'rule' | 'panel';
   class?: string;
 }
 
-const { kicker, title, href, linkLabel = 'Mehr erfahren', headingLevel: Heading = 'h3', class: className } = Astro.props;
+const { kicker, title, href, linkLabel = 'Mehr erfahren', headingLevel: Heading = 'h3', variant = 'rule', class: className } = Astro.props;
 const resolvedHref = href?.startsWith('/') ? url(href) : href;
 ---
 
 <article
   class:list={[
-    'group/card relative flex h-full flex-col border-t border-ink bg-paper pt-5 pb-7 transition-colors duration-300',
-    resolvedHref && 'hover:bg-paper-deep/60 has-[a:focus-visible]:bg-paper-deep/60',
+    // Long German words break only when a narrow column cannot hold them, e.g. with enlarged text.
+    'group/card relative flex h-full min-w-0 flex-col border-t border-ink wrap-anywhere transition-colors duration-300',
+    variant === 'panel' ? 'bg-paper px-5 pt-5 pb-7 md:px-6' : 'bg-transparent pt-5 pb-7',
+    resolvedHref && variant === 'panel' && 'hover:bg-paper-deep/60 has-[a:focus-visible]:bg-paper-deep/60',
     className,
   ]}
   data-reveal
 >
   {kicker && <p class="label text-graphite">{kicker}</p>}
-  <Heading class="mt-8 text-h3">
+  <Heading
+    class:list={[
+      'mt-8 text-h3',
+      resolvedHref && 'transition-colors group-hover/card:text-oxblood group-has-[a:focus-visible]/card:text-oxblood',
+    ]}
+  >
     {
       resolvedHref ? (
         <a href={resolvedHref} class="after:absolute after:inset-0 focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-4 focus-visible:after:outline-signal">
@@ -44,7 +54,7 @@ const resolvedHref = href?.startsWith('/') ? url(href) : href;
   {
     resolvedHref && (
       <p class="mt-auto flex items-center gap-2 pt-6 text-sm font-semibold" aria-hidden="true">
-        <span class="border-b border-ink/30 transition-colors group-hover/card:border-oxblood group-hover/card:text-oxblood group-has-[a:focus-visible]/card:border-oxblood group-has-[a:focus-visible]/card:text-oxblood">
+        <span class="min-w-0 border-b border-ink/30 hyphens-auto break-words transition-colors group-hover/card:border-oxblood group-hover/card:text-oxblood group-has-[a:focus-visible]/card:border-oxblood group-has-[a:focus-visible]/card:text-oxblood">
           {linkLabel}
         </span>
         <Icon name="arrow" size={16} class="transition-transform duration-300 group-hover/card:translate-x-1 group-has-[a:focus-visible]/card:translate-x-1 motion-reduce:transition-none" />

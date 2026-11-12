@@ -1,6 +1,7 @@
 ---
 // Ratgeber index in the style of a report's table of contents: topic label and reading time,
 // title and answer first lead per row; the whole row links to the article. No numbering.
+// The rows use the section grid: label in the three column margin, title under the section title.
 import Icon from './Icon.astro';
 import { url } from '../../lib/url';
 import { articleHref, type Article } from '../../lib/ratgeber';
@@ -12,23 +13,30 @@ interface Props {
   headingLevel?: 'h2' | 'h3';
   /** Shows the answer first lead under each title. */
   showLead?: boolean;
+  /** Title led further reading rows: smaller titles, tighter rows, no reading time. */
+  compact?: boolean;
   class?: string;
 }
 
-const { articles, headingLevel: Heading = 'h3', showLead = true, class: className } = Astro.props;
+const { articles, headingLevel: Heading = 'h3', showLead = true, compact = false, class: className } = Astro.props;
 ---
 
 <ul class:list={['border-t border-ink', className]} data-reveal-group>
   {
     articles.map((article) => (
       <li class="group/row relative border-b border-rule transition-colors duration-300 hover:bg-paper-deep/60 has-[a:focus-visible]:bg-paper-deep/60" data-reveal>
-        <div class="grid gap-3 py-6 md:grid-cols-[11rem_1fr_auto] md:items-baseline md:gap-8 md:py-8 md:pr-2">
-          <div>
+        <div
+          class:list={[
+            'grid md:grid-cols-12 md:items-baseline md:gap-x-8 md:pr-2',
+            compact ? 'gap-1.5 py-4 md:py-5' : 'gap-3 py-6 md:py-8',
+          ]}
+        >
+          <div class="md:col-span-3">
             <p class="label text-oxblood">{article.data.kicker}</p>
-            <p class="mt-1 text-sm text-graphite">{readingTimeLabel(article.body ?? '')}</p>
+            {!compact && <p class="mt-1 text-sm text-graphite">{readingTimeLabel(article.body ?? '')}</p>}
           </div>
-          <div>
-            <Heading class="text-h3">
+          <div class="min-w-0 md:col-span-8">
+            <Heading class={compact ? 'text-h4' : 'text-h3'}>
               <a
                 href={url(articleHref(article))}
                 class="after:absolute after:inset-0 focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-signal"
@@ -41,7 +49,7 @@ const { articles, headingLevel: Heading = 'h3', showLead = true, class: classNam
           <Icon
             name="arrow"
             size={22}
-            class="hidden text-ink transition-transform duration-300 group-hover/row:translate-x-1 group-hover/row:text-oxblood group-has-[a:focus-visible]/row:translate-x-1 group-has-[a:focus-visible]/row:text-oxblood motion-reduce:transition-none md:block"
+            class="hidden text-ink transition-transform duration-300 group-hover/row:translate-x-1 group-hover/row:text-oxblood group-has-[a:focus-visible]/row:translate-x-1 group-has-[a:focus-visible]/row:text-oxblood motion-reduce:transition-none md:col-span-1 md:block md:justify-self-end"
           />
         </div>
       </li>

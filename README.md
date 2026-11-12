@@ -65,15 +65,20 @@ Bausteine in `src/components/ui/`:
 
 | Komponente | Zweck |
 |---|---|
-| `Container`, `Section` | Raster; `Section` mit Label, Randnotiz (Slot `note`), Titel, Intro, Ton `paper`, `deep`, `ink` |
+| `Container`, `Section` | Raster; `Section` mit Label, Randnotiz (Slot `note`), Titel, Intro, Ton `paper`, `deep`, `ink`. Dichte `chapter` (Hauptkapitel) oder `support` (kurze Ergänzungen, weniger Abstand, kleinerer Titel). `axis` setzt den Inhalt unter den Titel (Leseachse nach der dreispaltigen Randspalte, Klasse `.axis`); ohne `axis` nur für Raster, die bewusst die ganze Breite nutzen. Töne nach Zweck: Erzählung auf `paper`, Nachschlage- und Arbeitsmaterial auf `deep` |
 | `Eyebrow` | Label im Berichtsstil mit kurzer Akzentlinie |
 | `Button` | Link oder Button, Varianten `primary`, `secondary`, `inverse`, `text`, SVG-Icon statt Pfeilzeichen |
-| `Card` | Zielgruppen und Leistungen, ganze Karte klickbar |
+| `Card` | Zielgruppen und Leistungen, ganze Karte klickbar; `rule` (Standard, transparent unter einer Linie) oder `panel` (gefüllte Fläche mit Innenabstand), je Gruppe nur eine Form |
 | `Quote`, `Steps`, `Faq`, `Checklist`, `KeyFacts` | Zitat, Ablauf mit Vorbereitungshinweis, FAQ auf `details`/`summary`, Checkliste, Kostenerklärung |
-| `CourtReference`, `TrustStrip`, `Seal` | Gerichtsbestellung mit Rechtshinweis, Nachweise mit Registernummer, Siegel |
+| `CourtReference`, `TrustStrip`, `Seal` | Gerichtsbestellung mit Rechtshinweis, Nachweise (Zertifizierung mit Registernummer, Erfahrung, Gerichtsbestellung vorn), Siegel |
+| `ExpertCard` | Kompakte Zuordnung neben Leistungs- und Zielgruppentext: Porträt, Name, zwei Kernfakten, Link zur Qualifikation |
 | `CtaBand`, `Breadcrumbs` | Abschluss mit Terminbuchung, Brotkrumen |
 | `ArtImage` | Bild mit Bildausschnitt je Breakpoint (`crops`), `width`/`height` je `source`, optional Parallaxe |
 | `MeasureRule`, `NeedleLine`, `Icon` | Dekor (Maßband, Linienzug) und Icons als SVG |
+
+Überschriften: `h1`, `h2` und die Display-Größen trennen nicht automatisch. Zu lange Komposita für schmale Telefone bekommen in `src/lib/display-breaks.ts` eine weiche Trennstelle, die `PageHeader` und `Section` beim Rendern einsetzen.
+
+Mobile Buchungsleiste: bleibt verborgen, solange `[data-primary-action]` (Aktionen im Seitenkopf oder Titelblock) sichtbar oder noch darunter ist, und während Kalender, abschließendes Band (`[data-cta-band]`) oder Footer im Bild sind.
 
 Bewegung: `data-reveal` (Standard, `rule`, `image`, `draw`) plus `data-reveal-group` für gestaffelte Einblendung, `data-parallax` für Bilder. Startzustände greifen nur, wenn das Inline-Skript `html.js` gesetzt hat und keine reduzierte Bewegung gewünscht ist. Ohne JS ist alles sichtbar, das Menü steht dann als Liste unter dem Header. Seitenwechsel blenden über CSS View Transitions über.
 

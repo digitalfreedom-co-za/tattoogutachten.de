@@ -1,6 +1,7 @@
 ---
 // Service index in the style of a report's table of contents: topic label, title and
 // answer first summary per row, the whole row links to the service page. No numbering.
+// The rows use the section grid: label in the three column margin, title under the section title.
 // grouped: two parts with their own heading, subject first, then commissioning route and occasion.
 import Icon from './Icon.astro';
 import { url } from '../../lib/url';
@@ -28,9 +29,8 @@ const parts = grouped
     parts.map(({ group, items }) => (
       <div class:list={[group && 'mt-14 first:mt-0']}>
         {group && (
-          <div class="mb-6 grid gap-2 md:grid-cols-[11rem_1fr] md:gap-8" data-reveal>
-            <span class="hidden md:block" aria-hidden="true" />
-            <div>
+          <div class="mb-6 md:grid md:grid-cols-12 md:gap-x-8" data-reveal>
+            <div class="axis">
               <h3 class="label text-ink">{group.title}</h3>
               <p class="mt-2 max-w-[40rem] text-sm text-graphite">{group.text}</p>
             </div>
@@ -40,9 +40,9 @@ const parts = grouped
           {
             items.map((service) => (
               <li class="group/row relative border-b border-rule transition-colors duration-300 hover:bg-paper-deep/60 has-[a:focus-visible]:bg-paper-deep/60" data-reveal>
-                <div class="grid gap-3 py-6 md:grid-cols-[11rem_1fr_auto] md:items-baseline md:gap-8 md:py-8 md:pr-2">
-                  <p class="label text-oxblood">{service.kicker}</p>
-                  <div>
+                <div class="grid gap-3 py-6 md:grid-cols-12 md:items-baseline md:gap-x-8 md:py-8 md:pr-2">
+                  <p class="label text-oxblood md:col-span-3">{service.kicker}</p>
+                  <div class="min-w-0 md:col-span-8">
                     <Heading class="text-h3">
                       <a
                         href={url(serviceHref(service))}

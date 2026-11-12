@@ -27,6 +27,38 @@ Ziel sind Bilder, auf denen man Linien, Schattierungen und Farbflächen so erken
 - keine Filter, keine Bildbearbeitung und keine Verschönerung durch die Kamera-App
 - die Originaldateien aufbewahren, nicht nur Bildschirmfotos oder per Messenger verkleinerte Kopien
 
+<figure class="schematic not-prose">
+<div class="schematic-panels">
+<div class="schematic-panel">
+<svg viewBox="0 0 240 180" role="img" aria-labelledby="foto-uebersicht">
+<path class="schematic-skin" d="M0 66C70 58 160 58 240 72V134C160 122 70 122 0 130Z"/>
+<circle class="schematic-motif" cx="120" cy="97" r="22"/>
+<circle class="schematic-motif" cx="120" cy="97" r="9"/>
+<path class="schematic-motif" d="M120 71V123M94 97H146"/>
+<rect class="schematic-mark" x="126" y="78" width="34" height="26"/>
+<path class="schematic-frame" d="M14 34V14H34M206 14H226V34M226 146V166H206M34 166H14V146"/>
+</svg>
+<p id="foto-uebersicht"><span class="label">Übersicht</span> Die ganze Tätowierung und die Körperstelle auf einem Bild.</p>
+</div>
+<div class="schematic-panel">
+<svg viewBox="0 0 240 180" role="img" aria-labelledby="foto-detail">
+<defs><clipPath id="foto-detail-ausschnitt"><rect x="14" y="14" width="212" height="152"/></clipPath></defs>
+<g clip-path="url(#foto-detail-ausschnitt)">
+<rect class="schematic-skin" x="14" y="14" width="212" height="152"/>
+<circle class="schematic-motif schematic-motif-zoom" cx="-23" cy="132" r="136"/>
+<circle class="schematic-motif schematic-motif-zoom" cx="-23" cy="132" r="56"/>
+<path class="schematic-motif schematic-motif-zoom" d="M14 132H144"/>
+</g>
+<circle class="schematic-mark-solid" cx="120" cy="90" r="6"/>
+<path class="schematic-mark-solid" d="M120 76V84M120 96V104M106 90H114M126 90H134"/>
+<path class="schematic-frame" d="M14 34V14H34M206 14H226V34M226 146V166H206M34 166H14V146"/>
+</svg>
+<p id="foto-detail"><span class="label">Nahaufnahme</span> Die Stelle, die Ihnen auffällt, scharf und von vorn.</p>
+</div>
+</div>
+<figcaption>Schematische Darstellung, kein Fallbeispiel. Beide Aufnahmen bei gleichmäßigem Tageslicht, ohne Blitz und ohne Filter.</figcaption>
+</figure>
+
 Notieren Sie zu jeder Fotoserie das Datum, falls es sich nicht aus der Datei ergibt.
 
 ## Welche Fotos sind außerdem hilfreich?

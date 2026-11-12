@@ -1,9 +1,12 @@
 ---
 // Mobile only booking bar fixed to the bottom edge, above the home indicator (safe area).
-// It needs JS to know when to step aside: it hides once the calendar frame of a booking section
-// ([data-booking-section], the section itself if it has no calendar) reaches the usable viewport
-// between header and bar, or while the footer is on screen, so it stays available through the
-// introduction and never covers the calendar or the contact details. Below 360px it drops the
+// It needs JS to know when to step aside. It stays hidden until the page's own primary action
+// ([data-primary-action], the booking button of the opening hero or page header, or the title block
+// of a page without actions) has scrolled above the viewport, so one booking action is visible at a
+// time and the opening of a page stays uncovered. It also hides once the calendar frame of a
+// booking section ([data-booking-section], the section itself if it has no calendar) reaches the usable
+// viewport between header and bar, and while a closing call to action ([data-cta-band]) or the footer
+// is on screen, so it never covers the calendar or the contact details. Below 360px it drops the
 // supporting line and keeps only the booking button, so the bar stays one row high. While hidden
 // it leaves the focus order, as it does while the mobile menu is open. Its measured height is the
 // bottom scroll padding and the body padding, and a focused element that still ends up behind
@@ -82,7 +85,8 @@ const href = url(bookingHref(withoutBase(Astro.url.pathname)));
   const calendars = Array.from(document.querySelectorAll<HTMLElement>('[data-booking-section]'), (section) =>
     section.querySelector<HTMLElement>('.booking-frame') ?? section,
   );
-  const footers = document.querySelectorAll<HTMLElement>('footer');
+  const closers = document.querySelectorAll<HTMLElement>('footer, [data-cta-band]');
+  const primaryActions = document.querySelectorAll<HTMLElement>('[data-primary-action]');
 
   if (bar && 'IntersectionObserver' in window) {
     const visible = new Set<Element>();
@@ -94,6 +98,12 @@ const href = url(bookingHref(withoutBase(Astro.url.pathname)));
 
     if (menu) new MutationObserver(update).observe(menu, { attributes: true, attributeFilter: ['data-open'] });
 
+    // Pages with a primary action start with the bar away, so it does not flash in before the first
+    // observer callback.
+    if (primaryActions.length > 0) {
+      bar.setAttribute('data-away', '');
+      bar.inert = true;
+    }
     bar.hidden = false;
 
     const track = (entries: IntersectionObserverEntry[]) => {
@@ -106,8 +116,8 @@ const href = url(bookingHref(withoutBase(Astro.url.pathname)));
 
     // The calendar counts once it reaches the usable viewport, between the sticky header on top
     // and the bar itself at the bottom. Both heights change with width, rotation and text size, so
-    // the observer is rebuilt with fresh margins whenever one of them does. The footer counts as
-    // soon as it touches the viewport.
+    // the observer is rebuilt with fresh margins whenever one of them does. The closing band and the
+    // footer count as soon as they touch the viewport.
     let calendarObserver: IntersectionObserver | undefined;
     let insets = '';
     const observeCalendars = () => {
@@ -120,8 +130,29 @@ const href = url(bookingHref(withoutBase(Astro.url.pathname)));
       calendars.forEach((el) => calendarObserver!.observe(el));
     };
     observeCalendars();
-    const footerObserver = new IntersectionObserver(track);
-    footers.forEach((el) => footerObserver.observe(el));
+    const closerObserver = new IntersectionObserver(track);
+    closers.forEach((el) => closerObserver.observe(el));
+
+    // A primary action holds the bar back while it is on screen or still below; once it has left the
+    // viewport upwards the bar may show. Checked from the current position on scroll and resize, not
+    // with an IntersectionObserver: a jump across the action (anchor, Home, End) would not notify one.
+    let actionFrame = 0;
+    const checkActions = () => {
+      actionFrame = 0;
+      primaryActions.forEach((el) => {
+        if (el.getBoundingClientRect().bottom > 0) visible.add(el);
+        else visible.delete(el);
+      });
+      update();
+    };
+    const scheduleActions = () => {
+      if (!actionFrame) actionFrame = requestAnimationFrame(checkActions);
+    };
+    if (primaryActions.length > 0) {
+      window.addEventListener('scroll', scheduleActions, { passive: true });
+      window.addEventListener('resize', scheduleActions);
+      checkActions();
+    }
     document.documentElement.classList.add('has-sticky-cta');
 
     const sizes = new ResizeObserver(() => {

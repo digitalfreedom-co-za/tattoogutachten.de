@@ -1,8 +1,13 @@
 ---
 // Page section in report layout: a narrow margin column (label, margin note)
 // next to a wide content column. On small screens the margin column stacks on top.
+// density: chapter for the principal parts of a page, support for short supporting explanations
+// (less padding, smaller title, tighter gap to the content). axis: the content starts under the title
+// instead of at the container edge; leave it off for layouts that span the grid on purpose
+// (card grids, comparison tables, image and text splits).
 import Container from './Container.astro';
 import Eyebrow from './Eyebrow.astro';
+import { withDisplayBreaks } from '../../lib/display-breaks';
 
 interface Props {
   id?: string;
@@ -10,12 +15,25 @@ interface Props {
   title?: string;
   intro?: string;
   tone?: 'paper' | 'deep' | 'ink';
+  density?: 'chapter' | 'support';
+  axis?: boolean;
   class?: string;
   /** Marks a booking section: the mobile booking bar steps aside while it is on screen. */
   'data-booking-section'?: boolean;
 }
 
-const { id, label, title, intro, tone = 'paper', class: className, 'data-booking-section': bookingSection } = Astro.props;
+const {
+  id,
+  label,
+  title,
+  intro,
+  tone = 'paper',
+  density = 'chapter',
+  axis = false,
+  class: className,
+  'data-booking-section': bookingSection,
+} = Astro.props;
+const support = density === 'support';
 const headingId = id && title ? `${id}-titel` : undefined;
 const hasHeader = Boolean(label || title || intro || Astro.slots.has('note'));
 
@@ -29,7 +47,7 @@ const toneClass = {
 <section
   id={id}
   aria-labelledby={headingId}
-  class:list={['py-section', toneClass, className]}
+  class:list={[support ? 'py-section-support' : 'py-section', toneClass, className]}
   data-booking-section={bookingSection || undefined}
 >
   <Container>
@@ -62,13 +80,17 @@ const toneClass = {
           {(title || intro) && (
             <div class="min-w-0 md:col-span-9 lg:col-span-8">
               {title && (
-                <h2 id={headingId} class="text-h2 tracking-display">
-                  {title}
+                <h2 id={headingId} class:list={[support ? 'text-h3' : 'text-h2 tracking-display']}>
+                  {withDisplayBreaks(title)}
                 </h2>
               )}
               {intro && (
                 <p
-                  class:list={['mt-5 max-w-[38rem] text-lead', tone === 'ink' ? 'text-paper/75' : 'text-graphite']}
+                  class:list={[
+                    'max-w-[38rem]',
+                    support ? 'mt-3' : 'mt-5 text-lead',
+                    tone === 'ink' ? 'text-paper/75' : 'text-graphite',
+                  ]}
                   data-reveal
                 >
                   {intro}
@@ -79,8 +101,8 @@ const toneClass = {
         </header>
       )
     }
-    <div class:list={[hasHeader && 'mt-12 md:mt-16']}>
-      <slot />
+    <div class:list={[hasHeader && (support ? 'mt-6 md:mt-8' : 'mt-12 md:mt-16'), axis && 'md:grid md:grid-cols-12 md:gap-x-8']}>
+      {axis ? <div class="axis min-w-0"><slot /></div> : <slot />}
     </div>
   </Container>
 </section>

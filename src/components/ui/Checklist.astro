@@ -18,9 +18,9 @@ const { items, title, icon = 'check', class: className } = Astro.props;
   <ul class="grid gap-4">
     {
       items.map((item) => (
-        <li class="grid grid-cols-[1.25rem_1fr] gap-4 border-t border-rule pt-4 first:border-t-0 first:pt-0">
+        <li class="grid grid-cols-[1.25rem_minmax(0,1fr)] gap-4 border-t border-rule pt-4 first:border-t-0 first:pt-0">
           <Icon name={icon} size={20} class:list={['mt-0.5', icon === 'check' ? 'text-oxblood' : 'text-stone']} />
-          <span>{item}</span>
+          <span class="hyphens-auto break-words">{item}</span>
         </li>
       ))
     }

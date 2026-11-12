@@ -23,7 +23,6 @@ import { ids, ref } from '../lib/schema';
 const breadcrumbs = [{ label: 'Über mich', href: '/ueber-mich/' }];
 
 import portrait from '../assets/images/patrick-wolf-portrait-studio-sitzend.jpg';
-import closeUp from '../assets/images/patrick-wolf-nahaufnahme.jpg';
 import atWork from '../assets/images/patrick-wolf-beim-taetowieren.webp';
 import studio from '../assets/images/patrick-wolf-studio-weit.webp';
 import badge from '../assets/images/rw-gutachterabzeichen-dgusv-logo.png';
@@ -100,7 +99,7 @@ const principles = [
             {site.office} in {contact.city} aus erstelle ich Gutachten bundesweit und europaweit, unabhängig davon, wer sie
             in Auftrag gibt.
           </p>
-          <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-5">
+          <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-5" data-primary-action>
             <Button href={primaryCta.href} icon="calendar">Kostenlose Erstberatung</Button>
             <Button href="#qualifikation" variant="text">Qualifikation</Button>
           </div>
@@ -270,15 +269,6 @@ const principles = [
           position="center"
           sizes="(min-width: 1344px) 520px, (min-width: 768px) 40vw, 100vw"
           widths={[400, 640, 880, 1286]}
-        />
-        <ArtImage
-          src={closeUp}
-          alt={`Nahaufnahme von ${site.expert}, der freundlich in die Kamera blickt.`}
-          ratio={1}
-          position="left top"
-          sizes="(min-width: 1344px) 320px, (min-width: 768px) 25vw, 60vw"
-          widths={[320, 480, 640]}
-          class="w-3/5 justify-self-end"
         />
       </div>
     </Container>

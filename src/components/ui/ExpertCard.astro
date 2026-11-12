@@ -1,11 +1,11 @@
 ---
-// Who writes the report: portrait, name, credentials and the seal, next to service content.
+// Who writes the report, as a supporting attribution next to service and audience content: a top rule
+// instead of a frame, the head and shoulders portrait, name, the two principal facts and the link to the
+// full credentials on the about page.
 import { Image } from 'astro:assets';
-import Icon from './Icon.astro';
-import Seal from './Seal.astro';
 import { url } from '../../lib/url';
-import { site, credentialLines } from '../../config/site';
-import portrait from '../../assets/images/patrick-wolf-nahaufnahme.jpg';
+import { site, credentials } from '../../config/site';
+import portrait from '../../assets/images/patrick-wolf-portrait-kopf-schulter.jpg';
 
 interface Props {
   class?: string;
@@ -14,36 +14,28 @@ interface Props {
 const { class: className } = Astro.props;
 ---
 
-<aside class:list={['border border-ink bg-paper p-6 md:p-8', className]} aria-label="Ihr Sachverständiger" data-reveal>
-  <div class="flex flex-wrap items-start gap-5">
+<aside class:list={['border-t border-ink pt-5', className]} aria-label="Ihr Sachverständiger" data-reveal>
+  <div class="flex flex-wrap items-start gap-4">
     <Image
       src={portrait}
       alt={`Porträt von ${site.expert}`}
-      width={96}
-      height={112}
+      width={72}
+      height={90}
       densities={[1, 2]}
       fit="cover"
-      position="left top"
-      class="h-28 w-24 shrink-0 object-cover"
+      position="top"
+      class="h-[5.625rem] w-18 shrink-0 object-cover"
     />
-    <div class="min-w-0 flex-1 basis-40">
+    <div class="min-w-0 flex-1 basis-36 hyphens-auto break-words">
       <p class="label text-graphite">Ihr Sachverständiger</p>
-      <p class="mt-2 font-serif text-h4">{site.expert}</p>
-      <p class="mt-1 text-sm text-graphite hyphens-auto">{site.office}</p>
+      <p class="mt-1.5 font-serif text-h4">{site.expert}</p>
+      <ul class="mt-2 grid gap-1 text-sm text-graphite">
+        <li>Geprüft und zertifiziert vom {credentials.associationShort}</li>
+        <li>Über {credentials.yearsInTrade} Jahre in der Tattoo- und Piercingbranche</li>
+      </ul>
     </div>
   </div>
-  <ul class="mt-6 grid gap-3 border-t border-rule pt-5 text-sm">
-    {
-      credentialLines.map((line) => (
-        <li class="grid grid-cols-[1rem_1fr] gap-3">
-          <Icon name="check" size={16} class="mt-0.5 text-oxblood" />
-          <span>{line}</span>
-        </li>
-      ))
-    }
-  </ul>
-  <div class="mt-6 flex items-end justify-between gap-4 border-t border-rule pt-5">
-    <a class="link-ink inline-flex min-h-11 items-center text-sm font-semibold" href={url('/ueber-mich/')}>Mehr über {site.expert}</a>
-    <Seal width={56} class="w-14" />
-  </div>
+  <a class="link-ink mt-3 inline-flex min-h-11 items-center text-sm font-semibold" href={url('/ueber-mich/#qualifikation')}>
+    Qualifikation von {site.expert}
+  </a>
 </aside>

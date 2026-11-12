@@ -53,6 +53,8 @@
 
   --spacing-gutter: clamp(1.25rem, 0.8rem + 2vw, 2.5rem);
   --spacing-section: clamp(4.5rem, 3rem + 6vw, 9rem);
+  /* Supporting sections: 40 to 48px on phones, up to 64px on desktop. */
+  --spacing-section-support: clamp(2.5rem, 2.1rem + 1.6vw, 4rem);
 
   --container-page: 84rem;
   --container-prose: 40rem;
@@ -97,10 +99,21 @@
     font-weight: 400;
     letter-spacing: var(--tracking-tightish);
     text-wrap: balance;
-    /* Long German compounds (Sachverständigenbüro) break instead of widening the page on phones.
+    /* Small headings: long German compounds (Sachverständigenbüro) hyphenate instead of widening the page.
        hyphens needs a German dictionary in the browser; overflow-wrap catches the browsers without one. */
     hyphens: auto;
     overflow-wrap: anywhere;
+  }
+
+  /* Display headings keep whole words: no automatic hyphenation, wrapping happens between words.
+     A compound that cannot fit a narrow phone carries a soft hyphen (U+00AD) in its copy, so it breaks
+     at a deliberate point. overflow-wrap stays as the last resort against a wider page. */
+  h1,
+  h2,
+  .text-h1,
+  .text-h2 {
+    hyphens: manual;
+    overflow-wrap: break-word;
   }
 
   p {
@@ -167,6 +180,17 @@
     font-feature-settings: "lnum", "tnum";
   }
 
+  /* The shared reading axis: inside a 12 column grid, content starts under the section titles
+     (after the three column margin) and keeps their measure. */
+  .axis {
+    @media (min-width: 48rem) {
+      grid-column: 4 / span 9;
+    }
+    @media (min-width: 64rem) {
+      grid-column: 4 / span 8;
+    }
+  }
+
   .hairline {
     height: 1px;
     background-color: var(--color-rule);
@@ -221,10 +245,49 @@
   border-left-color: var(--color-oxblood);
 }
 
-/* Tables in articles: long German compounds hyphenate instead of widening the page on phones. */
-.prose-report :where(th, td):not(:where(.not-prose *)) {
+/* Tables in articles follow the comparison component (src/components/ui/CompareTable.astro): ink rule on
+   top, column heads and row labels as report labels, values in the serif. The row label column is wide
+   enough for whole label words; values hyphenate long German compounds instead of widening the page. */
+.prose-report :where(table):not(:where(.not-prose *)) {
+  margin-block: 2.5rem;
+  border-top: 1px solid var(--color-ink);
+  table-layout: auto;
+}
+
+.prose-report :where(thead th, tbody th):not(:where(.not-prose *)) {
+  font-family: var(--font-sans);
+  font-size: var(--text-label);
+  line-height: var(--text-label--line-height);
+  letter-spacing: var(--text-label--letter-spacing);
+  text-transform: uppercase;
+  font-weight: 600;
+  /* A single label word only breaks when it cannot fit its cell, e.g. with enlarged text. */
   hyphens: auto;
-  overflow-wrap: break-word;
+  overflow-wrap: anywhere;
+}
+
+.prose-report :where(thead th):not(:where(.not-prose *)) {
+  color: var(--color-ink);
+  vertical-align: bottom;
+}
+
+.prose-report :where(tbody th):not(:where(.not-prose *)) {
+  color: var(--color-graphite);
+  width: 28%;
+}
+
+.prose-report :where(tbody td):not(:where(.not-prose *)) {
+  font-family: var(--font-serif);
+  font-size: 1.0625rem;
+  line-height: 1.4;
+  color: var(--color-ink);
+  hyphens: auto;
+  overflow-wrap: anywhere;
+}
+
+.prose-report :where(tbody th, tbody td):not(:where(.not-prose *)) {
+  padding-block: 1rem;
+  vertical-align: top;
 }
 
 /* Phones: a three column comparison does not fit, so each row stacks into a block. The row header leads,
@@ -235,9 +298,6 @@
     display: block;
   }
 
-  .prose-report :where(table):not(:where(.not-prose *)) {
-    font-size: var(--text-sm);
-  }
 
   .prose-report :where(thead):not(:where(.not-prose *)) {
     position: absolute;
@@ -259,9 +319,7 @@
   }
 
   .prose-report :where(tbody th):not(:where(.not-prose *)) {
-    font-family: var(--font-serif);
-    font-size: var(--text-base);
-    font-weight: 400;
+    width: auto;
   }
 
   .prose-report :where(tbody td):not(:where(.not-prose *)) {
@@ -276,11 +334,90 @@
     letter-spacing: var(--text-label--letter-spacing);
     text-transform: uppercase;
     font-weight: 600;
-    color: var(--color-graphite);
+    color: var(--color-oxblood);
     content: attr(data-label);
     /* The thead already names the column for screen readers. */
     content: attr(data-label) / '';
   }
+}
+
+/* Schematic figures in Ratgeber articles (raw HTML in the Markdown): two framed panels in the site's
+   rules and type, annotations in oxblood. Clearly captioned as illustrations, never as a case. */
+.schematic {
+  margin-block: 2.5rem;
+  border-top: 1px solid var(--color-ink);
+  padding-top: 1.25rem;
+}
+
+/* Side by side at every width: overview and detail are read as a pair. */
+.schematic-panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.schematic-panel svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--color-paper);
+}
+
+.schematic-panel p {
+  margin-top: 0.75rem;
+  font-size: var(--text-sm);
+  line-height: var(--text-sm--line-height);
+  color: var(--color-ink-soft);
+}
+
+.schematic-panel p .label {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--color-oxblood);
+}
+
+.schematic figcaption {
+  margin-top: 1.25rem;
+  border-top: 1px solid var(--color-rule);
+  padding-top: 0.75rem;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--text-sm);
+  color: var(--color-graphite);
+}
+
+.schematic-frame {
+  fill: none;
+  stroke: var(--color-ink);
+  stroke-width: 1.5;
+}
+
+.schematic-skin {
+  fill: var(--color-paper-deep);
+  stroke: var(--color-rule);
+}
+
+.schematic-motif {
+  fill: none;
+  stroke: var(--color-ink-soft);
+  stroke-width: 1.25;
+}
+
+.schematic-motif-zoom {
+  stroke-width: 3;
+}
+
+.schematic-mark {
+  fill: none;
+  stroke: var(--color-oxblood);
+  stroke-width: 1.25;
+  stroke-dasharray: 3 3;
+}
+
+.schematic-mark-solid {
+  fill: none;
+  stroke: var(--color-oxblood);
+  stroke-width: 1.5;
 }
 
 /* The plugin adds typographic quotes around blockquotes; the copy rules forbid them. */
