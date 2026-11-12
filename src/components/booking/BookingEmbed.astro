@@ -1,14 +1,15 @@
 ---
 // Booking calendar (cal.com inline embed) in a reserved frame. Nothing from cal.com loads with the
-// page: src/scripts/booking.ts injects the official embed once the frame nears the viewport.
+// page: src/scripts/booking.ts injects the official embed once the frame scrolls into view.
+// While the demo calendar is configured (CAL_IS_DEMO), a notice above the frame says so.
 // Until then a calendar sheet skeleton holds the final height, so nothing shifts.
 // Without JavaScript the frame shows the alternatives instead: the booking link, phone, email.
 //   compact: landing page, event details hidden, fallback link to /termin/.
 //   full:    /termin/, event details shown, fallback link straight to the cal.com booking page.
 import Button from '../ui/Button.astro';
 import Icon from '../ui/Icon.astro';
-import { CAL_LINK, CAL_ORIGIN, CAL_EMBED_SCRIPT, CAL_PUBLIC_URL } from '../../config/booking';
-import { contact } from '../../config/site';
+import { CAL_LINK, CAL_ORIGIN, CAL_EMBED_SCRIPT, CAL_PUBLIC_URL, CAL_IS_DEMO } from '../../config/booking';
+import { contact, site } from '../../config/site';
 import { url } from '../../lib/url';
 
 interface Props {
@@ -40,6 +41,15 @@ const weekdays = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
   data-status-ready="Der Kalender ist geladen."
   data-status-failed="Der Kalender konnte nicht geladen werden. Sie können direkt bei cal.com, telefonisch oder per E-Mail einen Termin vereinbaren."
 >
+  {
+    CAL_IS_DEMO && (
+      <p class="mb-5 border-l-2 border-oxblood bg-paper px-4 py-3 text-sm text-graphite md:px-5">
+        <span class="label mr-2 text-oxblood">Vorschau</span>
+        Dies ist ein Demo-Kalender für die Vorschau dieser Website. Der echte Kalender von {site.expert} folgt. Die Dauer
+        des Demo-Termins weicht von der bis zu 60 Minuten langen Erstberatung ab.
+      </p>
+    )
+  }
   <div class="booking-frame relative overflow-hidden border border-ink bg-paper">
     <div id={targetId} class="booking-target relative z-10"></div>
 
@@ -94,7 +104,7 @@ const weekdays = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
 
   <div class="mt-5 grid gap-5 text-sm md:grid-cols-12 md:gap-x-8">
     <p class="text-graphite md:col-span-7">
-      Die Terminbuchung läuft über den Dienst cal.com. Der Kalender lädt erst, wenn Sie diesen Bereich erreichen; dabei
+      Die Terminbuchung läuft über den Dienst cal.com. Der Kalender lädt erst, wenn dieser Bereich sichtbar wird; dabei
       überträgt Ihr Browser unter anderem Ihre IP-Adresse an cal.com. Was dabei verarbeitet wird, steht in der
       <a class="link-ink" href={url('/datenschutz/')}>Datenschutzerklärung</a>.
     </p>

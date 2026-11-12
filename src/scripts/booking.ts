@@ -123,8 +123,8 @@ function init(): void {
         mount(entry.target as HTMLElement);
       }
     },
-    // Start shortly before the frame scrolls in, so the calendar is usually there on arrival.
-    { rootMargin: '400px 0px' },
+    // Load only once the frame is in view; the skeleton holds the height until then, so no layout shift.
+    { rootMargin: '0px' },
   );
   roots.forEach((root) => observer.observe(root));
 }

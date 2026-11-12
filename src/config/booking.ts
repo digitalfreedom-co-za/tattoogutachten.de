@@ -1,9 +1,17 @@
 // Online booking via cal.com, configured in one place.
 //
-// CAL_LINK is a DEMO event (30 minutes, hidden in the account of the site builder) until
-// Patrick Wolf has his own cal.com account. To switch, set PUBLIC_CAL_LINK at build time
-// (e.g. PUBLIC_CAL_LINK=patrick-wolf/erstberatung) or replace the fallback below.
-export const CAL_LINK: string = import.meta.env.PUBLIC_CAL_LINK || 'marcelrgberger/tattoogutachten-demo';
+// CAL_LINK is a DEMO event (hidden in the cal.com account of the web developer) until Patrick Wolf
+// has his own cal.com account. To switch, set PUBLIC_CAL_LINK at build time
+// (e.g. PUBLIC_CAL_LINK=patrick-wolf/erstberatung). The demo notice above the calendar and the
+// demo wording in the Datenschutzerklärung follow CAL_IS_DEMO and disappear with the real link.
+const DEMO_CAL_LINK = 'marcelrgberger/tattoogutachten-demo';
+export const CAL_LINK: string = import.meta.env.PUBLIC_CAL_LINK || DEMO_CAL_LINK;
+
+/** True while the calendar is the demo event of the preview, not the real one of the operator. */
+export const CAL_IS_DEMO = CAL_LINK === DEMO_CAL_LINK;
+
+/** Holder of the demo cal.com account, named in the Datenschutzerklärung while CAL_IS_DEMO. */
+export const CAL_DEMO_ACCOUNT_HOLDER = 'Marcel R. G. Berger';
 
 /** Origin of the hosted cal.com app and its official embed loader. */
 export const CAL_ORIGIN = 'https://app.cal.com';

@@ -3,9 +3,11 @@
 // November 2026): GitHub Pages hosting, self hosted fonts, no cookies or tracking of its own,
 // the lazy cal.com embed on / and /termin/ (incl. Cloudflare __cf_bm cookie and Sentry), plain
 // external links. Update this page whenever a third party service is added or removed.
+// While the demo calendar is configured (CAL_IS_DEMO in src/config/booking.ts), the booking section
+// names the holder of the demo account as recipient; with the real link it switches to the operator.
 import ArticleLayout from '../layouts/ArticleLayout.astro';
 import { site, company, contact, contentUpdated, type NavItem } from '../config/site';
-import { BOOKING_ANCHOR } from '../config/booking';
+import { BOOKING_ANCHOR, CAL_IS_DEMO, CAL_DEMO_ACCOUNT_HOLDER } from '../config/booking';
 import { url } from '../lib/url';
 
 const title = `Datenschutzerklärung | ${site.name}`;
@@ -31,7 +33,7 @@ const external = { target: '_blank', rel: 'noopener noreferrer' };
   title={title}
   description={description}
   heading="Datenschutzerklärung"
-  lead="Diese Seiten kommen ohne eigene Cookies, ohne Analyse und ohne Werbedienste aus. Daten an einen Drittanbieter gehen nur, wenn Sie den Bereich der Online-Terminbuchung erreichen."
+  lead="Diese Seiten kommen ohne eigene Cookies, ohne Analyse und ohne Werbedienste aus. Neben dem Hosting bei GitHub Pages kommt ein weiterer Dienst nur dann ins Spiel, wenn der Bereich der Online-Terminbuchung sichtbar wird."
   label="Rechtliches"
   breadcrumbs={breadcrumbs}
   updated={contentUpdated}
@@ -100,7 +102,7 @@ const external = { target: '_blank', rel: 'noopener noreferrer' };
   <p>
     Der Kalender steht auf der <a href={url(`/#${BOOKING_ANCHOR}`)}>Startseite</a> und auf der Seite
     <a href={url('/termin/')}>Termin buchen</a>. Er wird nicht mit der Seite geladen, sondern erst automatisch, wenn
-    Sie beim Scrollen in die Nähe des Buchungsbereichs kommen. Ab diesem Moment ruft Ihr Browser Inhalte von Servern
+    der Buchungsbereich beim Scrollen sichtbar wird. Ab diesem Moment ruft Ihr Browser Inhalte von Servern
     von cal.com ab. Auf allen anderen Seiten wird nichts von cal.com geladen.
   </p>
   <h3>Welche Daten verarbeitet werden</h3>
@@ -113,9 +115,22 @@ const external = { target: '_blank', rel: 'noopener noreferrer' };
   </p>
   <p>
     Wenn Sie einen Termin buchen, verarbeitet cal.com zusätzlich die Angaben, die Sie im Buchungsformular machen,
-    insbesondere Name, E-Mail-Adresse, den gewählten Termin und Ihre Nachricht. Diese Angaben erhalten wir, um den
-    Termin mit Ihnen durchzuführen. Die Terminbestätigung versendet cal.com per E-Mail.
+    insbesondere Name, E-Mail-Adresse, den gewählten Termin und Ihre Nachricht. Die Terminbestätigung versendet
+    cal.com per E-Mail.
   </p>
+  {
+    CAL_IS_DEMO ? (
+      <p>
+        Derzeit ist auf dieser Website ein Demo-Kalender für die Vorschau eingebunden. Er liegt im cal.com Konto des
+        Webentwicklers dieser Website, {CAL_DEMO_ACCOUNT_HOLDER}, nicht in einem Konto der {company.name}. Angaben aus
+        einer Buchung gehen deshalb an dieses Konto und nicht an uns, ein Termin mit {site.expert} kommt darüber nicht
+        zustande. Für eine echte Erstberatung rufen Sie bitte an oder schreiben Sie eine E-Mail. Sobald der Kalender der{' '}
+        {company.name} eingebunden ist, wird dieser Hinweis entfernt.
+      </p>
+    ) : (
+      <p>Diese Angaben erhalten wir, um den Termin mit Ihnen durchzuführen.</p>
+    )
+  }
   <h3>Rechtsgrundlage</h3>
   <p>
     Das Laden des Kalenders beruht auf Art. 6 Abs. 1 lit. f DSGVO. Unser berechtigtes Interesse besteht darin, Ihnen
