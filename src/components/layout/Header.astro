@@ -1,6 +1,6 @@
 ---
-// Site header: logo, main navigation, booking CTA on every breakpoint (icon only below sm and between lg
-// and xl, where the six nav items need the room). Below lg the navigation moves into a
+// Site header: logo, main navigation, booking CTA as a visible text button on every breakpoint
+// (compact below sm and between lg and xl, where the nav tightens too). Below lg the navigation moves into a
 // full screen panel behind a menu button (aria-expanded, Escape closes, focus is trapped
 // and returned). Without JS the panel renders as a plain list under the header.
 import Logo from './Logo.astro';
@@ -21,14 +21,14 @@ const ctaHref = bookingHref(withoutBase(currentPath));
     <Logo />
 
     <nav aria-label="Hauptnavigation" class="hidden lg:block">
-      <ul class="flex items-center gap-6 xl:gap-9">
+      <ul class="flex items-center gap-4 xl:gap-9">
         {
           mainNav.map((item) => (
             <li>
               <a
                 href={url(item.href)}
                 aria-current={isCurrent(item.href) ? 'page' : undefined}
-                class="nav-link relative whitespace-nowrap py-2 text-[0.9375rem] font-medium text-ink-soft transition-colors hover:text-ink aria-[current=page]:text-oxblood"
+                class="nav-link relative whitespace-nowrap py-2 text-[0.875rem] font-medium xl:text-[0.9375rem] text-ink-soft transition-colors hover:text-ink aria-[current=page]:text-oxblood"
               >
                 {item.label}
               </a>
@@ -39,17 +39,7 @@ const ctaHref = bookingHref(withoutBase(currentPath));
     </nav>
 
     <div class="flex items-center gap-1.5 min-[360px]:gap-2">
-      <div class="hidden sm:block lg:hidden xl:block">
-        <Button href={ctaHref} icon="calendar">{primaryCta.label}</Button>
-      </div>
-      <a
-        href={url(ctaHref)}
-        class="inline-flex size-11 items-center justify-center border border-ink text-ink transition-colors hover:bg-ink hover:text-paper sm:hidden lg:inline-flex xl:hidden"
-        aria-label={primaryCta.label}
-        title={primaryCta.label}
-      >
-        <Icon name="calendar" size={20} />
-      </a>
+      <Button href={ctaHref} icon="calendar" class="header-cta whitespace-nowrap">{primaryCta.label}</Button>
       <button
         type="button"
         class="menu-toggle hidden size-11 items-center justify-center bg-ink text-paper transition-colors hover:bg-oxblood"
@@ -108,7 +98,12 @@ const ctaHref = bookingHref(withoutBase(currentPath));
     background: currentColor;
     transform: scaleX(0);
     transform-origin: left center;
-    transition: transform 350ms var(--ease-out-quint);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .nav-link::after {
+      transition: transform 350ms var(--ease-out-quint);
+    }
   }
 
   .nav-link:hover::after,
@@ -158,6 +153,19 @@ const ctaHref = bookingHref(withoutBase(currentPath));
       opacity: 1;
       transform: none;
       transition-delay: calc(var(--i) * 45ms + 60ms);
+    }
+  }
+
+  /* Compact booking button below sm and between lg and xl: tighter padding, no icon. The label stays. */
+  @media (max-width: 39.99rem), (min-width: 64rem) and (max-width: 79.99rem) {
+    #site-header :global(.header-cta) {
+      gap: 0;
+      padding-inline: 0.75rem;
+      font-size: 0.8125rem;
+    }
+
+    #site-header :global(.header-cta svg) {
+      display: none;
     }
   }
 

@@ -1,6 +1,8 @@
 ---
 // Header mark: the RW monogram cropped from the DGuSV badge, plus a typeset wordmark.
 // The full badge (with its claim text) is shown in the trust strip, where it is readable.
+// Narrow phones keep the booking button readable next to the menu: below 360px only the mark,
+// from 360px the wordmark alone, from 500px mark, wordmark and office line.
 import { Image } from 'astro:assets';
 import badge from '../../assets/images/rw-gutachterabzeichen-dgusv-logo.png';
 import { site } from '../../config/site';
@@ -27,13 +29,13 @@ const { tone = 'ink' } = Astro.props;
     position="left"
     densities={[1, 2, 3]}
     loading="eager"
-    class="size-10 shrink-0 md:size-11"
+    class="size-10 shrink-0 min-[360px]:max-[499px]:hidden md:size-11"
   />
-  <span class="flex flex-col leading-none">
-    <span class:list={['font-serif text-[1.3125rem] tracking-tightish md:text-[1.4375rem]', tone === 'ink' ? 'text-ink' : 'text-paper']}>
+  <span class="hidden flex-col leading-none min-[360px]:flex">
+    <span class:list={['font-serif text-[1.125rem] tracking-tightish min-[500px]:text-[1.3125rem] md:text-[1.4375rem]', tone === 'ink' ? 'text-ink' : 'text-paper']}>
       {site.name}
     </span>
-    <span class:list={['label mt-1 hidden text-[0.625rem] tracking-[0.16em] whitespace-nowrap min-[420px]:block', tone === 'ink' ? 'text-graphite' : 'text-paper/60']}>
+    <span class:list={['label mt-1 hidden text-[0.625rem] tracking-[0.16em] whitespace-nowrap min-[500px]:block', tone === 'ink' ? 'text-graphite' : 'text-paper/60']}>
       {site.office}
     </span>
   </span>
