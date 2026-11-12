@@ -76,7 +76,7 @@ export function llmsFull(base: URL | undefined, articles: Article[]): string {
     '',
     '## Wer',
     '',
-    `${site.expert} ist ${site.role} und leitet das ${site.office} in ${contact.city}. Er arbeitet seit über ${credentials.yearsInTrade} Jahren im Tattoo- und Piercingbereich und ist weiterhin als Tätowierer tätig. Studioarbeit und Gutachtertätigkeit sind getrennt: eigenes Büro, eigene Website.`,
+    `${site.expert} ist ${site.role} und leitet das ${site.office} in ${contact.city}. Er arbeitet seit über ${credentials.yearsInTrade} Jahren im Tattoo- und Piercingbereich und ist weiterhin als Tätowierer tätig. Studioarbeit und Gutachtertätigkeit sind getrennt: Für die Gutachten gibt es mit ${site.domain} eine eigenständige Website.`,
     '',
     ...credentialLines.map((line) => `- ${line}`),
     `- Die Bestellung durch das ${credentials.court} erfolgte in einem Gerichtsverfahren. Sie ist keine öffentliche Bestellung und Vereidigung.`,

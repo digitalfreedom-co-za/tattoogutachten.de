@@ -56,12 +56,12 @@ Date: 2026-11-12. Method: crawl of all public pages (sitemap based) with curl, e
 - DGuSV seal 2026 with confirmation register number DE-8#17024/70-03 (printed on the seal), RW badge.
 - More than 22 years in tattoo and piercing, member of Bundesverband Tattoo.
 - Six services already described, including hygiene and piercing (competitors barely cover these).
-- Five step process, free first consultation up to 60 minutes, strict separation of studio work and expert work (separate website and office).
+- Five step process, free first consultation up to 60 minutes, strict separation of studio work and expert work (separate website dedicated to expert work).
 - Real photos of Patrick Wolf at work.
 - Sie tone, GmbH operator with full Impressum.
 
 ## Recommendations per ticket
-- Landing page (#3): H1 with Tattoo Gutachter / Tattoogutachten plus bundesweit; trust strip with seal, register number, LG Frankfurt, 22+ years, BVT; audience cards; process with what happens and what the client prepares; checklist for the first consultation in our own words; strong booking CTA. Clear statement of independence (separate expert office), because competitors mix studio and expert role.
+- Landing page (#3): H1 with Tattoo Gutachter / Tattoogutachten plus bundesweit; trust strip with seal, register number, LG Frankfurt, 22+ years, BVT; audience cards; process with what happens and what the client prepares; checklist for the first consultation in our own words; strong booking CTA. Clear statement of independence (separate website dedicated to expert work), because competitors mix studio and expert role.
 - Subpages (#4): one page per service with answer first intro, typical questions, what is assessed, what the client receives, related services. FAQ page with all questions grouped, more questions added where the source has facts. Ueber mich with a structured credential list (dated where Patrick provides dates) like a CV.
 - Booking and contact (#5): online booking plus a checklist what to prepare and expected response time (only if Patrick confirms a time).
 - SEO and GEO (#7): full schema graph (ProfessionalService, Person with hasCredential and memberOf, Service per page, FAQPage, BreadcrumbList), unique titles and metas, llms.txt, OG image, internal links between services, audience pages and guides.

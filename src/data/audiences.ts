@@ -146,7 +146,7 @@ export const audiences: Audience[] = [
     situations: [
       'Ein Mandant streitet mit einem Tattoo- oder Piercingstudio über einen möglichen Mangel.',
       'Ein Studio wehrt sich gegen den Vorwurf handwerklicher Fehler oder mangelnder Hygiene.',
-      'Vor einem Verfahren soll der Zustand einer Tätowierung fachlich festgehalten werden.',
+      'Vor oder in einem Verfahren soll der Zustand einer Tätowierung fachlich festgehalten werden.',
       'Ein Gericht braucht Antworten auf Beweisfragen zu einer Tätowierung oder einem Piercing.',
     ],
     help: {

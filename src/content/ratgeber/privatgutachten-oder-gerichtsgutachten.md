@@ -12,7 +12,7 @@ order: 3
 
 ## Was ist ein Privatgutachten?
 
-Ein Privatgutachten ist ein Gutachten, das Sie selbst beauftragen, ohne dass ein Gericht beteiligt ist. Auftraggeber können Privatpersonen, Unternehmen wie Tattoo- und Piercingstudios oder deren rechtliche Vertretungen sein.
+Ein Privatgutachten ist ein Gutachten, das eine Partei selbst beauftragt und nicht das Gericht. Es kann vor, während oder ganz ohne ein Gerichtsverfahren entstehen. Auftraggeber können Privatpersonen, Unternehmen wie Tattoo- und Piercingstudios oder deren rechtliche Vertretungen sein.
 
 Ein Privatgutachten kann helfen, einen Sachverhalt fachlich einzuordnen, Unklarheiten zu beseitigen und eine sachliche Grundlage für eine außergerichtliche Einigung zu schaffen. Nicht jede Meinungsverschiedenheit muss sofort vor Gericht geklärt werden. Mehr dazu auf der Seite [Privatgutachten und Stellungnahmen](/leistungen/privatgutachten/).
 
@@ -26,7 +26,7 @@ Ein Gerichtsgutachten beantwortet die Beweisfragen, die ein Gericht in einem Ver
 | --- | --- | --- |
 | Auftraggeber | Sie selbst, Ihr Studio oder Ihr Rechtsanwalt | Das zuständige Gericht |
 | Fragestellung | Im Sachverständigenvertrag vereinbart | Beweisfragen des Gerichts |
-| Zeitpunkt | Vor oder ohne Gerichtsverfahren | Im laufenden Verfahren |
+| Zeitpunkt | Vor, während oder ohne Gerichtsverfahren | Im laufenden Verfahren |
 | Vergütung | Nach Aufwand, vorher schriftlich vereinbart | Nach dem JVEG, über das Gericht |
 
 ## Ist ein Privatgutachten vor Gericht verwendbar?
@@ -41,4 +41,4 @@ Ob eine Rechtsschutzversicherung Gutachterkosten übernimmt, kann nur Ihr Versic
 
 ## Welches Gutachten brauche ich?
 
-Das hängt davon ab, ob bereits ein Verfahren läuft und was Sie erreichen wollen. Ob ein Privatgutachten in Ihrem Fall rechtlich sinnvoll ist, besprechen Sie mit Ihrem Rechtsanwalt. Ob eine Begutachtung fachlich möglich ist und welchen Umfang sie hätte, klären wir in der kostenlosen Erstberatung. Für beide Gutachtenarten gilt dasselbe: Die Bewertung ist unabhängig und unparteiisch und hängt nicht davon ab, wer den Auftrag erteilt.
+Das hängt davon ab, ob bereits ein Verfahren läuft und was Sie erreichen wollen. Ob ein Privatgutachten in Ihrem Fall rechtlich sinnvoll ist, besprechen Sie mit Ihrem Rechtsanwalt. Ob eine Begutachtung fachlich möglich ist und welchen Umfang sie hätte, klären wir in der kostenlosen Erstberatung. Für beide Gutachtenarten gilt dasselbe: Die Bewertung ist unabhängig und unparteiisch und hängt nicht davon ab, wer den Auftrag erteilt. Weitere Antworten rund um den Auftrag finden Sie unter [häufige Fragen](/haeufige-fragen/#auftrag).

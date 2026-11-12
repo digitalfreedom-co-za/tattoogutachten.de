@@ -186,18 +186,18 @@ export const services: Service[] = [
   {
     slug: 'privatgutachten',
     name: 'Privatgutachten',
-    kicker: 'Außergerichtlich',
+    kicker: 'Parteiauftrag',
     title: 'Privatgutachten und Stellungnahmen',
     summary:
-      'Ein Privatgutachten ordnet einen Streit fachlich ein, bevor er vor Gericht geht, und schafft eine sachliche Grundlage für eine Einigung.',
-    situation: 'Ein Sachverhalt soll fachlich geklärt oder der Zustand festgehalten werden, bevor es zu einem Gerichtsverfahren kommt.',
+      'Ein Privatgutachten geben Sie selbst in Auftrag, nicht das Gericht. Es ordnet einen Streit fachlich ein, vor, während oder ganz ohne Gerichtsverfahren.',
+    situation: 'Ein Sachverhalt soll im eigenen Auftrag fachlich geklärt oder der Zustand festgehalten werden, mit oder ohne Gerichtsverfahren.',
     metaTitle: 'Privatgutachten Tattoo und Beweissicherung | Sachverständiger Patrick Wolf',
     metaDescription:
       'Privatgutachten und Beweissicherung bei Tattoos und Piercings: Sachverhalt klären, Zustand sichern, Grundlage für eine Einigung schaffen. Erstberatung kostenlos.',
     definitionTitle: 'Was ist ein Privatgutachten?',
     intro: [
-      'Ein Privatgutachten ist ein Gutachten, das Sie selbst beauftragen, ohne dass ein Gericht beteiligt ist. Es kann helfen, einen Sachverhalt fachlich einzuordnen, Unklarheiten zu beseitigen und eine sachliche Grundlage für eine außergerichtliche Einigung zu schaffen.',
-      'Nicht jede Meinungsverschiedenheit muss sofort vor Gericht geklärt werden. Privatgutachten und schriftliche Fachstellungnahmen entstehen für Privatpersonen, Unternehmen und deren rechtliche Vertretungen.',
+      'Ein Privatgutachten ist ein Gutachten, das eine Partei selbst beauftragt, also Sie, Ihr Studio oder Ihr Rechtsanwalt, und nicht das Gericht. Es kann vor, während oder ganz ohne ein Gerichtsverfahren entstehen. Es hilft, einen Sachverhalt fachlich einzuordnen, Unklarheiten zu beseitigen und eine sachliche Grundlage für eine außergerichtliche Einigung zu schaffen.',
+      'Nicht jede Meinungsverschiedenheit muss sofort vor Gericht geklärt werden. Läuft bereits ein Verfahren, kann ein Privatgutachten dort vorgelegt werden, das Gewicht bestimmt das Gericht. Privatgutachten und schriftliche Fachstellungnahmen entstehen für Privatpersonen, Unternehmen und deren rechtliche Vertretungen.',
       'Die Begutachtung bleibt unabhängig von dem Ergebnis, das sich der Auftraggeber wünscht.',
     ],
     assessed: [
@@ -361,7 +361,7 @@ export const reportComparison = {
   rows: [
     { label: 'Auftraggeber', values: ['Sie selbst, Ihr Studio oder Ihr Rechtsanwalt', 'Das zuständige Gericht'] },
     { label: 'Fragestellung', values: ['Im Sachverständigenvertrag vereinbart', 'Beweisfragen des Gerichts'] },
-    { label: 'Zeitpunkt', values: ['Vor oder ohne Gerichtsverfahren', 'Im laufenden Verfahren'] },
+    { label: 'Zeitpunkt', values: ['Vor, während oder ohne Gerichtsverfahren', 'Im laufenden Verfahren'] },
     { label: 'Vergütung', values: ['Nach Aufwand, vorher schriftlich vereinbart', 'Nach dem JVEG, über das Gericht'] },
     {
       label: 'Im Verfahren',
