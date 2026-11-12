@@ -1,0 +1,237 @@
+---
+// Datenschutzerklärung. Describes only what the site really loads (checked in the browser,
+// November 2026): GitHub Pages hosting, self hosted fonts, no cookies or tracking of its own,
+// the lazy cal.com embed on / and /termin/ (incl. Cloudflare __cf_bm cookie and Sentry), plain
+// external links. Update this page whenever a third party service is added or removed.
+import ArticleLayout from '../layouts/ArticleLayout.astro';
+import JsonLd from '../components/seo/JsonLd.astro';
+import { site, company, contact, contentUpdated, type NavItem } from '../config/site';
+import { BOOKING_ANCHOR } from '../config/booking';
+import { absoluteUrl, breadcrumbList } from '../lib/schema';
+import { url } from '../lib/url';
+
+const title = `Datenschutzerklärung | ${site.name}`;
+const description = `Datenschutzerklärung von ${site.domain}: Hosting bei GitHub Pages, Terminbuchung über cal.com, Kontakt per E-Mail und Telefon, Ihre Rechte. Keine Cookies und kein Tracking auf unseren eigenen Seiten.`;
+const breadcrumbs: NavItem[] = [{ label: 'Datenschutz', href: '/datenschutz/' }];
+
+const toc: NavItem[] = [
+  { label: 'Verantwortlicher', href: '#verantwortlicher' },
+  { label: 'Hosting bei GitHub Pages', href: '#hosting' },
+  { label: 'Schriften, Cookies und Tracking', href: '#cookies' },
+  { label: 'Terminbuchung über cal.com', href: '#terminbuchung' },
+  { label: 'Kontakt per E-Mail und Telefon', href: '#kontakt' },
+  { label: 'Links zu anderen Diensten', href: '#links' },
+  { label: 'Ihre Rechte', href: '#rechte' },
+  { label: 'Beschwerde bei der Aufsichtsbehörde', href: '#beschwerde' },
+];
+
+const schema = {
+  '@graph': [
+    {
+      '@type': 'WebPage',
+      name: 'Datenschutzerklärung',
+      description,
+      inLanguage: 'de-DE',
+      url: absoluteUrl('/datenschutz/', Astro.site),
+    },
+    breadcrumbList(breadcrumbs, Astro.site),
+  ],
+};
+
+const external = { target: '_blank', rel: 'noopener noreferrer' };
+---
+
+<ArticleLayout
+  title={title}
+  description={description}
+  heading="Datenschutzerklärung"
+  lead="Diese Seiten kommen ohne eigene Cookies, ohne Analyse und ohne Werbedienste aus. Daten an einen Drittanbieter gehen nur, wenn Sie den Bereich der Online-Terminbuchung erreichen."
+  label="Rechtliches"
+  breadcrumbs={breadcrumbs}
+  updated={contentUpdated}
+>
+  <JsonLd slot="head" data={schema} />
+
+  <h2 id="verantwortlicher">Verantwortlicher</h2>
+  <p>Verantwortlich für die Verarbeitung personenbezogener Daten auf dieser Internetseite ist:</p>
+  <p>
+    {company.name}<br />
+    {company.street}<br />
+    {contact.postalCode} {contact.city}<br />
+    {contact.country}<br />
+    Vertreten durch den Geschäftsführer {company.managingDirector}
+  </p>
+  <p>
+    Telefon: <a href={contact.phone.href}>{contact.phone.display}</a><br />
+    E-Mail: <a class="break-all" href={contact.email.href}>{contact.email.display}</a>
+  </p>
+  <p>
+    Ein Datenschutzbeauftragter ist nicht benannt. Fragen zum Datenschutz richten Sie bitte an die oben genannten
+    Kontaktdaten.
+  </p>
+
+  <h2 id="hosting">Hosting bei GitHub Pages</h2>
+  <p>
+    Diese Internetseite wird über GitHub Pages bereitgestellt, einen Dienst der GitHub, Inc., 88 Colin P. Kelly Jr.
+    Street, San Francisco, CA 94107, USA. Beim Aufruf einer Seite überträgt Ihr Browser technisch notwendige Daten an
+    die Server von GitHub. Dazu gehören Ihre IP-Adresse, Datum und Uhrzeit des Abrufs, die aufgerufene Adresse, die
+    zuvor besuchte Seite (Referrer) sowie Angaben zu Browser und Betriebssystem.
+  </p>
+  <p>
+    Nach eigenen Angaben speichert GitHub die IP-Adresse der Besucher von GitHub Pages zu Sicherheitszwecken. Auf diese
+    Protokolle haben wir keinen Zugriff, und wir werten sie nicht aus. Wie lange GitHub sie aufbewahrt, legt GitHub
+    fest.
+  </p>
+  <p>
+    Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO. Unser berechtigtes Interesse liegt in einer sicheren und
+    zuverlässigen Bereitstellung der Internetseite.
+  </p>
+  <p>
+    Dabei werden Daten in die USA übermittelt. GitHub ist nach dem EU-U.S. Data Privacy Framework zertifiziert; für
+    die Übermittlung gilt damit der Angemessenheitsbeschluss der Europäischen Kommission nach Art. 45 DSGVO. Ergänzend
+    stützt sich GitHub auf die Standardvertragsklauseln der Europäischen Kommission. Einzelheiten stehen in der
+    <a href="https://docs.github.com/de/site-policy/privacy-policies/github-general-privacy-statement" {...external}
+      >Datenschutzerklärung von GitHub<span class="sr-only"> (öffnet in einem neuen Fenster)</span></a
+    >.
+  </p>
+  <p>Alle Seiten werden verschlüsselt über HTTPS übertragen.</p>
+
+  <h2 id="cookies">Schriften, Cookies und Tracking</h2>
+  <p>
+    Die Schriften dieser Seite liegen auf demselben Server wie die Seite selbst. Beim Laden werden keine Daten an
+    Schriftanbieter wie Google Fonts übertragen.
+  </p>
+  <p>
+    Unsere eigenen Seiten setzen keine Cookies und legen keine Daten im Speicher Ihres Browsers ab. Wir verwenden
+    keine Analyse- oder Reichweitenmessung, keine Werbedienste und keine Social-Media-Plugins. Eine Ausnahme bildet
+    allein der Kalender von cal.com, wie im nächsten Abschnitt beschrieben.
+  </p>
+
+  <h2 id="terminbuchung">Online-Terminbuchung über cal.com</h2>
+  <p>
+    Für die Buchung der kostenlosen Erstberatung binden wir einen Kalender des Dienstes cal.com ein. Anbieter ist die
+    Cal.com, Inc., 2261 Market Street #4382, San Francisco, CA 94114, USA.
+  </p>
+  <h3>Wann der Kalender lädt</h3>
+  <p>
+    Der Kalender steht auf der <a href={url(`/#${BOOKING_ANCHOR}`)}>Startseite</a> und auf der Seite
+    <a href={url('/termin/')}>Termin buchen</a>. Er wird nicht mit der Seite geladen, sondern erst automatisch, wenn
+    Sie beim Scrollen in die Nähe des Buchungsbereichs kommen. Ab diesem Moment ruft Ihr Browser Inhalte von Servern
+    von cal.com ab. Auf allen anderen Seiten wird nichts von cal.com geladen.
+  </p>
+  <h3>Welche Daten verarbeitet werden</h3>
+  <p>
+    Schon beim Laden des Kalenders erhält cal.com technische Daten: Ihre IP-Adresse, Angaben zu Browser und Gerät,
+    die Adresse der Seite, auf der der Kalender eingebunden ist, sowie Datum und Uhrzeit. Dabei setzt der von cal.com
+    genutzte Dienstleister Cloudflare das Cookie __cf_bm, das zur Abwehr automatisierter Zugriffe (Bots) dient und
+    nach 30 Minuten ohne Aktivität abläuft. Außerdem sendet der Kalender technische Fehlerberichte an den Dienst
+    Sentry, den cal.com zur Fehleranalyse einsetzt.
+  </p>
+  <p>
+    Wenn Sie einen Termin buchen, verarbeitet cal.com zusätzlich die Angaben, die Sie im Buchungsformular machen,
+    insbesondere Name, E-Mail-Adresse, den gewählten Termin und Ihre Nachricht. Diese Angaben erhalten wir, um den
+    Termin mit Ihnen durchzuführen. Die Terminbestätigung versendet cal.com per E-Mail.
+  </p>
+  <h3>Rechtsgrundlage</h3>
+  <p>
+    Das Laden des Kalenders beruht auf Art. 6 Abs. 1 lit. f DSGVO. Unser berechtigtes Interesse besteht darin, Ihnen
+    eine einfache Online-Terminbuchung ohne Umweg anzubieten. Das Cookie __cf_bm ist für den Betrieb des Kalenders
+    unbedingt erforderlich (§ 25 Abs. 2 Nr. 2 TDDDG). Die Verarbeitung Ihrer Angaben bei einer Buchung dient der
+    Durchführung vorvertraglicher Maßnahmen auf Ihre Anfrage (Art. 6 Abs. 1 lit. b DSGVO).
+  </p>
+  <h3>Übermittlung in die USA</h3>
+  <p>
+    Cal.com verarbeitet die Daten in den USA. Cal.com, Inc. ist nach dem EU-U.S. Data Privacy Framework zertifiziert;
+    die Übermittlung erfolgt damit auf Grundlage des Angemessenheitsbeschlusses der Europäischen Kommission nach Art.
+    45 DSGVO. Für Übermittlungen außerhalb dieses Rahmens nutzt cal.com die Standardvertragsklauseln der Europäischen
+    Kommission. Einzelheiten stehen in der
+    <a href="https://cal.com/privacy" {...external}
+      >Datenschutzerklärung von cal.com<span class="sr-only"> (öffnet in einem neuen Fenster)</span></a
+    >.
+  </p>
+  <h3>Speicherdauer und Alternativen</h3>
+  <p>
+    Buchungsdaten löschen wir, sobald sie für die Durchführung und Nachbereitung des Termins nicht mehr benötigt
+    werden, soweit keine gesetzlichen Aufbewahrungspflichten bestehen. Wenn Sie cal.com nicht nutzen möchten,
+    vereinbaren Sie Ihren Termin einfach telefonisch unter <a href={contact.phone.href}>{contact.phone.display}</a> oder
+    per E-Mail.
+  </p>
+
+  <h2 id="kontakt">Kontakt per E-Mail und Telefon</h2>
+  <p>
+    Wenn Sie uns per E-Mail schreiben oder anrufen, verarbeiten wir Ihre Angaben, also etwa Name, Kontaktdaten, Ihr
+    Anliegen und mitgesendete Fotos oder Unterlagen, um Ihre Anfrage zu bearbeiten. Geht es um ein Gutachten oder
+    einen Auftrag, ist Rechtsgrundlage Art. 6 Abs. 1 lit. b DSGVO, im Übrigen Art. 6 Abs. 1 lit. f DSGVO mit dem
+    berechtigten Interesse, Anfragen zu beantworten.
+  </p>
+  <p>
+    Das E-Mail-Postfach wird beim Anbieter WEB.DE der 1&amp;1 Mail &amp; Media GmbH, Brauerstraße 48, 76135 Karlsruhe,
+    betrieben. Ihre Nachrichten liegen deshalb auch auf deren Servern.
+  </p>
+  <p>
+    Wir löschen Ihre Anfrage, sobald sie erledigt ist und keine gesetzlichen Aufbewahrungspflichten bestehen.
+    Geschäftsbriefe und Unterlagen zu Aufträgen bewahren wir nach Handels- und Steuerrecht bis zu zehn Jahre auf (§
+    257 HGB, § 147 AO).
+  </p>
+
+  <h2 id="links">Links zu anderen Diensten</h2>
+  <p>
+    Einige Seiten verlinken auf andere Anbieter, etwa auf Google Maps für die Route zum Büro oder auf die
+    Buchungsseite von cal.com. Solche Links sind einfache Verweise: Daten an den Anbieter gehen erst, wenn Sie den
+    Link anklicken. Ab dann gilt die Datenschutzerklärung des jeweiligen Anbieters.
+  </p>
+
+  <h2 id="rechte">Ihre Rechte</h2>
+  <p>Sie haben gegenüber der {company.name} jederzeit das Recht auf</p>
+  <ul>
+    <li>Auskunft über Ihre gespeicherten Daten (Art. 15 DSGVO),</li>
+    <li>Berichtigung unrichtiger Daten (Art. 16 DSGVO),</li>
+    <li>Löschung Ihrer Daten (Art. 17 DSGVO),</li>
+    <li>Einschränkung der Verarbeitung (Art. 18 DSGVO),</li>
+    <li>Datenübertragbarkeit (Art. 20 DSGVO).</li>
+  </ul>
+  <p>
+    Für Anfragen genügt eine E-Mail an <a class="break-all" href={contact.email.href}>{contact.email.display}</a>.
+  </p>
+  <h3>Widerspruchsrecht</h3>
+  <p>
+    Soweit wir Daten auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO verarbeiten, können Sie aus Gründen, die sich aus
+    Ihrer besonderen Situation ergeben, jederzeit Widerspruch einlegen (Art. 21 DSGVO). Wir verarbeiten die Daten dann
+    nicht mehr, es sei denn, es bestehen zwingende schutzwürdige Gründe für die Verarbeitung oder sie dient der
+    Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen.
+  </p>
+
+  <h2 id="beschwerde">Beschwerde bei der Aufsichtsbehörde</h2>
+  <p>
+    Sie haben das Recht, sich bei einer Datenschutzaufsichtsbehörde zu beschweren (Art. 77 DSGVO). Für die
+    {company.name} zuständig ist:
+  </p>
+  <p>
+    Der Hessische Beauftragte für Datenschutz und Informationsfreiheit<br />
+    Wilhelmstraße 7<br />
+    65185 Wiesbaden<br />
+    <a href="https://datenschutz.hessen.de" {...external}
+      >datenschutz.hessen.de<span class="sr-only"> (öffnet in einem neuen Fenster)</span></a
+    >
+  </p>
+
+  <h2>Pflicht zur Bereitstellung und automatisierte Entscheidungen</h2>
+  <p>
+    Sie sind nicht verpflichtet, uns Daten bereitzustellen. Ohne Kontaktdaten können wir eine Anfrage oder einen
+    Termin allerdings nicht bearbeiten. Eine automatisierte Entscheidungsfindung einschließlich Profiling findet nicht
+    statt.
+  </p>
+
+  <nav slot="aside" aria-label="Inhalt der Datenschutzerklärung">
+    <p class="label text-ink">Auf dieser Seite</p>
+    <ul class="mt-3 grid gap-2">
+      {
+        toc.map((item) => (
+          <li>
+            <a class="link-ink" href={item.href}>{item.label}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</ArticleLayout>

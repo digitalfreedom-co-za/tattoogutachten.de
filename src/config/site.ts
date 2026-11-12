@@ -31,6 +31,17 @@ export const contact = {
   mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Benekestr.%209%2C%2061231%20Bad%20Nauheim',
 } as const;
 
+/** Legal entity behind the site (Impressum, controller in the Datenschutzerklärung). */
+export const company = {
+  name: 'RuW Lifestyle GmbH',
+  street: 'Benekestraße 9',
+  managingDirector: 'Patrick Wolf',
+  registerCourt: 'Amtsgericht Friedberg (Hessen)',
+  registerNumber: 'HRB 8945',
+  vatId: 'DE323734171',
+  website: 'www.tattoogutachten.de',
+} as const;
+
 export const credentials = {
   association: 'Deutscher Gutachter und Sachverständigen Verband e.V.',
   associationShort: 'DGuSV',
