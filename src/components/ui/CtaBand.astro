@@ -1,10 +1,10 @@
 ---
-// Closing call to action on ink: serif statement left, booking and direct contact right.
+// Closing call to action on ink: serif statement left, booking, direct contact and office address right.
 import Container from './Container.astro';
 import Button from './Button.astro';
 import Icon from './Icon.astro';
 import MeasureRule from './MeasureRule.astro';
-import { contact, primaryCta } from '../../config/site';
+import { contact, credentials, primaryCta, site } from '../../config/site';
 
 interface Props {
   title: string;
@@ -37,6 +37,13 @@ const { title, text, ctaLabel = primaryCta.label, ctaHref = primaryCta.href } = 
           <a class="link-ink break-all hover:!text-brass-light" href={contact.email.href}>
             <span class="sr-only">E-Mail </span>{contact.email.display}
           </a>
+        </li>
+        <li class="flex gap-3">
+          <Icon name="pin" size={18} class="mt-0.5 shrink-0 text-brass-light" />
+          <span class="text-paper/80">
+            {site.office}, {contact.street}, {contact.postalCode} {contact.city}
+            <span class="mt-1 block text-paper/60">Einsatzgebiet {credentials.areaServed}</span>
+          </span>
         </li>
       </ul>
     </div>

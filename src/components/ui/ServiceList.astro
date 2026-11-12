@@ -1,0 +1,44 @@
+---
+// Service index in the style of a report's table of contents: topic label, title and
+// answer first summary per row, the whole row links to the service page. No numbering.
+import Icon from './Icon.astro';
+import { url } from '../../lib/url';
+import { type Service, serviceHref } from '../../data/services';
+
+interface Props {
+  services: Service[];
+  /** Heading level of the service titles inside the surrounding outline. */
+  headingLevel?: 'h3' | 'h4';
+  class?: string;
+}
+
+const { services, headingLevel: Heading = 'h3', class: className } = Astro.props;
+---
+
+<ul class:list={['border-t border-ink', className]} data-reveal-group>
+  {
+    services.map((service) => (
+      <li class="group/row relative border-b border-rule transition-colors duration-300 hover:bg-paper-deep/60" data-reveal>
+        <div class="grid gap-3 py-6 md:grid-cols-[11rem_1fr_auto] md:items-baseline md:gap-8 md:py-8 md:pr-2">
+          <p class="label text-oxblood">{service.kicker}</p>
+          <div>
+            <Heading class="text-h3">
+              <a
+                href={url(serviceHref(service))}
+                class="after:absolute after:inset-0 focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-signal"
+              >
+                {service.title}
+              </a>
+            </Heading>
+            <p class="mt-3 max-w-[40rem] text-graphite">{service.summary}</p>
+          </div>
+          <Icon
+            name="arrow"
+            size={22}
+            class="hidden text-ink transition-transform duration-300 group-hover/row:translate-x-1 group-hover/row:text-oxblood motion-reduce:transition-none md:block"
+          />
+        </div>
+      </li>
+    ))
+  }
+</ul>

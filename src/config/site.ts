@@ -37,13 +37,14 @@ export const credentials = {
   court: 'Landgericht Frankfurt am Main',
   membership: 'Bundesverband Tattoo',
   yearsInTrade: 22,
+  areaServed: 'bundes- und europaweit',
 } as const;
 
 export const mainNav: NavItem[] = [
   { label: 'Leistungen', href: '/leistungen/' },
-  { label: 'Ablauf und Kosten', href: '/ablauf-und-kosten/' },
+  { label: 'Ablauf und Kosten', href: '/ablauf-kosten/' },
   { label: 'Über mich', href: '/ueber-mich/' },
-  { label: 'FAQ', href: '/faq/' },
+  { label: 'FAQ', href: '/haeufige-fragen/' },
   { label: 'Kontakt', href: '/kontakt/' },
 ];
 

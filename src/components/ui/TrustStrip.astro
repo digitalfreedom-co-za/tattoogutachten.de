@@ -1,6 +1,7 @@
 ---
 // Credentials at a glance: seal, register number, court appointment, years in the trade,
-// association membership, plus the RW badge. Values come from src/config/site.ts.
+// association membership, area served and independence, plus the RW badge.
+// Values come from src/config/site.ts.
 import { Image } from 'astro:assets';
 import badge from '../../assets/images/rw-gutachterabzeichen-dgusv-logo.png';
 import Seal from './Seal.astro';
@@ -19,6 +20,8 @@ const facts = [
   { label: 'Gerichtlich bestellt', value: 'LG Frankfurt am Main', note: 'in einem Gerichtsverfahren' },
   { label: 'Erfahrung', value: `über ${credentials.yearsInTrade} Jahre`, note: 'Tattoo und Piercing' },
   { label: 'Mitglied', value: credentials.membership },
+  { label: 'Einsatzgebiet', value: 'Bundesweit', note: 'und europaweit' },
+  { label: 'Unabhängig', value: 'Eigener Auftritt', note: 'Gutachten getrennt von der Studioarbeit' },
 ];
 ---
 
@@ -28,7 +31,7 @@ const facts = [
       <Seal width={84} class="w-16 md:w-[84px]" />
       <Image src={badge} alt="Abzeichen geprüfter und zertifizierter Gutachter des DGuSV" width={210} densities={[1, 2]} class="h-auto w-44 md:w-[210px]" />
     </div>
-    <ul class="grid grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-3 lg:grid-cols-6" data-reveal-group>
+    <ul class="grid grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-3 lg:grid-cols-4" data-reveal-group>
       {
         facts.map((fact) => (
           <li class:list={['border-l border-rule pl-4', fact.mono && 'col-span-2 sm:col-span-3 lg:col-span-2']} data-reveal>

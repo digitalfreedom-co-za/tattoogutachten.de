@@ -1,170 +1,99 @@
 ---
-// Placeholder start page. It shows the design system and every reusable component with
-// content reworked from the old site. The real landing page follows in its own ticket.
+// Landing page. Content lives in src/data (services, audiences, process, FAQ) and
+// src/config/site.ts (contact, credentials), so subpages and JSON-LD reuse the same facts.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Container from '../components/ui/Container.astro';
 import Section from '../components/ui/Section.astro';
 import Eyebrow from '../components/ui/Eyebrow.astro';
 import Button from '../components/ui/Button.astro';
 import Card from '../components/ui/Card.astro';
+import Icon from '../components/ui/Icon.astro';
 import Quote from '../components/ui/Quote.astro';
-import Steps, { type Step } from '../components/ui/Steps.astro';
-import Faq, { type FaqEntry } from '../components/ui/Faq.astro';
+import Seal from '../components/ui/Seal.astro';
+import Steps from '../components/ui/Steps.astro';
+import Faq from '../components/ui/Faq.astro';
 import CtaBand from '../components/ui/CtaBand.astro';
 import TrustStrip from '../components/ui/TrustStrip.astro';
-import Breadcrumbs from '../components/ui/Breadcrumbs.astro';
 import Checklist from '../components/ui/Checklist.astro';
-import KeyFacts, { type Fact } from '../components/ui/KeyFacts.astro';
+import KeyFacts from '../components/ui/KeyFacts.astro';
 import CourtReference from '../components/ui/CourtReference.astro';
+import ServiceList from '../components/ui/ServiceList.astro';
 import ArtImage from '../components/ui/ArtImage.astro';
-import MeasureRule from '../components/ui/MeasureRule.astro';
 import NeedleLine from '../components/ui/NeedleLine.astro';
-import { site, credentials } from '../config/site';
+import { site, contact, credentials, primaryCta } from '../config/site';
+import { services, serviceScopeNote } from '../data/services';
+import { audiences, audienceHref } from '../data/audiences';
+import { steps, costFacts, preparationChecklist } from '../data/process';
+import { featuredFaq } from '../data/faq';
+import { url } from '../lib/url';
 
 import portrait from '../assets/images/patrick-wolf-portrait-studio-sitzend.jpg';
 import atWork from '../assets/images/patrick-wolf-beim-taetowieren.webp';
 import studio from '../assets/images/patrick-wolf-studio-weit.webp';
 
-const audiences = [
-  {
-    kicker: 'Privatpersonen',
-    title: 'Wenn das Ergebnis nicht stimmt',
-    text: 'Ob unsaubere Linienführung, ungleichmäßige Farbflächen oder schwache Farbaufnahme in der Haut: Ich stelle fest, was objektiv vorliegt, und trenne es von reinen Geschmacksfragen.',
-  },
-  {
-    kicker: 'Tattoo-Studios',
-    title: 'Wenn ein Vorwurf im Raum steht',
-    text: 'Auch Studios können eine unabhängige Prüfung beauftragen, etwa bei Vorwürfen handwerklicher Fehler oder zu Hygiene und Arbeitsabläufen. Die Bewertung hängt nicht davon ab, wer den Auftrag erteilt.',
-  },
-  {
-    kicker: 'Rechtsanwälte',
-    title: 'Wenn es um Fakten für den Fall geht',
-    text: 'Ein Privatgutachten liefert fachliche Feststellungen zu Ausführung und Arbeitsabläufen. Die rechtliche Bewertung bleibt Ihre Aufgabe.',
-  },
-  {
-    kicker: 'Gerichte',
-    title: 'Wenn ein Verfahren Fachwissen braucht',
-    text: 'Beweisfragen werden präzise beantwortet und die Feststellungen so dokumentiert, dass sie auch für Fachfremde nachvollziehbar sind.',
-  },
-];
-
-const steps: Step[] = [
-  {
-    title: 'Kostenlose Erstberatung',
-    duration: 'bis zu 60 Minuten',
-    text: 'Sie schildern Ihr Anliegen, wir sehen uns Fotos und Unterlagen an und klären, ob eine Begutachtung sinnvoll ist. Daraus entsteht keine Verpflichtung.',
-    prepare: 'Fotos der Tätowierung, Rechnung oder Vertrag, Ihre wichtigsten Fragen.',
-  },
-  {
-    title: 'Umfang und Kosten klären',
-    text: 'Ist eine weitere Untersuchung nötig, besprechen wir Umfang und voraussichtliche Kosten, bevor eine kostenpflichtige Leistung beginnt.',
-  },
-  {
-    title: 'Schriftliche Beauftragung',
-    text: 'Ein Vertrag hält Art und Umfang des Auftrags, die Fragestellungen, die Vergütung und den voraussichtlichen Zeitraum fest.',
-    prepare: 'Ihre Fragestellung in eigenen Worten, so konkret wie möglich.',
-  },
-  {
-    title: 'Untersuchung',
-    text: 'Je nach Auftrag werte ich Fotos und Unterlagen aus, untersuche die Tätowierung persönlich oder besichtige die betreffenden Räume.',
-  },
-  {
-    title: 'Gutachten',
-    text: 'Sie erhalten Sachverhalt, Untersuchungsgrundlagen, Feststellungen und eine begründete Bewertung, klar und verständlich formuliert.',
-  },
-];
-
-const costFacts: Fact[] = [
-  {
-    term: 'Erstberatung',
-    value: 'Kostenlos, bis zu 60 Minuten',
-    note: 'Unverbindlich. Eine vollständige Begutachtung oder schriftliche Stellungnahme ist darin nicht enthalten.',
-  },
-  {
-    term: 'Privatauftrag',
-    value: 'Nach Aufwand, vorab vereinbart',
-    note: 'Die Kosten hängen von Komplexität, Zeitaufwand und zusätzlichen Untersuchungen ab und werden vor der Beauftragung besprochen.',
-  },
-  {
-    term: 'Gerichtsauftrag',
-    value: 'Vergütung nach JVEG',
-    note: 'Bei einer Bestellung durch das Gericht richtet sich die Vergütung nach dem Justizvergütungs- und Entschädigungsgesetz.',
-  },
-];
-
-const checklist = [
-  'Gut ausgeleuchtete Fotos der Tätowierung, aus der Nähe und mit Abstand',
-  'Wenn vorhanden, Fotos aus der Stech- und Heilungsphase',
-  'Rechnung, Vertrag oder Nachrichten mit dem Studio',
-  'Datum der Sitzung und eine kurze Schilderung des Problems',
-];
-
-const faq: FaqEntry[] = [
-  {
-    question: 'Ist eine Tätowierung, die mir nicht gefällt, automatisch mangelhaft?',
-    answer:
-      'Nein. Bei der Bewertung wird zwischen persönlichem Geschmack und objektiv feststellbaren Ausführungsmängeln unterschieden. Entscheidend ist die tatsächliche handwerkliche Ausführung.',
-  },
-  {
-    question: 'Kann eine Tätowierung anhand von Fotos beurteilt werden?',
-    answer:
-      'Eine erste Einschätzung ist mit aussagekräftigen Fotos oft möglich. Für eine abschließende Beurteilung kann eine persönliche Untersuchung nötig sein, weil sich nicht jedes Merkmal auf Bildern zuverlässig zeigt.',
-  },
-  {
-    question: 'Ist ein Privatgutachten vor Gericht verwendbar?',
-    answer:
-      'Ein Privatgutachten kann im Verfahren vorgelegt werden. Es steht aber nicht automatisch einem vom Gericht eingeholten Gutachten gleich. Welches Gewicht es erhält, entscheidet das Gericht.',
-  },
-  {
-    question: 'Muss ich nach der Erstberatung ein Gutachten beauftragen?',
-    answer: 'Nein. Die kostenlose Erstberatung verpflichtet Sie zu keiner weiteren Zusammenarbeit.',
-  },
+const credentialList = [
+  `Geprüfter und zertifizierter Gutachter des ${credentials.associationShort} (${credentials.association})`,
+  `Bestätigungs-Register Nr. ${credentials.registerNumber}`,
+  `Durch das ${credentials.court} in einem Gerichtsverfahren als Sachverständiger bestellt`,
+  `Mitglied im ${credentials.membership}`,
+  `Über ${credentials.yearsInTrade} Jahre Berufserfahrung im Tattoo- und Piercingbereich`,
 ];
 ---
 
 <BaseLayout
-  title="Tattoogutachten, Sachverständigenbüro Wolf"
-  description="Gutachten zu Tattoos und Piercings. Die neue Website ist in Arbeit."
+  title="Tattoo Gutachter Patrick Wolf | Tattoogutachten bundesweit, DGuSV zertifiziert"
+  description={`Unabhängige Tattoogutachten und Piercing-Gutachten von Patrick Wolf, zertifiziert durch den DGuSV, über ${credentials.yearsInTrade} Jahre Branchenerfahrung. Für Privatpersonen, Studios, Anwälte und Gerichte, bundesweit. Erstberatung kostenlos.`}
 >
-  <!-- Opening: asymmetric, report title block left, portrait right -->
+  <!-- Opening: report title block left, portrait with the seal pinned to it right -->
   <section class="relative overflow-hidden" aria-labelledby="start-titel">
-    <Container class="grid gap-10 pt-10 pb-16 md:grid-cols-12 md:gap-x-8 md:pt-16 md:pb-24">
-      <div class="relative z-10 flex flex-col md:col-span-7 md:pt-6 lg:col-span-7">
+    <Container class="grid gap-12 pt-10 pb-16 md:grid-cols-12 md:gap-x-8 md:pt-16 md:pb-24">
+      <div class="relative z-10 flex flex-col md:col-span-7 md:pt-6">
         <div class="flex items-center justify-between gap-4 border-y border-ink py-3" data-reveal>
           <p class="label whitespace-nowrap text-ink">{site.office}</p>
-          <p class="label hidden whitespace-nowrap text-graphite min-[420px]:block">Bad Nauheim</p>
+          <p class="label hidden whitespace-nowrap text-graphite min-[420px]:block">{contact.city}, bundesweit tätig</p>
         </div>
-        <Eyebrow class="mt-10 md:mt-14">Gutachten zu Tätowierungen und Piercings</Eyebrow>
+        <Eyebrow class="mt-10 md:mt-14">{site.role}</Eyebrow>
         <h1 id="start-titel" class="mt-6 text-h1 tracking-display" data-reveal>
-          Ein klarer Befund, wenn ein Tattoo <em class="text-oxblood">Fragen</em> aufwirft.
+          Tattoo Gutachter für <em class="text-oxblood">unabhängige</em> Tattoogutachten, bundesweit.
         </h1>
         <p class="mt-8 max-w-[34rem] text-lead text-graphite" data-reveal>
           {site.expert} ist geprüfter und zertifizierter Gutachter des {credentials.associationShort} und seit über
-          {credentials.yearsInTrade} Jahren in der Branche. Er prüft unabhängig, für Privatpersonen, Studios,
-          Rechtsanwälte und Gerichte.
+          {credentials.yearsInTrade} Jahren in der Tattoo- und Piercingbranche. Seine Tattoogutachten stellen fest, was
+          handwerklich vorliegt, für Privatpersonen, Studios, Rechtsanwälte und Gerichte.
         </p>
         <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-5" data-reveal>
-          <Button href="/termin/" icon="calendar">Kostenlose Erstberatung</Button>
-          <Button href="/leistungen/" variant="text">Leistungen ansehen</Button>
+          <Button href={primaryCta.href} icon="calendar">{primaryCta.label}</Button>
+          <Button href="/leistungen/" variant="text">Leistungen</Button>
         </div>
+        <p class="mt-8 flex items-start gap-3 text-sm text-graphite" data-reveal>
+          <Icon name="check" size={18} class="mt-0.5 shrink-0 text-oxblood" />
+          <span>Erstberatung kostenlos und unverbindlich, bis zu 60 Minuten.</span>
+        </p>
       </div>
 
       <figure class="relative md:col-span-5 md:col-start-8">
         <NeedleLine class="pointer-events-none absolute top-[12%] -left-14 z-0 hidden h-[70%] w-auto text-oxblood/45 md:block" />
-        <ArtImage
-          src={portrait}
-          alt="Patrick Wolf sitzt im Studio und hört einem Kunden aufmerksam zu."
-          ratio={4 / 5}
-          position="right top"
-          crops={[{ media: '(min-width: 768px)', ratio: 3 / 4, position: 'right top' }]}
-          sizes="(min-width: 1344px) 520px, (min-width: 768px) 40vw, 100vw"
-          widths={[400, 640, 880, 1037]}
-          loading="eager"
-          fetchpriority="high"
-          parallax
-          class="relative z-10"
-        />
-        <figcaption class="mt-3 font-serif text-sm italic text-graphite">{site.expert} im Gespräch</figcaption>
+        <div class="relative">
+          <ArtImage
+            src={portrait}
+            alt="Patrick Wolf, Tattoo Gutachter und zertifizierter Sachverständiger des DGuSV, sitzt im Studio und hört aufmerksam zu."
+            ratio={4 / 5}
+            position="right top"
+            crops={[{ media: '(min-width: 768px)', ratio: 3 / 4, position: 'right top' }]}
+            sizes="(min-width: 1344px) 520px, (min-width: 768px) 40vw, 100vw"
+            widths={[400, 640, 880, 1037]}
+            loading="eager"
+            fetchpriority="high"
+            parallax
+            class="relative z-10"
+          />
+          <div class="absolute -bottom-10 left-4 z-20 bg-paper p-1.5 shadow-[0_10px_30px_-12px_rgb(23_20_15/0.45)] md:-left-8" data-reveal>
+            <Seal width={112} class="w-20 md:w-28" />
+          </div>
+        </div>
+        <figcaption class="mt-3 pl-30 font-serif text-sm italic text-graphite md:pl-28">
+          {site.expert}, Sachverständigenbüro in {contact.city}
+        </figcaption>
       </figure>
     </Container>
   </section>
@@ -172,85 +101,107 @@ const faq: FaqEntry[] = [
   <TrustStrip />
 
   <Section
+    id="leistungen"
+    label="Leistungen"
+    title="Was ein Tattoo Gutachter für Sie prüft."
+    intro="Ein Gutachten beantwortet eine konkrete Frage: Ist das Tattoo oder Piercing fachgerecht ausgeführt, und wenn nicht, woran liegt es? Sechs Leistungen decken die typischen Fälle ab."
+  >
+    <p slot="note">{serviceScopeNote}</p>
+    <ServiceList services={services} />
+  </Section>
+
+  <!-- Independence: the expert role is kept apart from the studio work -->
+  <section class="bg-paper-deep py-section" aria-labelledby="unabhaengig-titel">
+    <Container class="grid gap-12 md:grid-cols-12 md:items-center md:gap-x-8">
+      <div class="md:col-span-6 lg:col-span-7">
+        <ArtImage
+          src={atWork}
+          alt="Patrick Wolf mit Handschuhen bei konzentrierter Arbeit an einer Tätowierung."
+          ratio={4 / 3}
+          position="center"
+          crops={[{ media: '(min-width: 768px)', ratio: 16 / 11, position: 'center' }]}
+          sizes="(min-width: 1344px) 720px, (min-width: 768px) 50vw, 100vw"
+          widths={[480, 720, 960, 1120]}
+          parallax
+        />
+      </div>
+      <div class="md:col-span-6 lg:col-span-5">
+        <Eyebrow>Unabhängigkeit</Eyebrow>
+        <h2 id="unabhaengig-titel" class="mt-6 text-h2 tracking-display" data-reveal>
+          Tätowierer und Gutachter, klar getrennt.
+        </h2>
+        <div class="mt-6 grid gap-4 text-graphite" data-reveal>
+          <p>
+            {site.expert} tätowiert weiterhin. Seine Gutachten laufen deshalb über das {site.office} und diese eigene
+            Website, getrennt von der Arbeit im Studio.
+          </p>
+          <p>
+            Die {credentials.yearsInTrade} Jahre Praxis sind die fachliche Grundlage. Das Ergebnis eines Gutachtens hängt aber allein an den
+            feststellbaren Tatsachen, nicht daran, wer den Auftrag erteilt oder welches Ergebnis er sich wünscht.
+          </p>
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <Section
     id="zielgruppen"
     label="Für wen"
-    title="Unabhängig, egal wer den Auftrag erteilt."
-    intro="Eine Bewertung orientiert sich ausschließlich an feststellbaren Tatsachen. Sie bevorzugt weder Auftraggeber noch ein bestimmtes Ergebnis."
+    title="Für alle Seiten, mit derselben Sorgfalt."
+    intro="Kunden, Studios, Rechtsanwälte und Gerichte beauftragen Tattoogutachten. Die Fragen unterscheiden sich, der Maßstab bleibt derselbe."
   >
-    <p slot="note">Randnotiz: Tätowieren und Begutachten sind bewusst getrennt, mit eigenem Büro und eigener Website.</p>
-    <div class="grid gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-4" data-reveal-group>
+    <div class="grid gap-x-8 gap-y-4 md:grid-cols-3" data-reveal-group>
       {
-        audiences.map((item) => (
-          <Card kicker={item.kicker} title={item.title} href="/leistungen/">
-            <p>{item.text}</p>
+        audiences.map((audience) => (
+          <Card kicker={audience.label} title={audience.title} href={audienceHref(audience)} linkLabel={`Mehr für ${audience.label}`}>
+            <p>{audience.text}</p>
           </Card>
         ))
       }
     </div>
   </Section>
 
-  <section class="bg-paper-deep py-section" aria-label="Haltung">
-    <Container class="grid gap-12 md:grid-cols-12 md:items-end md:gap-x-8">
-      <div class="md:col-span-7">
-        <ArtImage
-          src={atWork}
-          alt="Patrick Wolf mit Handschuhen bei konzentrierter Arbeit an einer Tätowierung."
-          ratio={4 / 3}
-          position="center"
-          crops={[{ media: '(min-width: 768px)', ratio: 16 / 10, position: 'center' }]}
-          sizes="(min-width: 1344px) 720px, (min-width: 768px) 56vw, 100vw"
-          widths={[480, 720, 960, 1120]}
-          parallax
-        />
-      </div>
-      <div class="md:col-span-5">
-        <Quote author={site.expert} role="Geprüfter und zertifizierter Gutachter des DGuSV">
-          Ein gutes Gutachten überzeugt nicht durch Behauptungen, sondern durch nachvollziehbare Feststellungen,
-          fachliche Begründungen und Objektivität.
-        </Quote>
-      </div>
-    </Container>
-  </section>
-
   <Section
     id="ablauf"
     label="Ablauf"
-    title="Fünf Schritte, jeder davon nachvollziehbar."
-    intro="Am Anfang steht ein Gespräch, kein Vertrag. Kostenpflichtig wird es erst nach einer schriftlichen Beauftragung."
-  >
-    <Steps steps={steps} />
-  </Section>
-
-  <Section
-    id="kosten"
-    label="Kosten"
-    title="Was ein Gutachten kostet, klären wir vorher."
+    title="So läuft ein Tattoogutachten ab."
+    intro="Am Anfang steht ein kostenloses Gespräch, kein Vertrag. Kostenpflichtig wird es erst nach einer schriftlichen Beauftragung."
     tone="deep"
   >
-    <p slot="note">Ein Gutachten lässt sich nicht pauschal bepreisen. Der Aufwand unterscheidet sich von Fall zu Fall erheblich.</p>
+    <Steps steps={steps} />
+    <p class="mt-12">
+      <Button href="/ablauf-kosten/" variant="text">Ablauf und Kosten im Detail</Button>
+    </p>
+  </Section>
+
+  <Section id="kosten" label="Kosten" title="Was kostet ein Tattoo-Gutachten?">
+    <p slot="note">
+      Ein Gutachten lässt sich nicht pauschal bepreisen. Eine kurze Stellungnahme macht weniger Arbeit als ein Gutachten
+      mit mehreren Beweisfragen und Ortstermin.
+    </p>
     <div class="grid gap-12 lg:grid-cols-12 lg:gap-x-8">
-      <KeyFacts facts={costFacts} class="lg:col-span-7" />
-      <Checklist title="Für die Erstberatung bereitlegen" items={checklist} class="lg:col-span-5" />
+      <div class="lg:col-span-7">
+        <p class="mb-8 max-w-[38rem] text-lead text-graphite" data-reveal>
+          Die Kosten richten sich nach dem Aufwand. Sie kennen den voraussichtlichen Rahmen, bevor Sie etwas
+          unterschreiben, und die erste Stunde kostet nichts.
+        </p>
+        <KeyFacts facts={costFacts} />
+      </div>
+      <Checklist title="Für die Erstberatung bereitlegen" items={preparationChecklist} class="self-start lg:col-span-5" />
     </div>
   </Section>
 
-  <Section id="gericht" label="Justiz">
+  <Section id="gericht" label="Justiz" tone="deep">
     <CourtReference />
-    <div class="mt-12">
-      <MeasureRule class="w-full text-ink/40" />
-    </div>
   </Section>
 
-  <Section id="fragen" label="Häufige Fragen" title="Antworten, bevor Sie fragen müssen." tone="paper">
-    <Faq items={faq} name="faq-start" />
-  </Section>
-
-  <Section id="ratgeber" label="Ratgeber" title="Vorschau: Artikelseiten" tone="deep">
-    <div class="grid gap-10 md:grid-cols-12 md:gap-x-8">
-      <div class="md:col-span-5">
+  <!-- About teaser -->
+  <section class="py-section" aria-labelledby="person-titel">
+    <Container class="grid gap-12 md:grid-cols-12 md:gap-x-8">
+      <div class="md:col-span-5 md:order-2 md:col-start-8">
         <ArtImage
           src={studio}
-          alt="Patrick Wolf sitzt lächelnd in seinem Studio zwischen Behandlungsliegen."
+          alt="Patrick Wolf sitzt lächelnd in seinem Studio in Bad Nauheim zwischen den Behandlungsliegen."
           ratio={1}
           position="center"
           crops={[{ media: '(min-width: 768px)', ratio: 4 / 5, position: 'center' }]}
@@ -258,23 +209,73 @@ const faq: FaqEntry[] = [
           widths={[400, 640, 880]}
         />
       </div>
-      <div class="md:col-span-7">
-        <Breadcrumbs items={[{ label: 'Ratgeber', href: '/ratgeber/' }, { label: 'Mangel oder Geschmackssache', href: '/ratgeber/mangel-oder-geschmack/' }]} />
-        <div class="prose prose-report mt-8">
-          <h3>Mangel oder Geschmackssache?</h3>
-          <p>
-            Nicht jede Tätowierung, die enttäuscht, ist handwerklich fehlerhaft. Ein Gutachten trennt das persönliche
-            Empfinden von dem, was sich objektiv feststellen lässt: Linienführung und Konturen, die Gleichmäßigkeit von
-            Schattierungen und Farbflächen und die Farbaufnahme in der Haut.
-          </p>
-          <blockquote><p>Entscheidend sind die konkreten Umstände und die tatsächliche Ausführung.</p></blockquote>
-        </div>
+      <div class="md:col-span-7 md:order-1">
+        <Eyebrow>Über mich</Eyebrow>
+        <h2 id="person-titel" class="mt-6 text-h2 tracking-display" data-reveal>
+          Vom Tätowierer zum Sachverständigen.
+        </h2>
+        <p class="mt-6 max-w-[36rem] text-lead text-graphite" data-reveal>
+          Wer eine Tätowierung bewertet, muss das Handwerk verstehen: Arbeitsmethoden, das Zusammenspiel von Nadel, Farbe
+          und Haut und die Ursachen handwerklicher Fehler. {site.expert} kennt die Branche seit über
+          {credentials.yearsInTrade} Jahren aus handwerklicher und betrieblicher Sicht.
+        </p>
+        <ul class="mt-8 grid max-w-[36rem] gap-3 border-t border-ink pt-6 text-sm" data-reveal>
+          {
+            credentialList.map((item) => (
+              <li class="grid grid-cols-[1.125rem_1fr] gap-3">
+                <Icon name="check" size={18} class="mt-0.5 text-oxblood" />
+                <span>{item}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <Quote author={site.expert} role={`Geprüfter und zertifizierter Gutachter des ${credentials.associationShort}`} size="md" class="mt-12">
+          Ein gutes Gutachten überzeugt nicht durch Behauptungen, sondern durch nachvollziehbare Feststellungen, fachliche
+          Begründungen und Objektivität.
+        </Quote>
+        <p class="mt-10">
+          <Button href="/ueber-mich/" variant="text">Mehr über {site.expert}</Button>
+        </p>
       </div>
+    </Container>
+  </section>
+
+  <!-- Booking anchor: the booking ticket replaces the body with the lazy cal.com embed.
+       The links below stay as the fallback without JS. -->
+  <Section
+    id="termin"
+    label="Termin"
+    title="Kostenlose Erstberatung buchen."
+    intro="Bis zu 60 Minuten, kostenlos und unverbindlich. Sie schildern Ihr Anliegen, wir klären, ob ein Gutachten sinnvoll ist und was es kosten würde."
+    tone="deep"
+  >
+    <div class="grid gap-8 border-y border-ink py-8 md:grid-cols-12 md:items-center md:gap-x-8" data-reveal>
+      <div class="md:col-span-5">
+        <Button href={primaryCta.href} icon="calendar">Termin online buchen</Button>
+      </div>
+      <ul class="grid gap-4 text-[0.9375rem] sm:grid-cols-2 md:col-span-7">
+        <li class="flex items-center gap-3">
+          <Icon name="phone" size={18} class="shrink-0 text-oxblood" />
+          <a class="link-ink" href={contact.phone.href}><span class="sr-only">Telefon </span>{contact.phone.display}</a>
+        </li>
+        <li class="flex items-center gap-3">
+          <Icon name="mail" size={18} class="shrink-0 text-oxblood" />
+          <a class="link-ink break-all" href={contact.email.href}><span class="sr-only">E-Mail </span>{contact.email.display}</a>
+        </li>
+      </ul>
     </div>
+  </Section>
+
+  <Section id="fragen" label="Häufige Fragen" title="Antworten auf die häufigsten Fragen.">
+    <p slot="note">
+      Alle Fragen zu Begutachtung, Auftrag und Kosten:
+      <a class="link-ink not-italic" href={url('/haeufige-fragen/')}>häufige Fragen zum Tattoogutachten</a>.
+    </p>
+    <Faq items={featuredFaq} name="faq-start" />
   </Section>
 
   <CtaBand
     title="Klären wir, ob ein Gutachten für Sie sinnvoll ist."
-    text="Die Erstberatung dauert bis zu 60 Minuten, ist kostenlos und verpflichtet Sie zu nichts."
+    text="Die Erstberatung dauert bis zu 60 Minuten, ist kostenlos und verpflichtet Sie zu nichts. Gutachten bundesweit und europaweit."
   />
 </BaseLayout>
