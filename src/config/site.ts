@@ -16,13 +16,16 @@ export const site = {
 
 export const contact = {
   /** Written out in full everywhere (Impressum, footer, JSON-LD, llms.txt), so the address data stays identical. */
-  street: 'Benekestraße 9',
+  street: 'Friedrich-Ebert-Platz 1A',
   postalCode: '61231',
   city: 'Bad Nauheim',
   country: 'Deutschland',
   countryCode: 'DE',
-  /** Building coordinates of the office from OpenStreetMap (Nominatim, way 50656186), checked 2026-11-12. */
-  geo: { latitude: 50.3707, longitude: 8.746 },
+  /**
+   * OpenStreetMap has no 1A on Friedrich-Ebert-Platz, so these are the coordinates of building no. 1
+   * (Overpass, way 77693878), checked 2026-11-12.
+   */
+  geo: { latitude: 50.3602, longitude: 8.7378 },
   phone: {
     display: '+49 173 1605162',
     href: 'tel:+491731605162',
@@ -32,7 +35,7 @@ export const contact = {
     href: 'mailto:Kurstadttattoo@web.de',
   },
   /** Plain Google Maps search link (no embedded map, so nothing loads from Google on our pages). */
-  mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Benekestra%C3%9Fe%209%2C%2061231%20Bad%20Nauheim',
+  mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Friedrich-Ebert-Platz%201A%2C%2061231%20Bad%20Nauheim',
 } as const;
 
 /** Legal entity behind the site (Impressum, controller in the Datenschutzerklärung). */
