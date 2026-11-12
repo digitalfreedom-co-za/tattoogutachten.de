@@ -1,0 +1,44 @@
+---
+// Two way comparison in report style. From sm up a real table; below sm each row stacks,
+// the column name is repeated in front of every value so nothing depends on the header row.
+interface Row {
+  label: string;
+  values: string[];
+}
+
+interface Props {
+  columns: string[];
+  rows: Row[];
+  caption: string;
+  class?: string;
+}
+
+const { columns, rows, caption, class: className } = Astro.props;
+---
+
+<table class:list={['w-full border-t border-ink text-left', className]} data-reveal>
+  <caption class="sr-only">{caption}</caption>
+  <thead class="max-sm:sr-only">
+    <tr class="border-b border-ink">
+      <td class="py-4 pr-6"></td>
+      {columns.map((column) => <th scope="col" class="label py-4 pr-6 align-bottom text-ink">{column}</th>)}
+    </tr>
+  </thead>
+  <tbody>
+    {
+      rows.map((row) => (
+        <tr class="border-b border-rule max-sm:grid max-sm:gap-3 max-sm:py-5">
+          <th scope="row" class="label py-5 pr-6 align-top font-semibold text-graphite max-sm:py-0 sm:w-[11rem]">
+            {row.label}
+          </th>
+          {row.values.map((value, index) => (
+            <td class="py-5 pr-6 align-top max-sm:py-0">
+              <span class="label block text-[0.6875rem] text-oxblood sm:hidden">{columns[index]}</span>
+              <span class="font-serif text-lg leading-snug max-sm:mt-1 max-sm:block">{value}</span>
+            </td>
+          ))}
+        </tr>
+      ))
+    }
+  </tbody>
+</table>

@@ -40,6 +40,18 @@ export const credentials = {
   areaServed: 'bundes- und europaweit',
 } as const;
 
+/** Credentials as short lines, for the landing page, the expert card on service pages and the about page. */
+export const credentialLines: string[] = [
+  `Geprüfter und zertifizierter Gutachter des ${credentials.associationShort} (${credentials.association})`,
+  `Bestätigungs-Register Nr. ${credentials.registerNumber}`,
+  `Durch das ${credentials.court} in einem Gerichtsverfahren als Sachverständiger bestellt`,
+  `Mitglied im ${credentials.membership}`,
+  `Über ${credentials.yearsInTrade} Jahre Berufserfahrung im Tattoo- und Piercingbereich`,
+];
+
+/** Date of the last factual review of the content pages, shown as Stand. */
+export const contentUpdated = '2026-11-12';
+
 export const mainNav: NavItem[] = [
   { label: 'Leistungen', href: '/leistungen/' },
   { label: 'Ablauf und Kosten', href: '/ablauf-kosten/' },

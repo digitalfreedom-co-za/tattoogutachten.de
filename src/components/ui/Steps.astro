@@ -1,19 +1,31 @@
 ---
 // Process timeline. Each step: what happens, and optionally what the client prepares.
+// The detailed mode (process page) replaces the short text with the long one plus a list.
+import Icon from './Icon.astro';
+
+export interface StepDetail {
+  text: string;
+  itemsLabel?: string;
+  items?: string[];
+  note?: string;
+}
+
 export interface Step {
   title: string;
   text: string;
   prepare?: string;
   duration?: string;
+  detail?: StepDetail;
 }
 
 interface Props {
   steps: Step[];
   prepareLabel?: string;
+  detailed?: boolean;
   class?: string;
 }
 
-const { steps, prepareLabel = 'Sie bereiten vor', class: className } = Astro.props;
+const { steps, prepareLabel = 'Sie bereiten vor', detailed = false, class: className } = Astro.props;
 ---
 
 <ol class:list={['relative', className]} data-reveal-group>
@@ -32,7 +44,23 @@ const { steps, prepareLabel = 'Sie bereiten vor', class: className } = Astro.pro
             {step.title}
           </h3>
           {step.duration && <p class="label mt-2 text-oxblood">{step.duration}</p>}
-          <p class="mt-3 max-w-[34rem] text-graphite">{step.text}</p>
+          <p class="mt-3 max-w-[34rem] text-graphite">{detailed && step.detail ? step.detail.text : step.text}</p>
+          {detailed && step.detail?.items && step.detail.items.length > 0 && (
+            <div class="mt-5 max-w-[34rem]">
+              {step.detail.itemsLabel && <p class="label text-graphite">{step.detail.itemsLabel}</p>}
+              <ul class="mt-3 grid gap-2">
+                {step.detail.items.map((item) => (
+                  <li class="grid grid-cols-[1rem_1fr] gap-3">
+                    <Icon name="check" size={16} class="mt-1 text-oxblood" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {detailed && step.detail?.note && (
+            <p class="mt-5 max-w-[34rem] border-l border-rule pl-4 text-sm text-graphite">{step.detail.note}</p>
+          )}
         </div>
         {step.prepare && (
           <aside class="col-start-2 mt-5 border-l border-brass pl-4 text-sm lg:col-start-3 lg:mt-2">

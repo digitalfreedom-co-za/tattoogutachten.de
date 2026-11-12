@@ -20,7 +20,7 @@ import CourtReference from '../components/ui/CourtReference.astro';
 import ServiceList from '../components/ui/ServiceList.astro';
 import ArtImage from '../components/ui/ArtImage.astro';
 import NeedleLine from '../components/ui/NeedleLine.astro';
-import { site, contact, credentials, primaryCta } from '../config/site';
+import { site, contact, credentials, credentialLines, primaryCta } from '../config/site';
 import { services, serviceScopeNote } from '../data/services';
 import { audiences, audienceHref } from '../data/audiences';
 import { steps, costFacts, preparationChecklist } from '../data/process';
@@ -31,13 +31,6 @@ import portrait from '../assets/images/patrick-wolf-portrait-studio-sitzend.jpg'
 import atWork from '../assets/images/patrick-wolf-beim-taetowieren.webp';
 import studio from '../assets/images/patrick-wolf-studio-weit.webp';
 
-const credentialList = [
-  `Geprüfter und zertifizierter Gutachter des ${credentials.associationShort} (${credentials.association})`,
-  `Bestätigungs-Register Nr. ${credentials.registerNumber}`,
-  `Durch das ${credentials.court} in einem Gerichtsverfahren als Sachverständiger bestellt`,
-  `Mitglied im ${credentials.membership}`,
-  `Über ${credentials.yearsInTrade} Jahre Berufserfahrung im Tattoo- und Piercingbereich`,
-];
 ---
 
 <BaseLayout
@@ -221,7 +214,7 @@ const credentialList = [
         </p>
         <ul class="mt-8 grid max-w-[36rem] gap-3 border-t border-ink pt-6 text-sm" data-reveal>
           {
-            credentialList.map((item) => (
+            credentialLines.map((item) => (
               <li class="grid grid-cols-[1.125rem_1fr] gap-3">
                 <Icon name="check" size={18} class="mt-0.5 text-oxblood" />
                 <span>{item}</span>

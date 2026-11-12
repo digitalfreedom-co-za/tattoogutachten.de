@@ -1,0 +1,101 @@
+---
+// Services overview: all six services, a situation finder, what every report contains and
+// what is out of scope. Service content comes from src/data/services.ts.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/ui/PageHeader.astro';
+import Section from '../../components/ui/Section.astro';
+import Button from '../../components/ui/Button.astro';
+import ServiceList from '../../components/ui/ServiceList.astro';
+import Checklist from '../../components/ui/Checklist.astro';
+import TrustStrip from '../../components/ui/TrustStrip.astro';
+import CtaBand from '../../components/ui/CtaBand.astro';
+import { site, credentials, contentUpdated, primaryCta } from '../../config/site';
+import { services, serviceHref, serviceExclusions, clients } from '../../data/services';
+import { reportContents } from '../../data/process';
+import { url } from '../../lib/url';
+---
+
+<BaseLayout
+  title="Leistungen: Tattoo-Gutachten, Piercing, Hygiene, Privat- und Gerichtsgutachten | Patrick Wolf"
+  description={`Alle Leistungen von Tattoo Gutachter ${site.expert}: Tattoo-Gutachten, Hygiene- und Piercing-Gutachten, Privatgutachten, Gerichtsgutachten und Unterstützung bei Streitfällen. ${credentials.associationShort} zertifiziert, bundesweit.`}
+>
+  <PageHeader
+    label="Leistungen"
+    heading="Gutachten zu Tätowierungen, Piercings und Studiohygiene."
+    lead={`${site.expert} untersucht und bewertet Tätowierungen, Piercings und die Arbeitsabläufe in Studios, als geprüfter und zertifizierter Gutachter des ${credentials.associationShort}. Jeder Fall wird nach seinen konkreten Umständen, der vorhandenen Dokumentation und den fachlichen Anforderungen beurteilt.`}
+    breadcrumbs={[{ label: 'Leistungen', href: '/leistungen/' }]}
+    updated={contentUpdated}
+  >
+    <Button href={primaryCta.href} icon="calendar">Kostenlose Erstberatung</Button>
+    <Button href="/ablauf-kosten/" variant="text">Ablauf und Kosten</Button>
+  </PageHeader>
+
+  <TrustStrip />
+
+  <Section
+    id="uebersicht"
+    label="Übersicht"
+    title="Welche Gutachten gibt es?"
+    intro="Sechs Leistungen decken die typischen Fälle ab: drei nach dem Gegenstand der Prüfung, drei nach dem Anlass. Jede Leistung hat eine eigene Seite mit Prüfumfang, Ergebnis und typischen Fragen."
+  >
+    <p slot="note">Auftraggeber sind {clients.join(', ')}.</p>
+    <ServiceList services={services} />
+  </Section>
+
+  <Section
+    id="passende-leistung"
+    label="Orientierung"
+    title="Welche Leistung passt zu Ihrem Fall?"
+    intro="Beschreiben Sie Ihren Fall in einem Satz und suchen Sie die passende Zeile. Wenn Sie unsicher sind, klären wir es in der kostenlosen Erstberatung."
+    tone="deep"
+  >
+    <table class="w-full border-t border-ink text-left" data-reveal>
+      <caption class="sr-only">Typische Situationen und die passende Leistung</caption>
+      <thead class="max-md:sr-only">
+        <tr class="border-b border-ink">
+          <th scope="col" class="label py-4 pr-8 text-ink">Ihre Situation</th>
+          <th scope="col" class="label py-4 text-ink">Passende Leistung</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          services.map((service) => (
+            <tr class="border-b border-rule max-md:grid max-md:gap-2 max-md:py-5">
+              <td class="py-5 pr-8 align-top text-ink-soft max-md:py-0 md:w-3/5">{service.situation}</td>
+              <td class="py-5 align-top max-md:py-0">
+                <a class="link-ink font-serif text-h4" href={url(serviceHref(service))}>
+                  {service.name}
+                </a>
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </Section>
+
+  <Section
+    id="inhalt-gutachten"
+    label="Ergebnis"
+    title="Was enthält ein Gutachten?"
+    intro="Ein Gutachten enthält den Sachverhalt, die Untersuchungsgrundlagen, die fachlichen Feststellungen und eine begründete Bewertung. Es ist so geschrieben, dass auch Fachfremde es nachvollziehen können."
+  >
+    <p slot="note">
+      Das Ergebnis hängt allein an den feststellbaren Tatsachen, nicht daran, wer den Auftrag erteilt.
+    </p>
+    <div class="grid gap-8 md:grid-cols-2 md:gap-x-8">
+      <Checklist title="Inhalt, je nach Auftrag" items={reportContents} />
+      <Checklist title="Nicht Teil der Leistung" items={serviceExclusions} icon="close" />
+    </div>
+    <p class="mt-10 max-w-[40rem] text-graphite" data-reveal>
+      Sind medizinische Befunde oder gesundheitliche Schäden betroffen, kann zusätzlich eine ärztliche Beurteilung nötig
+      sein. Rechtliche Fragen klären Sie mit einem Rechtsanwalt. Mehr dazu in den
+      <a class="link-ink" href={url('/haeufige-fragen/#auftrag')}>häufigen Fragen zu Auftrag und Gericht</a>.
+    </p>
+  </Section>
+
+  <CtaBand
+    title="Sie benötigen eine unabhängige Beurteilung?"
+    text="In der kostenlosen Erstberatung klären wir, ob eine sachverständige Untersuchung für Ihr Anliegen sinnvoll ist und welche Vorgehensweise infrage kommt."
+  />
+</BaseLayout>

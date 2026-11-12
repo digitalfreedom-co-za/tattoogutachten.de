@@ -3,8 +3,7 @@
 // title block, prose column and a margin column for notes (stacks under the text on mobile).
 import BaseLayout from './BaseLayout.astro';
 import Container from '../components/ui/Container.astro';
-import Breadcrumbs from '../components/ui/Breadcrumbs.astro';
-import Eyebrow from '../components/ui/Eyebrow.astro';
+import PageHeader from '../components/ui/PageHeader.astro';
 import type { NavItem } from '../config/site';
 
 interface Props {
@@ -19,28 +18,12 @@ interface Props {
 }
 
 const { title, description, heading, lead, label = 'Ratgeber', breadcrumbs, updated } = Astro.props;
-const updatedText = updated
-  ? new Intl.DateTimeFormat('de-DE', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(updated))
-  : undefined;
 ---
 
 <BaseLayout title={title} description={description}>
   <slot name="head" slot="head" />
   <article>
-    <Container class="pt-10 pb-12 md:pt-14 md:pb-16">
-      <Breadcrumbs items={breadcrumbs} />
-      <div class="mt-12 grid gap-8 md:mt-16 md:grid-cols-12 md:gap-x-8">
-        <div class="md:col-span-3">
-          <div class="hairline mb-4" data-reveal="rule" aria-hidden="true"></div>
-          <Eyebrow>{label}</Eyebrow>
-          {updatedText && <p class="mt-3 text-sm text-graphite">Stand: <time datetime={updated}>{updatedText}</time></p>}
-        </div>
-        <header class="md:col-span-9 lg:col-span-8">
-          <h1 class="text-h1 tracking-display">{heading}</h1>
-          {lead && <p class="mt-6 max-w-[38rem] text-lead text-graphite">{lead}</p>}
-        </header>
-      </div>
-    </Container>
+    <PageHeader heading={heading} lead={lead} label={label} breadcrumbs={breadcrumbs} updated={updated} />
     <Container class="grid gap-12 pb-section md:grid-cols-12 md:gap-x-8">
       <div class="prose prose-report md:col-span-8 md:col-start-4 lg:col-span-6 lg:col-start-4">
         <slot />

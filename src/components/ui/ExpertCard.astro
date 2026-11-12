@@ -1,0 +1,49 @@
+---
+// Who writes the report: portrait, name, credentials and the seal, next to service content.
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import Seal from './Seal.astro';
+import { url } from '../../lib/url';
+import { site, credentialLines } from '../../config/site';
+import portrait from '../../assets/images/patrick-wolf-nahaufnahme.jpg';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<aside class:list={['border border-ink bg-paper p-6 md:p-8', className]} aria-label="Ihr Sachverständiger" data-reveal>
+  <div class="flex items-start gap-5">
+    <Image
+      src={portrait}
+      alt={`Porträt von ${site.expert}`}
+      width={96}
+      height={112}
+      densities={[1, 2]}
+      fit="cover"
+      position="left top"
+      class="h-28 w-24 shrink-0 object-cover"
+    />
+    <div>
+      <p class="label text-graphite">Ihr Sachverständiger</p>
+      <p class="mt-2 font-serif text-h4">{site.expert}</p>
+      <p class="mt-1 text-sm text-graphite">{site.office}</p>
+    </div>
+  </div>
+  <ul class="mt-6 grid gap-3 border-t border-rule pt-5 text-sm">
+    {
+      credentialLines.map((line) => (
+        <li class="grid grid-cols-[1rem_1fr] gap-3">
+          <Icon name="check" size={16} class="mt-0.5 text-oxblood" />
+          <span>{line}</span>
+        </li>
+      ))
+    }
+  </ul>
+  <div class="mt-6 flex items-end justify-between gap-4 border-t border-rule pt-5">
+    <a class="link-ink text-sm font-semibold" href={url('/ueber-mich/')}>Mehr über {site.expert}</a>
+    <Seal width={56} class="w-14" />
+  </div>
+</aside>

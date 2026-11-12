@@ -1,0 +1,39 @@
+---
+// Title block of a subpage, set like the cover of a report: breadcrumbs, a margin column with
+// label and review date, the h1 with an answer first lead. The default slot takes actions.
+import Container from './Container.astro';
+import Breadcrumbs from './Breadcrumbs.astro';
+import Eyebrow from './Eyebrow.astro';
+import type { NavItem } from '../../config/site';
+
+interface Props {
+  heading: string;
+  lead?: string;
+  label: string;
+  breadcrumbs: NavItem[];
+  /** ISO date of the last factual review, shown as Stand. */
+  updated?: string;
+  class?: string;
+}
+
+const { heading, lead, label, breadcrumbs, updated, class: className } = Astro.props;
+const updatedText = updated
+  ? new Intl.DateTimeFormat('de-DE', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(updated))
+  : undefined;
+---
+
+<Container class:list={['pt-10 pb-12 md:pt-14 md:pb-16', className]}>
+  <Breadcrumbs items={breadcrumbs} />
+  <div class="mt-12 grid gap-8 md:mt-16 md:grid-cols-12 md:gap-x-8">
+    <div class="md:col-span-3">
+      <div class="hairline mb-4" data-reveal="rule" aria-hidden="true"></div>
+      <Eyebrow>{label}</Eyebrow>
+      {updatedText && <p class="mt-3 text-sm text-graphite">Stand: <time datetime={updated}>{updatedText}</time></p>}
+    </div>
+    <header class="md:col-span-9 lg:col-span-8">
+      <h1 class="text-h1 tracking-display">{heading}</h1>
+      {lead && <p class="mt-6 max-w-[38rem] text-lead text-graphite">{lead}</p>}
+      {Astro.slots.has('default') && <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-5"><slot /></div>}
+    </header>
+  </div>
+</Container>

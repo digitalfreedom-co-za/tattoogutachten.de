@@ -1,0 +1,168 @@
+---
+// One page per service, generated from src/data/services.ts: answer first definition,
+// scope, result, service specific topics, typical questions, related services, booking CTA.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/ui/PageHeader.astro';
+import Section from '../../components/ui/Section.astro';
+import Button from '../../components/ui/Button.astro';
+import Card from '../../components/ui/Card.astro';
+import Checklist from '../../components/ui/Checklist.astro';
+import ExpertCard from '../../components/ui/ExpertCard.astro';
+import CompareTable from '../../components/ui/CompareTable.astro';
+import CourtReference from '../../components/ui/CourtReference.astro';
+import Faq from '../../components/ui/Faq.astro';
+import Icon from '../../components/ui/Icon.astro';
+import CtaBand from '../../components/ui/CtaBand.astro';
+import { contentUpdated, primaryCta } from '../../config/site';
+import { services, serviceHref, serviceBySlug, serviceScopeNote, reportComparison, type Service } from '../../data/services';
+import { faqForService } from '../../data/faq';
+import { url } from '../../lib/url';
+
+export function getStaticPaths() {
+  return services.map((service) => ({ params: { slug: service.slug }, props: { service } }));
+}
+
+interface Props {
+  service: Service;
+}
+
+const { service } = Astro.props;
+const [answer, ...moreIntro] = service.intro;
+const questions = faqForService(service.slug);
+const related = service.related.map(serviceBySlug);
+
+// Sections alternate between paper and deep paper in render order, whatever blocks a service has.
+let toneIndex = 0;
+const nextTone = () => (toneIndex++ % 2 === 0 ? 'deep' : 'paper');
+---
+
+<BaseLayout title={service.metaTitle} description={service.metaDescription}>
+  <PageHeader
+    label={service.kicker}
+    heading={service.title}
+    lead={service.summary}
+    breadcrumbs={[
+      { label: 'Leistungen', href: '/leistungen/' },
+      { label: service.name, href: serviceHref(service) },
+    ]}
+    updated={contentUpdated}
+  >
+    <Button href={primaryCta.href} icon="calendar">Kostenlose Erstberatung</Button>
+    <Button href="/ablauf-kosten/" variant="text">Ablauf und Kosten</Button>
+  </PageHeader>
+
+  <Section id="definition" label="Kurz erklärt" title={service.definitionTitle} tone={nextTone()}>
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-x-8">
+      <div class="grid content-start gap-5 lg:col-span-7" data-reveal>
+        <p class="max-w-[40rem] text-lead text-ink">{answer}</p>
+        {moreIntro.map((paragraph) => <p class="max-w-[40rem] text-graphite">{paragraph}</p>)}
+      </div>
+      <ExpertCard class="self-start lg:col-span-5 xl:col-span-4 xl:col-start-9" />
+    </div>
+  </Section>
+
+  <Section id="pruefumfang" label="Prüfumfang" title="Was wird geprüft, und was erhalten Sie?" tone={nextTone()}>
+    <p slot="note">{serviceScopeNote}</p>
+    <div class="grid gap-8 md:grid-cols-2 md:gap-x-8">
+      <Checklist title={service.assessedTitle ?? 'Geprüft wird'} items={service.assessed} />
+      <Checklist title="Das erhalten Sie" items={service.deliverables} />
+    </div>
+    {
+      service.note && (
+        <p class="mt-10 max-w-[40rem] border-l border-oxblood pl-4 text-graphite" data-reveal>
+          {service.note}
+        </p>
+      )
+    }
+  </Section>
+
+  {
+    service.topics?.map((topic) => (
+      <Section id={topic.id} label={topic.label} title={topic.title} tone={nextTone()}>
+        <div class="grid gap-5 md:grid-cols-12 md:gap-x-8" data-reveal>
+          <div class="grid max-w-[40rem] gap-5 md:col-span-9 md:col-start-4 lg:col-span-8 lg:col-start-4">
+          {topic.paragraphs.map((paragraph, i) => (
+            <p class:list={i === 0 ? 'text-lead text-ink' : 'text-graphite'}>{paragraph}</p>
+          ))}
+          {topic.items && (
+            <ul class="grid gap-3 border-t border-rule pt-5">
+              {topic.items.map((item) => (
+                <li class="grid grid-cols-[1.125rem_1fr] gap-3">
+                  <Icon name="check" size={18} class="mt-0.5 text-oxblood" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+          {topic.link && (
+            <p>
+              <Button href={topic.link.href} variant="text">{topic.link.label}</Button>
+            </p>
+          )}
+          </div>
+        </div>
+      </Section>
+    ))
+  }
+
+  {
+    service.showCourtReference && (
+      <Section id="bestellung" label="Justiz" tone={nextTone()}>
+        <CourtReference />
+      </Section>
+    )
+  }
+
+  {
+    service.showComparison && (
+      <Section
+        id="privat-oder-gericht"
+        label="Vergleich"
+        title="Privatgutachten oder Gerichtsgutachten?"
+        intro="Den Unterschied macht der Auftraggeber: Ein Privatgutachten geben Sie selbst in Auftrag, ein Gerichtsgutachten holt das Gericht ein."
+        tone={nextTone()}
+      >
+        <CompareTable caption="Privatgutachten und Gerichtsgutachten im Vergleich" {...reportComparison} />
+      </Section>
+    )
+  }
+
+  {
+    questions.length > 0 && (
+      <Section id="fragen" label="Typische Fragen" title={`Häufige Fragen zum Thema ${service.name}`} tone={nextTone()}>
+        <p slot="note">
+          Alle Antworten nach Themen:
+          <a class="link-ink not-italic" href={url('/haeufige-fragen/')}>häufige Fragen zum Tattoogutachten</a>.
+        </p>
+        <Faq items={questions} name={`faq-${service.slug}`} />
+      </Section>
+    )
+  }
+
+  <Section
+    id="ablauf"
+    label="Ablauf"
+    title="Wie geht es weiter?"
+    intro="Am Anfang steht eine kostenlose Erstberatung von bis zu 60 Minuten. Kostenpflichtig wird es erst, wenn Sie ein Gutachten schriftlich beauftragen."
+    tone={nextTone()}
+  >
+    <p class="mb-12" data-reveal>
+      <Button href="/ablauf-kosten/" variant="text">Die fünf Schritte und die Kosten im Detail</Button>
+    </p>
+    <h3 class="label mb-6 text-graphite">Verwandte Leistungen</h3>
+    <div class="grid gap-x-8 gap-y-4 md:grid-cols-3" data-reveal-group>
+      {
+        related.map((item) => (
+          <Card kicker={item.kicker} title={item.name} href={serviceHref(item)} linkLabel={`Mehr zum Thema ${item.name}`} headingLevel="h4">
+            <p>{item.summary}</p>
+          </Card>
+        ))
+      }
+    </div>
+  </Section>
+
+  <CtaBand
+    title="Klären wir, ob ein Gutachten in Ihrem Fall sinnvoll ist."
+    text="Die Erstberatung dauert bis zu 60 Minuten, ist kostenlos und verpflichtet Sie zu nichts. Gutachten bundesweit und europaweit."
+  />
+</BaseLayout>

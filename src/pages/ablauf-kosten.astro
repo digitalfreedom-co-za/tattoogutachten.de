@@ -1,0 +1,114 @@
+---
+// Process and costs: the five steps in detail, the cost logic without invented prices,
+// private versus court commission, the preparation checklist and the cost FAQ.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/ui/PageHeader.astro';
+import Section from '../components/ui/Section.astro';
+import Button from '../components/ui/Button.astro';
+import Steps from '../components/ui/Steps.astro';
+import KeyFacts from '../components/ui/KeyFacts.astro';
+import Checklist from '../components/ui/Checklist.astro';
+import CompareTable from '../components/ui/CompareTable.astro';
+import Faq from '../components/ui/Faq.astro';
+import CtaBand from '../components/ui/CtaBand.astro';
+import { contentUpdated, primaryCta } from '../config/site';
+import { steps, costFacts, costDrivers, preparationChecklist } from '../data/process';
+import { reportComparison } from '../data/services';
+import { faqByTopic } from '../data/faq';
+import { url } from '../lib/url';
+
+const costQuestions = faqByTopic('kosten');
+---
+
+<BaseLayout
+  title="Tattoo-Gutachten: Ablauf und Kosten | Erstberatung 60 Minuten kostenlos"
+  description="So läuft ein Tattoo-Gutachten ab: kostenlose Erstberatung bis 60 Minuten, Kosten nach Aufwand und vorher schriftlich vereinbart, Gerichtsgutachten nach JVEG. Fünf Schritte, transparent erklärt."
+>
+  <PageHeader
+    label="Ablauf und Kosten"
+    heading="Ablauf und Kosten eines Tattoo-Gutachtens."
+    lead="Ein Gutachten beginnt mit einer kostenlosen Erstberatung von bis zu 60 Minuten. Kosten entstehen erst, wenn Sie schriftlich beauftragen, und der voraussichtliche Rahmen steht vorher fest."
+    breadcrumbs={[{ label: 'Ablauf und Kosten', href: '/ablauf-kosten/' }]}
+    updated={contentUpdated}
+  >
+    <Button href={primaryCta.href} icon="calendar">Kostenlose Erstberatung</Button>
+    <Button href="#kosten" variant="text">Direkt zu den Kosten</Button>
+  </PageHeader>
+
+  <Section
+    id="ablauf"
+    label="Ablauf"
+    title="Wie läuft ein Tattoo-Gutachten ab?"
+    intro="In fünf Schritten: Erstberatung, Klärung von Umfang und Kosten, schriftliche Beauftragung, Untersuchung und Gutachten. Erst ab dem dritten Schritt entstehen Kosten."
+    tone="deep"
+  >
+    <p slot="note">
+      Einen Sachverständigen beauftragt kaum jemand alle Tage. Oft ist unklar, ob ein Gutachten nötig ist, welche
+      Unterlagen gebraucht werden und was es kostet. Deshalb steht am Anfang ein ausführliches Gespräch.
+    </p>
+    <Steps steps={steps} detailed />
+  </Section>
+
+  <Section
+    id="kosten"
+    label="Kosten"
+    title="Was kostet ein Tattoo-Gutachten?"
+    intro="Einen Pauschalpreis gibt es nicht, weil Aufwand und Umfang von Fall zu Fall erheblich schwanken. Die Kosten richten sich nach dem Aufwand und werden vor einer privaten Beauftragung schriftlich vereinbart."
+  >
+    <p slot="note">
+      Eine einfache schriftliche Stellungnahme erfordert einen anderen Arbeitsumfang als ein umfangreiches Gutachten mit
+      mehreren Beweisfragen, ergänzender Dokumentation oder einer Ortsbesichtigung.
+    </p>
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-x-8">
+      <KeyFacts facts={costFacts} class="lg:col-span-7" />
+      <Checklist title="Wovon die Kosten abhängen" items={costDrivers} class="self-start lg:col-span-5" />
+    </div>
+  </Section>
+
+  <Section
+    id="privat-oder-gericht"
+    label="Vergleich"
+    title="Privatauftrag oder Gericht: Was gilt für die Vergütung?"
+    intro="Das hängt davon ab, wer das Gutachten beauftragt. Bei einem Privatgutachten gelten die im Sachverständigenvertrag vereinbarten Bedingungen, bei einem Gerichtsgutachten richtet sich die Vergütung nach dem JVEG und läuft über das Gericht."
+    tone="deep"
+  >
+    <CompareTable caption="Privatgutachten und Gerichtsgutachten im Vergleich" {...reportComparison} />
+    <p class="mt-10 max-w-[40rem] text-graphite" data-reveal>
+      Mehr zu beiden Wegen auf den Seiten
+      <a class="link-ink" href={url('/leistungen/privatgutachten/')}>Privatgutachten und Beweissicherung</a> und
+      <a class="link-ink" href={url('/leistungen/gerichtsgutachten/')}>Gutachten für Gerichte</a>.
+    </p>
+  </Section>
+
+  <Section
+    id="vorbereitung"
+    label="Vorbereitung"
+    title="Was sollten Sie zur Erstberatung mitbringen?"
+    intro="Je mehr Sie zeigen können, desto genauer wird die erste Einschätzung. Welche Unterlagen tatsächlich gebraucht werden, klären wir im Gespräch."
+  >
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-x-8">
+      <Checklist title="Für die Erstberatung bereitlegen" items={preparationChecklist} class="self-start lg:col-span-7" />
+      <div class="grid content-start gap-5 lg:col-span-5" data-reveal>
+        <h3 class="text-h4">Wie lange dauert ein Gutachten?</h3>
+        <p class="text-graphite">
+          Das hängt vom Umfang des Auftrags, den vorhandenen Unterlagen und dem Untersuchungsaufwand ab. Nach der
+          Erstberatung lässt sich der Zeitbedarf in der Regel genauer einschätzen, der voraussichtliche
+          Bearbeitungszeitraum steht dann im Vertrag.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <Section id="fragen" label="Häufige Fragen" title="Fragen zu Kosten und Ablauf" tone="deep">
+    <p slot="note">
+      Alle Fragen nach Themen:
+      <a class="link-ink not-italic" href={url('/haeufige-fragen/')}>häufige Fragen zum Tattoogutachten</a>.
+    </p>
+    <Faq items={costQuestions} name="faq-kosten" />
+  </Section>
+
+  <CtaBand
+    title="Jetzt kostenlose Erstberatung vereinbaren."
+    text="Sie möchten wissen, ob ein Gutachten für Ihr Anliegen sinnvoll ist? Die Erstberatung dauert bis zu 60 Minuten, ist kostenlos und unverbindlich."
+  />
+</BaseLayout>

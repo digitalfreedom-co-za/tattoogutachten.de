@@ -9,10 +9,12 @@ interface Props {
   title: string;
   href?: string;
   linkLabel?: string;
+  /** Heading level of the title inside the surrounding outline. */
+  headingLevel?: 'h3' | 'h4';
   class?: string;
 }
 
-const { kicker, title, href, linkLabel = 'Mehr erfahren', class: className } = Astro.props;
+const { kicker, title, href, linkLabel = 'Mehr erfahren', headingLevel: Heading = 'h3', class: className } = Astro.props;
 const resolvedHref = href?.startsWith('/') ? url(href) : href;
 ---
 
@@ -25,7 +27,7 @@ const resolvedHref = href?.startsWith('/') ? url(href) : href;
   data-reveal
 >
   {kicker && <p class="label text-graphite">{kicker}</p>}
-  <h3 class="mt-8 text-h3">
+  <Heading class="mt-8 text-h3">
     {
       resolvedHref ? (
         <a href={resolvedHref} class="after:absolute after:inset-0 focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-4 focus-visible:after:outline-signal">
@@ -35,7 +37,7 @@ const resolvedHref = href?.startsWith('/') ? url(href) : href;
         title
       )
     }
-  </h3>
+  </Heading>
   <div class="mt-4 text-graphite">
     <slot />
   </div>

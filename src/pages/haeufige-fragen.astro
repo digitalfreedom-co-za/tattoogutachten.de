@@ -1,0 +1,70 @@
+---
+// All FAQ entries grouped by topic, every answer visible. The entries come from src/data/faq.ts,
+// the same list the landing page teaser and the FAQPage JSON-LD use.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/ui/PageHeader.astro';
+import Section from '../components/ui/Section.astro';
+import Container from '../components/ui/Container.astro';
+import Button from '../components/ui/Button.astro';
+import Faq from '../components/ui/Faq.astro';
+import CtaBand from '../components/ui/CtaBand.astro';
+import { contentUpdated, primaryCta, type NavItem } from '../config/site';
+import { faq, faqTopics, faqByTopic, type FaqTopic } from '../data/faq';
+
+/** Where each topic continues in depth. */
+const topicLinks: Record<FaqTopic, NavItem> = {
+  grundlagen: { label: 'Tattoo-Gutachten bei handwerklichen Mängeln', href: '/leistungen/tattoo-gutachten/' },
+  begutachtung: { label: 'Alle Leistungen im Überblick', href: '/leistungen/' },
+  auftrag: { label: 'Privatgutachten oder Gerichtsgutachten', href: '/leistungen/privatgutachten/#privat-oder-gericht' },
+  kosten: { label: 'Ablauf und Kosten im Detail', href: '/ablauf-kosten/' },
+  person: { label: 'Mehr über Patrick Wolf', href: '/ueber-mich/' },
+};
+---
+
+<BaseLayout
+  title="Häufige Fragen zum Tattoo-Gutachten: Kosten, Ablauf, Gericht | Tattoogutachten"
+  description="Tattoo schlecht gestochen? Antworten auf die häufigsten Fragen zum Tattoo-Gutachten: Mangel oder Geschmack, Fotos, Piercings, Privat- und Gerichtsgutachten, Kosten, kostenlose Erstberatung."
+>
+  <PageHeader
+    label="Häufige Fragen"
+    heading="Häufige Fragen zum Tattoo-Gutachten."
+    lead={`Hier finden Sie ${faq.length} Antworten zur Beauftragung eines Tattoo-Sachverständigen, zum Ablauf einer Begutachtung und zu den Kosten, nach Themen geordnet. Jede Antwort beginnt mit dem Wesentlichen.`}
+    breadcrumbs={[{ label: 'Häufige Fragen', href: '/haeufige-fragen/' }]}
+    updated={contentUpdated}
+  />
+
+  <nav aria-label="Themen" class="border-y border-ink bg-paper-deep">
+    <Container class="py-2">
+      <ul class="flex flex-wrap gap-x-8">
+        {
+          faqTopics.map((topic) => (
+            <li>
+              <a class="label link-ink inline-flex min-h-11 items-center no-underline hover:underline" href={`#${topic.id}`}>
+                {topic.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </Container>
+  </nav>
+
+  {
+    faqTopics.map((topic, index) => (
+      <Section id={topic.id} label={topic.label} title={topic.title} tone={index % 2 === 0 ? 'paper' : 'deep'}>
+        <Faq items={faqByTopic(topic.id)} variant="list" />
+        <p class="mt-8" data-reveal>
+          <Button href={topicLinks[topic.id].href} variant="text">
+            {topicLinks[topic.id].label}
+          </Button>
+        </p>
+      </Section>
+    ))
+  }
+
+  <CtaBand
+    title="Noch Fragen?"
+    text="Nicht jeder Sachverhalt lässt sich mit einer allgemeinen Antwort klären. Ihr Anliegen besprechen wir gern in einer kostenlosen Erstberatung von bis zu 60 Minuten."
+    ctaLabel={primaryCta.label}
+  />
+</BaseLayout>
