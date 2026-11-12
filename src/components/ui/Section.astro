@@ -36,7 +36,7 @@ const toneClass = {
     {
       hasHeader && (
         <header class="grid gap-6 md:grid-cols-12 md:gap-x-8">
-          <div class="md:col-span-3">
+          <div class="min-w-0 md:col-span-3">
             <div
               class:list={['hairline mb-4 md:mb-5', tone === 'ink' && 'bg-paper/20']}
               data-reveal="rule"
@@ -60,7 +60,7 @@ const toneClass = {
             )}
           </div>
           {(title || intro) && (
-            <div class="md:col-span-9 lg:col-span-8">
+            <div class="min-w-0 md:col-span-9 lg:col-span-8">
               {title && (
                 <h2 id={headingId} class="text-h2 tracking-display" data-reveal>
                   {title}
