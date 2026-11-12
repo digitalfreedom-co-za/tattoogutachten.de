@@ -124,6 +124,16 @@ function setupTimezone(root: HTMLElement): void {
   });
 }
 
+/**
+ * Outcome of a load. Ignored once the block is blocked again: a late cal.com event or timeout of a
+ * load the visitor has since withdrawn must not replace the placeholder.
+ */
+function settle(root: HTMLElement, state: 'ready' | 'failed'): void {
+  window.clearTimeout(Number(root.dataset.timeout));
+  if (root.dataset.state === 'blocked') return;
+  setState(root, state);
+}
+
 /** Installs the embed snippet for a block and wires its events, once. */
 function mount(root: HTMLElement): void {
   const { calOrigin, calScript, namespace } = root.dataset;
@@ -134,17 +144,8 @@ function mount(root: HTMLElement): void {
   Cal('init', namespace, { origin: calOrigin });
   const api = Cal.ns![namespace];
 
-  api('on', {
-    action: 'linkReady',
-    callback: () => {
-      window.clearTimeout(Number(root.dataset.timeout));
-      setState(root, 'ready');
-    },
-  });
-  const failed = () => {
-    window.clearTimeout(Number(root.dataset.timeout));
-    setState(root, 'failed');
-  };
+  api('on', { action: 'linkReady', callback: () => settle(root, 'ready') });
+  const failed = () => settle(root, 'failed');
   api('on', { action: 'linkFailed', callback: failed });
 
   // embed.js blocked (content blocker, offline): no cal.com event will ever fire.
@@ -163,7 +164,7 @@ function render(root: HTMLElement): void {
   container.replaceChildren();
   setState(root, 'loading');
   window.clearTimeout(Number(root.dataset.timeout));
-  root.dataset.timeout = String(window.setTimeout(() => setState(root, 'failed'), LOAD_TIMEOUT_MS));
+  root.dataset.timeout = String(window.setTimeout(() => settle(root, 'failed'), LOAD_TIMEOUT_MS));
 
   api('inline', {
     elementOrSelector: `#${target}`,
