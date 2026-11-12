@@ -1,0 +1,60 @@
+---
+// Link to the same page in the other language (two locales, so a single link instead of a menu).
+// In the header it is icon only below sm (36 x 36, aria-label and title from the dictionary) and shows
+// the name of the other language from sm up; in the menu panel it always shows the name. The link
+// carries the target's hreflang, and its text the target's lang. A click records an explicit choice
+// (localStorage locale-explicit), so the language hint does not come back, and keeps the section
+// when the current hash has a translated anchor (src/i18n/routes.ts, anchorPairs).
+import Icon from '../ui/Icon.astro';
+import { url } from '../../lib/url';
+import { pageLocale, t, localeMeta, locales, routes, anchorMap, type PathPair } from '../../i18n';
+
+interface Props {
+  alternates: PathPair | null;
+  variant?: 'header' | 'panel';
+  class?: string;
+}
+
+const { alternates, variant = 'header', class: className } = Astro.props;
+const locale = pageLocale(Astro.url);
+const target = locales.find((candidate) => candidate !== locale) ?? locale;
+const href = url(alternates ? alternates[target] : routes.home[target]);
+const name = localeMeta[target].name;
+const label = `${t(locale).language.switchLabel}: ${name}`;
+const anchors = anchorMap(locale, target);
+---
+
+<a
+  href={href}
+  hreflang={localeMeta[target].lang}
+  aria-label={variant === 'header' ? label : undefined}
+  title={variant === 'header' ? label : undefined}
+  data-locale-choice
+  data-anchors={JSON.stringify(anchors)}
+  class:list={[
+    variant === 'header'
+      ? 'inline-flex size-9 shrink-0 items-center justify-center gap-2 border border-ink/30 text-ink transition-colors hover:border-ink hover:text-oxblood sm:size-auto sm:min-h-11 sm:px-3'
+      : 'link-ink inline-flex min-h-11 items-center gap-3',
+    className,
+  ]}
+>
+  <Icon name="globe" size={18} class:list={['shrink-0', variant === 'header' ? 'h-[18px] w-[18px] sm:h-4 sm:w-4' : 'text-oxblood']} />
+  <span lang={localeMeta[target].lang} class:list={[variant === 'header' && 'hidden text-[0.875rem] font-medium sm:inline']}>{name}</span>
+</a>
+
+<script>
+  document.querySelectorAll<HTMLAnchorElement>('[data-locale-choice]').forEach((link) => {
+    if (link.dataset.localeReady) return;
+    link.dataset.localeReady = '';
+    link.addEventListener('click', () => {
+      try {
+        localStorage.setItem('locale-explicit', '1');
+      } catch {
+        // Storage blocked: the choice simply is not remembered.
+      }
+      const anchors = JSON.parse(link.dataset.anchors ?? '{}') as Record<string, string>;
+      const hash = decodeURIComponent(location.hash.slice(1));
+      if (hash) link.hash = anchors[hash] ?? hash;
+    });
+  });
+</script>

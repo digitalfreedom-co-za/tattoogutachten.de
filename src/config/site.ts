@@ -1,5 +1,8 @@
 // Single source for contact data, navigation and credentials.
-// Every component reads from here; never hard-code these values in markup.
+// Every component reads from here; never hard-code these values in markup. Wording that differs per
+// locale comes from the dictionaries (src/i18n/{en,de}.json) through the *For(locale) helpers; the
+// plain exports are the German versions, read by the German pages and content modules.
+import { t, fill, routes, type Locale } from '../i18n';
 
 export interface NavItem {
   label: string;
@@ -10,7 +13,8 @@ export const site = {
   name: 'Tattoogutachten',
   office: 'Sachverständigenbüro Wolf',
   expert: 'Patrick Wolf',
-  role: 'Sachverständiger für Tätowierungen und Piercings',
+  /** German job title; roleFor(locale) gives both. */
+  role: t('de').site.role,
   domain: 'tattoogutachten.de',
 } as const;
 
@@ -19,7 +23,8 @@ export const contact = {
   street: 'Benekestraße 9',
   postalCode: '61231',
   city: 'Bad Nauheim',
-  country: 'Deutschland',
+  /** German country name; the English one is t('en').site.country. */
+  country: t('de').site.country,
   countryCode: 'DE',
   /** Building coordinates of the office from OpenStreetMap (Nominatim, way 50656186), checked 2026-11-12. */
   geo: { latitude: 50.3707, longitude: 8.746 },
@@ -56,36 +61,51 @@ export const credentials = {
   associationUrl: 'https://www.dgusv.de',
   membershipUrl: 'https://bundesverband-tattoo.de',
   yearsInTrade: 22,
-  areaServed: 'bundes- und europaweit',
+  /** German wording; t(locale).site.areaServed gives both. */
+  areaServed: t('de').site.areaServed,
 } as const;
 
 /** Credentials as short lines, for the landing page, the expert card on service pages and the about page. */
-export const credentialLines: string[] = [
-  `Geprüfter und zertifizierter Gutachter des ${credentials.associationShort} (${credentials.association})`,
-  `Bestätigungs-Register Nr. ${credentials.registerNumber}`,
-  `Durch das ${credentials.court} in einem Gerichtsverfahren als Sachverständiger bestellt`,
-  `Mitglied im ${credentials.membership}`,
-  `Über ${credentials.yearsInTrade} Jahre Berufserfahrung im Tattoo- und Piercingbereich`,
-];
+export const credentialLinesFor = (locale: Locale): string[] =>
+  t(locale).credentialLines.map((line) =>
+    fill(line, {
+      associationShort: credentials.associationShort,
+      association: credentials.association,
+      registerNumber: credentials.registerNumber,
+      court: t(locale).court,
+      membership: credentials.membership,
+      years: credentials.yearsInTrade,
+    }),
+  );
+
+export const credentialLines: string[] = credentialLinesFor('de');
 
 /** Date of the last factual review of the content pages, shown as Stand. */
 export const contentUpdated = '2026-11-12';
 
-export const mainNav: NavItem[] = [
-  { label: 'Leistungen', href: '/leistungen/' },
-  { label: 'Ablauf und Kosten', href: '/ablauf-kosten/' },
-  { label: 'Über mich', href: '/ueber-mich/' },
-  { label: 'Ratgeber', href: '/ratgeber/' },
-  { label: 'FAQ', href: '/haeufige-fragen/' },
-  { label: 'Kontakt', href: '/kontakt/' },
+/** Main navigation of a locale, in display order. */
+export function mainNavFor(locale: Locale): NavItem[] {
+  const nav = t(locale).nav;
+  return [
+    { label: nav.services, href: routes.services[locale] },
+    { label: nav.process, href: routes.process[locale] },
+    { label: nav.about, href: routes.about[locale] },
+    { label: nav.guides, href: routes.guides[locale] },
+    { label: nav.faq, href: routes.faq[locale] },
+    { label: nav.contact, href: routes.contact[locale] },
+  ];
+}
+
+export const primaryCtaFor = (locale: Locale): NavItem => ({ label: t(locale).nav.booking, href: routes.booking[locale] });
+
+export const legalNavFor = (locale: Locale): NavItem[] => [
+  { label: t(locale).nav.imprint, href: routes.imprint[locale] },
+  { label: t(locale).nav.privacy, href: routes.privacy[locale] },
 ];
 
-export const primaryCta: NavItem = { label: 'Termin buchen', href: '/termin/' };
-
-export const legalNav: NavItem[] = [
-  { label: 'Impressum', href: '/impressum/' },
-  { label: 'Datenschutz', href: '/datenschutz/' },
-];
+export const mainNav: NavItem[] = mainNavFor('de');
+export const primaryCta: NavItem = primaryCtaFor('de');
+export const legalNav: NavItem[] = legalNavFor('de');
 
 /**
  * Search engine switch. Off (default) on the github.io preview: every page carries noindex, robots.txt
@@ -100,5 +120,13 @@ export const ogImage = {
   path: '/og/tattoogutachten-og.png',
   width: 1200,
   height: 630,
-  alt: `${site.office}: ${site.expert}, ${site.role}, ${credentials.associationShort} zertifiziert, Gutachten ${credentials.areaServed}.`,
 } as const;
+
+export const ogImageAltFor = (locale: Locale): string =>
+  fill(t(locale).site.ogImageAlt, {
+    office: site.office,
+    expert: site.expert,
+    role: t(locale).site.role,
+    association: credentials.associationShort,
+    areaServed: t(locale).site.areaServed,
+  });

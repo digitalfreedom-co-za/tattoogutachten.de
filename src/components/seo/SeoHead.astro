@@ -1,12 +1,15 @@
 ---
-// All SEO tags of a page: title, description, canonical, robots, Open Graph, Twitter and one
+// All SEO tags of a page: title, description, canonical, robots, hreflang, Open Graph, Twitter and one
 // JSON-LD @graph (site wide entities, the WebPage, its breadcrumb trail and the page's own nodes).
 // Absolute URLs come from Astro.site plus the base path, indexing from the switch in config/site.ts.
+// hreflang lists both language versions of the page plus x-default, which points at the English
+// version: the default locale is served to everyone at the root, without a language redirect.
 import { getImage } from 'astro:assets';
 import JsonLd from './JsonLd.astro';
-import { site, indexable, ogImage, type NavItem } from '../../config/site';
+import { site, indexable, ogImage, ogImageAltFor, type NavItem } from '../../config/site';
 import { absoluteUrl, breadcrumbList, siteGraph, webPageNode, type JsonLdNode } from '../../lib/schema';
 import { withoutBase } from '../../lib/url';
+import { pageLocale, localeMeta, locales, defaultLocale, routes, type PathPair } from '../../i18n';
 import portrait from '../../assets/images/patrick-wolf-portrait-studio-sitzend.jpg';
 
 export interface SeoProps {
@@ -27,10 +30,16 @@ export interface SeoProps {
   noindex?: boolean;
 }
 
-type Props = SeoProps;
+type Props = SeoProps & {
+  /** Both language versions of this page (BaseLayout), null for pages without a pair. */
+  alternates: PathPair | null;
+};
 
-const { title, description, breadcrumbs, pageType, page, schema = [], ogType = 'website', published, modified, noindex = false } =
+const { title, description, breadcrumbs, pageType, page, schema = [], ogType = 'website', published, modified, noindex = false, alternates } =
   Astro.props;
+const locale = pageLocale(Astro.url);
+const otherLocales = locales.filter((candidate) => candidate !== locale);
+const imageAlt = ogImageAltFor(locale);
 
 const path = withoutBase(Astro.url.pathname);
 const canonical = absoluteUrl(path, Astro.site);
@@ -42,9 +51,9 @@ const graph = noindex
   ? null
   : {
       '@graph': [
-        ...siteGraph(Astro.site, new URL(portraitImage.src, Astro.site).href),
-        webPageNode({ path, name: title, description, type: pageType, breadcrumbs, extra: page }, Astro.site),
-        ...(breadcrumbs?.length ? [breadcrumbList(breadcrumbs, path, Astro.site)] : []),
+        ...siteGraph(Astro.site, new URL(portraitImage.src, Astro.site).href, locale),
+        webPageNode({ path, name: title, description, type: pageType, breadcrumbs, extra: page, locale }, Astro.site),
+        ...(breadcrumbs?.length ? [breadcrumbList(breadcrumbs, path, Astro.site, locale)] : []),
         ...schema,
       ],
     };
@@ -55,10 +64,19 @@ const graph = noindex
 <meta name="robots" content={robots} />
 <meta name="author" content={site.expert} />
 {!noindex && <link rel="canonical" href={canonical} />}
+{
+  !noindex && alternates && (
+    <>
+      {locales.map((code) => <link rel="alternate" hreflang={localeMeta[code].lang} href={absoluteUrl(alternates[code], Astro.site)} />)}
+      <link rel="alternate" hreflang="x-default" href={absoluteUrl(alternates[defaultLocale], Astro.site)} />
+    </>
+  )
+}
 
 <meta property="og:type" content={ogType} />
 <meta property="og:site_name" content={site.name} />
-<meta property="og:locale" content="de_DE" />
+<meta property="og:locale" content={localeMeta[locale].og} />
+{alternates && otherLocales.map((code) => <meta property="og:locale:alternate" content={localeMeta[code].og} />)}
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 {!noindex && <meta property="og:url" content={canonical} />}
@@ -66,16 +84,16 @@ const graph = noindex
 <meta property="og:image:type" content="image/png" />
 <meta property="og:image:width" content={String(ogImage.width)} />
 <meta property="og:image:height" content={String(ogImage.height)} />
-<meta property="og:image:alt" content={ogImage.alt} />
+<meta property="og:image:alt" content={imageAlt} />
 {ogType === 'article' && published && <meta property="article:published_time" content={published} />}
 {ogType === 'article' && modified && <meta property="article:modified_time" content={modified} />}
-{ogType === 'article' && <meta property="article:author" content={absoluteUrl('/ueber-mich/', Astro.site)} />}
+{ogType === 'article' && <meta property="article:author" content={absoluteUrl(routes.about[locale], Astro.site)} />}
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={image} />
-<meta name="twitter:image:alt" content={ogImage.alt} />
+<meta name="twitter:image:alt" content={imageAlt} />
 
-<link rel="alternate" type="text/plain" title="llms.txt" href={absoluteUrl('/llms.txt', Astro.site)} />
+<link rel="alternate" type="text/plain" title="llms.txt" href={absoluteUrl(`${routes.home[locale]}llms.txt`, Astro.site)} />
 {graph && <JsonLd data={graph} />}

@@ -1,0 +1,205 @@
+{
+  "dateLocale": "de-DE",
+  "site": {
+    "role": "Sachverständiger für Tätowierungen und Piercings",
+    "areaServed": "bundes- und europaweit",
+    "country": "Deutschland",
+    "ogImageAlt": "{office}: {expert}, {role}, {association} zertifiziert, Gutachten {areaServed}.",
+    "logoLabel": "{name}, {office}, zur Startseite"
+  },
+  "credentialLines": [
+    "Geprüfter und zertifizierter Gutachter des {associationShort} ({association})",
+    "Bestätigungs-Register Nr. {registerNumber}",
+    "Durch das {court} in einem Gerichtsverfahren als Sachverständiger bestellt",
+    "Mitglied im {membership}",
+    "Über {years} Jahre Berufserfahrung im Tattoo- und Piercingbereich"
+  ],
+  "court": "Landgericht Frankfurt am Main",
+  "nav": {
+    "services": "Leistungen",
+    "process": "Ablauf und Kosten",
+    "about": "Über mich",
+    "guides": "Ratgeber",
+    "faq": "FAQ",
+    "contact": "Kontakt",
+    "booking": "Termin buchen",
+    "imprint": "Impressum",
+    "privacy": "Datenschutz",
+    "audiences": "Für wen",
+    "main": "Hauptnavigation",
+    "mainMobile": "Hauptnavigation mobil",
+    "menuOpen": "Menü öffnen",
+    "menuClose": "Menü schließen",
+    "menu": "Menü",
+    "home": "Start",
+    "breadcrumbs": "Brotkrumen",
+    "skipLink": "Zum Inhalt springen"
+  },
+  "language": {
+    "switchLabel": "Sprache",
+    "switchTo": "Deutsche Fassung dieser Seite",
+    "short": "DE",
+    "hint": "Diese Website gibt es auch auf Deutsch.",
+    "hintAction": "Zur deutschen Fassung",
+    "hintDismiss": "Hinweis schließen",
+    "hintRegion": "Sprachhinweis"
+  },
+  "contactLabels": {
+    "phone": "Telefon",
+    "email": "E-Mail",
+    "call": "Anrufen:",
+    "emailTo": "E-Mail an",
+    "writeEmail": "E-Mail schreiben"
+  },
+  "cta": {
+    "enquiry": "Anfrage stellen",
+    "enquiryNote": ["Anfrage per Telefon", "oder E-Mail"],
+    "bookingNote": ["Erstberatung kostenlos,", "bis zu 60 Minuten"],
+    "contactBand": "Kontakt aufnehmen"
+  },
+  "footer": {
+    "label": "Fußzeile",
+    "pages": "Seiten",
+    "audiences": "Für wen",
+    "audiencePrefix": "Für",
+    "certification": "Zertifizierung",
+    "certified": "Geprüfter und zertifizierter Gutachter des {associationShort}",
+    "registerShort": "Reg.-Nr. {registerNumber}",
+    "areaServed": "Einsatzgebiet {areaServed}",
+    "cookieSettings": "Cookie-Einstellungen"
+  },
+  "pageHeader": {
+    "updated": "Stand:"
+  },
+  "article": {
+    "author": "Autor",
+    "by": "Von",
+    "published": "Veröffentlicht",
+    "publishedOn": "Veröffentlicht am",
+    "readingTime": "Lesezeit",
+    "minute": "Minute",
+    "minutes": "Minuten"
+  },
+  "steps": {
+    "step": "Schritt",
+    "prepare": "Sie bereiten vor"
+  },
+  "seal": {
+    "alt": "Siegel {associationShort} {year}, zertifizierter Sachverständiger, Bestätigungs-Register Nr. {registerNumber}"
+  },
+  "trust": {
+    "label": "Qualifikation und Nachweise",
+    "badgeAlt": "Abzeichen geprüfter und zertifizierter Gutachter des DGuSV",
+    "certifiedBy": "Zertifiziert durch",
+    "register": "Bestätigungs-Register Nr. {registerNumber}",
+    "experience": "Erfahrung",
+    "experienceValue": "Über {years} Jahre",
+    "experienceNote": "in der Tattoo- und Piercingbranche",
+    "appointed": "Gerichtlich bestellt",
+    "appointedValue": "LG Frankfurt am Main",
+    "appointedNote": "in einem Gerichtsverfahren als Sachverständiger",
+    "member": "Mitglied",
+    "area": "Einsatzgebiet",
+    "areaValue": "Bundesweit",
+    "areaNote": "und europaweit",
+    "independent": "Unabhängig",
+    "independentValue": "Nach Tatsachen",
+    "independentNote": "nicht nach dem Auftraggeber"
+  },
+  "expertCard": {
+    "label": "Ihr Sachverständiger",
+    "portraitAlt": "Porträt von {expert}",
+    "certified": "Geprüft und zertifiziert vom {associationShort}",
+    "experience": "Über {years} Jahre in der Tattoo- und Piercingbranche",
+    "link": "Qualifikation von {expert}"
+  },
+  "courtReference": {
+    "label": "Gerichtliche Bestellung",
+    "court": "Gericht",
+    "appointment": "Bestellung als Sachverständiger",
+    "role": "Als Sachverständiger in einem Gerichtsverfahren bestellt",
+    "note": "Die gerichtliche Bestellung in einem einzelnen Verfahren stellt keine öffentliche Bestellung und Vereidigung als Sachverständiger dar."
+  },
+  "nextStep": {
+    "label": "Ihr nächster Schritt",
+    "book": "Kostenlose Erstberatung buchen"
+  },
+  "enquiryNote": {
+    "title": "Vor Ihrer Anfrage"
+  },
+  "prepare": {
+    "label": "Vorbereitung",
+    "listTitle": "Hilfreiche Unterlagen",
+    "consultation": "Am Anfang steht eine kostenlose Erstberatung von bis zu 60 Minuten. Kostenpflichtig wird es erst nach einer schriftlichen Beauftragung.",
+    "processLink": "Ablauf und Kosten im Detail"
+  },
+  "consent": {
+    "eyebrow": "Datenschutz",
+    "noticeTitle": "Darf der Buchungskalender von cal.com laden?",
+    "noticeText": "Diese Website setzt keine Cookies zur Analyse oder Werbung. Für die Online-Terminbuchung binden wir den Kalender von cal.com ein (Cal.com, Inc., USA). Lädt er, überträgt Ihr Browser unter anderem Ihre IP-Adresse an cal.com in den USA, und cal.com setzt ein Cookie zur Abwehr automatisierter Zugriffe. Das geschieht nur mit Ihrer Einwilligung.",
+    "noticeChoice": "Ohne Einwilligung funktioniert die Website vollständig, den Termin vereinbaren Sie dann telefonisch oder per E-Mail. Ihre Wahl ändern oder widerrufen Sie jederzeit unter Cookie-Einstellungen am Ende jeder Seite.",
+    "noticeMore": "Mehr in der Datenschutzerklärung",
+    "reject": "Ablehnen",
+    "accept": "Akzeptieren",
+    "settings": "Einstellungen",
+    "settingsTitle": "Cookie-Einstellungen",
+    "closeUnchanged": "Schließen ohne Änderung",
+    "necessary": "Notwendig",
+    "alwaysOn": "Immer aktiv",
+    "necessaryText": "Speichert Ihre Auswahl in diesem Browser (localStorage, Eintrag tg-consent mit Fassung des Hinweises, Zeitpunkt und Auswahl), damit wir nicht erneut fragen. Ohne Kennung, nur von dieser Website gelesen. Keine Einwilligung nötig, § 25 Abs. 2 Nr. 2 TDDDG.",
+    "bookingTitle": "Externe Medien: Terminbuchung über cal.com",
+    "bookingText": "Lädt den Buchungskalender der Cal.com, Inc., San Francisco, USA, auf der Startseite und der Seite Termin buchen, sobald er sichtbar wird. Dabei erhält cal.com Ihre IP-Adresse, Angaben zu Browser und Gerät und die Adresse der Seite. Der Dienstleister Cloudflare setzt das Cookie __cf_bm gegen automatisierte Zugriffe (30 Minuten), technische Fehlerberichte gehen an Sentry. Übermittlung in die USA auf Grundlage des EU-U.S. Data Privacy Framework. Rechtsgrundlage ist Ihre Einwilligung (Art. 6 Abs. 1 lit. a DSGVO, § 25 Abs. 1 TDDDG), die Sie jederzeit hier widerrufen können. Ohne sie bleibt der Kalender aus, Termine gibt es telefonisch oder per E-Mail.",
+    "detailsBefore": "Einzelheiten in der",
+    "detailsLink": "Datenschutzerklärung",
+    "save": "Auswahl speichern"
+  },
+  "booking": {
+    "statusLoading": "Der Kalender wird geladen.",
+    "statusReady": "Der Kalender ist geladen.",
+    "statusFailed": "Der Kalender konnte nicht geladen werden. Sie können direkt bei cal.com, telefonisch oder per E-Mail einen Termin vereinbaren.",
+    "duration": "Dauer",
+    "durationValue": "Bis zu 60 Minuten",
+    "cost": "Kosten",
+    "costValue": "Keine, unverbindlich",
+    "conversation": "Gespräch",
+    "confirmation": "Bestätigung",
+    "confirmationValue": "Per E-Mail, mit Links zum Verschieben und Absagen",
+    "weekdays": ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"],
+    "timezone": "Zeitzone",
+    "timezoneDevice": "Die Ihres Geräts",
+    "timezoneHint": "Der Kalender zeigt freie Uhrzeiten in dieser Zeitzone.",
+    "demoLabel": "Vorschau",
+    "demoText": "Der Kalender unten ist ein Demo-Kalender für die Vorschau dieser Website. Über ihn kommt kein Termin mit {expert} zustande, und seine Termindauer weicht von der Erstberatung ab. Bis der echte Kalender freigeschaltet ist, vereinbaren Sie die Erstberatung telefonisch oder per E-Mail.",
+    "frameLabel": "Buchungskalender",
+    "consentTitle": "Der Kalender kommt von cal.com.",
+    "consentText": "Damit Sie hier direkt einen Termin wählen können, binden wir den Buchungskalender der Cal.com, Inc. (USA) ein. Er lädt erst, wenn Sie zustimmen. Dabei überträgt Ihr Browser unter anderem Ihre IP-Adresse an cal.com in den USA, und cal.com setzt ein Cookie zur Abwehr automatisierter Zugriffe. Ihre Einwilligung können Sie jederzeit unter Cookie-Einstellungen am Ende der Seite widerrufen. Einzelheiten in der",
+    "consentLink": "Datenschutzerklärung",
+    "consentButton": "Kalender laden und zustimmen",
+    "withoutCal": "Ohne cal.com",
+    "withoutCalText": "Vereinbaren Sie die Erstberatung telefonisch oder per E-Mail.",
+    "fallbackNoJs": "Der Buchungskalender braucht JavaScript.",
+    "fallbackFailed": "Der Buchungskalender konnte nicht geladen werden.",
+    "fallbackText": "Vereinbaren Sie die kostenlose Erstberatung telefonisch oder per E-Mail, oder buchen Sie direkt auf der Buchungsseite von cal.com.",
+    "calPage": "Buchungsseite bei cal.com",
+    "newWindow": "(öffnet in einem neuen Fenster)",
+    "prepareLink": "Was Sie zur Erstberatung bereitlegen",
+    "dataNoteBefore": "Für die Buchung braucht cal.com nur Name und E-Mail-Adresse, Fotos und Unterlagen gehören nicht in den Kalender. Der Kalender lädt nur mit Ihrer Einwilligung, und erst wenn dieser Bereich sichtbar wird. Was dabei verarbeitet wird, steht in der",
+    "dataNoteLink": "Datenschutzerklärung unter Terminbuchung",
+    "deviceSuffix": "Ihr Gerät",
+    "regions": {
+      "Africa": "Afrika",
+      "America": "Amerika",
+      "Antarctica": "Antarktis",
+      "Arctic": "Arktis",
+      "Asia": "Asien",
+      "Atlantic": "Atlantik",
+      "Australia": "Australien",
+      "Europe": "Europa",
+      "Indian": "Indischer Ozean",
+      "Pacific": "Pazifik"
+    }
+  },
+  "schema": {
+    "breadcrumbHome": "Start"
+  }
+}

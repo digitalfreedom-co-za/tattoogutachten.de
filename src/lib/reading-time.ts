@@ -1,4 +1,6 @@
-/** Words per minute for German running text, a common reading speed estimate. */
+import { t, type Locale } from '../i18n';
+
+/** Words per minute for running text, a common reading speed estimate. */
 const WORDS_PER_MINUTE = 200;
 
 /** Reading time in whole minutes for a Markdown body, at least one. */
@@ -10,8 +12,11 @@ export function readingMinutes(markdown: string): number {
   return Math.max(1, Math.round(words / WORDS_PER_MINUTE));
 }
 
-/** Reading time as running text, e.g. "3 Minuten Lesezeit". */
-export function readingTimeLabel(markdown: string): string {
-  const minutes = readingMinutes(markdown);
-  return `${minutes} ${minutes === 1 ? 'Minute' : 'Minuten'} Lesezeit`;
+/** Reading time as running text, e.g. "3 Minuten Lesezeit" or "3 minutes reading time". */
+export function readingTimeText(minutes: number, locale: Locale): string {
+  const copy = t(locale).article;
+  const unit = minutes === 1 ? copy.minute : copy.minutes;
+  return `${minutes} ${unit} ${locale === 'de' ? copy.readingTime : copy.readingTime.toLowerCase()}`;
 }
+
+export const readingTimeLabel = (markdown: string, locale: Locale): string => readingTimeText(readingMinutes(markdown), locale);

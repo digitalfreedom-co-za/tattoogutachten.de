@@ -1,32 +1,32 @@
 ---
 // About Patrick Wolf: credentials as a CV style list, the path from tattoo artist to expert,
 // court work, independence and the separation of studio and expert work, working principles.
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Container from '../components/ui/Container.astro';
-import Breadcrumbs from '../components/ui/Breadcrumbs.astro';
-import Eyebrow from '../components/ui/Eyebrow.astro';
-import Section from '../components/ui/Section.astro';
-import Button from '../components/ui/Button.astro';
-import KeyFacts, { type Fact } from '../components/ui/KeyFacts.astro';
-import CourtReference from '../components/ui/CourtReference.astro';
-import Quote from '../components/ui/Quote.astro';
-import Seal from '../components/ui/Seal.astro';
-import Icon from '../components/ui/Icon.astro';
-import ArtImage from '../components/ui/ArtImage.astro';
-import CtaBand from '../components/ui/CtaBand.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/ui/Container.astro';
+import Breadcrumbs from '../../components/ui/Breadcrumbs.astro';
+import Eyebrow from '../../components/ui/Eyebrow.astro';
+import Section from '../../components/ui/Section.astro';
+import Button from '../../components/ui/Button.astro';
+import KeyFacts, { type Fact } from '../../components/ui/KeyFacts.astro';
+import CourtReference from '../../components/ui/CourtReference.astro';
+import Quote from '../../components/ui/Quote.astro';
+import Seal from '../../components/ui/Seal.astro';
+import Icon from '../../components/ui/Icon.astro';
+import ArtImage from '../../components/ui/ArtImage.astro';
+import CtaBand from '../../components/ui/CtaBand.astro';
 import { Image, getImage } from 'astro:assets';
-import { site, contact, credentials, contentUpdated, primaryCta } from '../config/site';
-import { practice } from '../config/practice';
-import { url } from '../lib/url';
-import { ids, ref } from '../lib/schema';
+import { site, contact, credentials, contentUpdated, primaryCta } from '../../config/site';
+import { practice } from '../../config/practice';
+import { url } from '../../lib/url';
+import { ids, ref } from '../../lib/schema';
 
-const breadcrumbs = [{ label: 'Über mich', href: '/ueber-mich/' }];
+const breadcrumbs = [{ label: 'Über mich', href: '/de/ueber-mich/' }];
 
-import portrait from '../assets/images/patrick-wolf-portrait-studio-sitzend.jpg';
-import atWork from '../assets/images/patrick-wolf-beim-taetowieren.webp';
-import studio from '../assets/images/patrick-wolf-studio-weit.webp';
-import badge from '../assets/images/rw-gutachterabzeichen-dgusv-logo.png';
-import sealImage from '../assets/images/siegel-dgusv-2026.png';
+import portrait from '../../assets/images/patrick-wolf-portrait-studio-sitzend.jpg';
+import atWork from '../../assets/images/patrick-wolf-beim-taetowieren.webp';
+import studio from '../../assets/images/patrick-wolf-studio-weit.webp';
+import badge from '../../assets/images/rw-gutachterabzeichen-dgusv-logo.png';
+import sealImage from '../../assets/images/siegel-dgusv-2026.png';
 
 /** The seal at a size where its print (register number, year) is legible, opened from the evidence block. */
 const sealLarge = await getImage({ src: sealImage, width: 1200, format: 'png' });
@@ -226,7 +226,7 @@ const principles = [
     </p>
     <CourtReference />
     <p class="mt-10" data-reveal>
-      <Button href="/leistungen/gerichtsgutachten/" variant="text">Gutachten für Gerichte</Button>
+      <Button href="/de/leistungen/gerichtsgutachten/" variant="text">Gutachten für Gerichte</Button>
     </p>
   </Section>
 
@@ -302,15 +302,15 @@ const principles = [
   <Section id="weiter" label="Weiterlesen" title="Was ich für Sie prüfe und wie es abläuft.">
     <ul class="grid gap-4 border-t border-ink pt-6 md:grid-cols-3 md:gap-x-8" data-reveal-group>
       <li data-reveal>
-        <a class="link-ink inline-flex min-h-11 items-center font-serif text-h4" href={url('/leistungen/')}>Alle Leistungen</a>
+        <a class="link-ink inline-flex min-h-11 items-center font-serif text-h4" href={url('/de/leistungen/')}>Alle Leistungen</a>
         <p class="mt-1 text-sm text-graphite">Tattoo-, Hygiene- und Piercing-Gutachten, Privat- und Gerichtsgutachten, Streitfälle.</p>
       </li>
       <li data-reveal>
-        <a class="link-ink inline-flex min-h-11 items-center font-serif text-h4" href={url('/ablauf-kosten/')}>Ablauf und Kosten</a>
+        <a class="link-ink inline-flex min-h-11 items-center font-serif text-h4" href={url('/de/ablauf-kosten/')}>Ablauf und Kosten</a>
         <p class="mt-1 text-sm text-graphite">Fünf Schritte, kostenlose Erstberatung, Kosten nach Aufwand.</p>
       </li>
       <li data-reveal>
-        <a class="link-ink inline-flex min-h-11 items-center font-serif text-h4" href={url('/haeufige-fragen/')}>Häufige Fragen</a>
+        <a class="link-ink inline-flex min-h-11 items-center font-serif text-h4" href={url('/de/haeufige-fragen/')}>Häufige Fragen</a>
         <p class="mt-1 text-sm text-graphite">Antworten zu Begutachtung, Auftrag, Gericht und Kosten.</p>
       </li>
     </ul>

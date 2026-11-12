@@ -3,27 +3,27 @@
 // which shows the consultation at a glance above the frame), then the consultation in detail, what to
 // prepare, what happens after booking and the booking FAQ. Anchor links in the header reach the
 // explanations first for visitors who want them.
-import BaseLayout from '../layouts/BaseLayout.astro';
-import PageHeader from '../components/ui/PageHeader.astro';
-import Section from '../components/ui/Section.astro';
-import Button from '../components/ui/Button.astro';
-import KeyFacts, { type Fact } from '../components/ui/KeyFacts.astro';
-import Checklist from '../components/ui/Checklist.astro';
-import Steps from '../components/ui/Steps.astro';
-import Faq from '../components/ui/Faq.astro';
-import CtaBand from '../components/ui/CtaBand.astro';
-import Icon from '../components/ui/Icon.astro';
-import BookingEmbed from '../components/booking/BookingEmbed.astro';
-import { contact, contentUpdated, credentials, site, type NavItem } from '../config/site';
-import { practice } from '../config/practice';
-import { steps, preparationChecklist, afterBookingSteps } from '../data/process';
-import { bookingFaq } from '../data/faq';
-import { absoluteUrl, ids, ref } from '../lib/schema';
-import { url } from '../lib/url';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/ui/PageHeader.astro';
+import Section from '../../components/ui/Section.astro';
+import Button from '../../components/ui/Button.astro';
+import KeyFacts, { type Fact } from '../../components/ui/KeyFacts.astro';
+import Checklist from '../../components/ui/Checklist.astro';
+import Steps from '../../components/ui/Steps.astro';
+import Faq from '../../components/ui/Faq.astro';
+import CtaBand from '../../components/ui/CtaBand.astro';
+import Icon from '../../components/ui/Icon.astro';
+import BookingEmbed from '../../components/booking/BookingEmbed.astro';
+import { contact, contentUpdated, credentials, site, type NavItem } from '../../config/site';
+import { practice } from '../../config/practice';
+import { steps, preparationChecklist, afterBookingSteps } from '../../data/process';
+import { bookingFaq } from '../../data/faq';
+import { absoluteUrl, ids, ref } from '../../lib/schema';
+import { url } from '../../lib/url';
 
 const title = 'Termin buchen: kostenlose Erstberatung zum Tattoo-Gutachten | Patrick Wolf';
 const description = `Online buchen: kostenlose Erstberatung bei Tattoo Gutachter ${site.expert}, bis zu 60 Minuten, unverbindlich, bundesweit. Mit Checkliste zur Vorbereitung.`;
-const breadcrumbs: NavItem[] = [{ label: 'Termin buchen', href: '/termin/' }];
+const breadcrumbs: NavItem[] = [{ label: 'Termin buchen', href: '/de/termin/' }];
 
 const consultationFacts: Fact[] = [
   { term: 'Dauer', value: 'Bis zu 60 Minuten' },
@@ -41,11 +41,11 @@ const page = {
   potentialAction: {
     '@type': 'ReserveAction',
     name: 'Kostenlose Erstberatung buchen',
-    target: absoluteUrl('/termin/#termin', Astro.site),
+    target: absoluteUrl('/de/termin/#termin', Astro.site),
     object: {
       '@type': 'Service',
       name: 'Kostenlose Erstberatung zum Tattoo-Gutachten',
-      url: absoluteUrl('/termin/', Astro.site),
+      url: absoluteUrl('/de/termin/', Astro.site),
       provider: ref(ids(Astro.site).office),
     },
   },
@@ -110,7 +110,7 @@ const page = {
         <p class="text-graphite">
           Gleichmäßiges Tageslicht ohne Blitz, keine Filter, eine Übersicht und scharfe Nahaufnahmen der auffälligen Stellen,
           dazu die Originaldateien. Wie das am besten gelingt, zeigt der Ratgeber
-          <a class="link-ink" href={url('/ratgeber/tattoo-fotografieren-fuer-die-begutachtung/')}>Tattoo fotografieren für die Begutachtung</a>.
+          <a class="link-ink" href={url('/de/ratgeber/tattoo-fotografieren-fuer-die-begutachtung/')}>Tattoo fotografieren für die Begutachtung</a>.
         </p>
       </div>
     </div>
@@ -124,14 +124,14 @@ const page = {
   >
     <Steps steps={afterBookingSteps} />
     <p class="mt-12" data-reveal>
-      <Button href="/ablauf-kosten/" variant="text">Wie es nach einer Beauftragung weitergeht</Button>
+      <Button href="/de/ablauf-kosten/" variant="text">Wie es nach einer Beauftragung weitergeht</Button>
     </p>
   </Section>
 
   <Section id="fragen" label="Häufige Fragen" title="Fragen zur Terminbuchung" tone="deep">
     <p slot="note">
       Alle Fragen nach Themen:
-      <a class="link-ink not-italic" href={url('/haeufige-fragen/')}>häufige Fragen zum Tattoogutachten</a>.
+      <a class="link-ink not-italic" href={url('/de/haeufige-fragen/')}>häufige Fragen zum Tattoogutachten</a>.
     </p>
     <Faq items={bookingFaq} variant="list" />
   </Section>
@@ -141,6 +141,6 @@ const page = {
     text="Rufen Sie an oder schreiben Sie eine E-Mail. Die Erstberatung lässt sich genauso gut telefonisch vereinbaren."
     action="contact"
     ctaLabel="Oder online im Kalender buchen"
-    ctaHref="/termin/#termin"
+    ctaHref="/de/termin/#termin"
   />
 </BaseLayout>

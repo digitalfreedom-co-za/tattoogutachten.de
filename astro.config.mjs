@@ -1,4 +1,7 @@
 import { defineConfig, fontProviders } from 'astro/config';
+import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import sitemap from '@astrojs/sitemap';
 import { unified } from '@astrojs/markdown-remark';
 import tailwindcss from '@tailwindcss/vite';
@@ -29,6 +32,38 @@ function fontsourceVariants(pkg, weight, styles) {
   }));
 }
 
+/**
+ * Adds the hreflang alternates to the sitemap written by @astrojs/sitemap, exactly as each built page
+ * declares them in its <head> (src/components/seo/SeoHead.astro). The sitemap integration only pairs
+ * pages whose paths differ by the locale prefix; ours translate every segment (/services/ and
+ * /de/leistungen/), and reading the built HTML keeps sitemap and pages from ever contradicting.
+ */
+function sitemapAlternates(base) {
+  const root = base.replace(/\/+$/, '');
+  return {
+    name: 'sitemap-alternates',
+    hooks: {
+      'astro:build:done': ({ dir }) => {
+        const outDir = fileURLToPath(dir);
+        for (const name of readdirSync(outDir).filter((file) => /^sitemap-\d+\.xml$/.test(file))) {
+          const file = join(outDir, name);
+          const xml = readFileSync(file, 'utf8').replace(/<url><loc>([^<]+)<\/loc>(.*?)<\/url>/g, (_, loc, rest) => {
+            const pathname = new URL(loc).pathname.slice(root.length);
+            const html = join(outDir, pathname, 'index.html');
+            const links = existsSync(html)
+              ? [...readFileSync(html, 'utf8').matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"/g)].map(
+                  ([, lang, href]) => `<xhtml:link rel="alternate" hreflang="${lang}" href="${href}"/>`,
+                )
+              : [];
+            return `<url><loc>${loc}</loc>${rest}${links.join('')}</url>`;
+          });
+          writeFileSync(file, xml);
+        }
+      },
+    },
+  };
+}
+
 export default defineConfig({
   site: SITE.url,
   base: SITE.base,
@@ -36,8 +71,12 @@ export default defineConfig({
   // Astro 7 defaults to 'jsx', which drops the whitespace between inline elements (link text, labels, footer lines)
   // all over the copy. true keeps the Astro 6 HTML compression, verified against the Astro 6 build text.
   compressHTML: true,
-  // The sitemap lists every page except the 404, in preview and launch mode alike (see indexable in src/config/site.ts).
-  integrations: [sitemap({ filter: (page) => !/\/(404|fuer-rechtsanwaelte-und-gerichte)\/?$/.test(page) })],
+  // The sitemap lists every page except the 404 and the redirect stub, in preview and launch mode alike
+  // (see indexable in src/config/site.ts), with the hreflang alternates of each page.
+  integrations: [
+    sitemap({ filter: (page) => !/\/(404|fuer-rechtsanwaelte-und-gerichte)\/?$/.test(page) }),
+    sitemapAlternates(SITE.base),
+  ],
   // Ratgeber Markdown: internal links get the base path, table rows get row headers; SmartyPants stays off because the
   // copy rules forbid typographic quotes and dashes.
   markdown: {

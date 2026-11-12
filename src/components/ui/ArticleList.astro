@@ -6,6 +6,7 @@ import Icon from './Icon.astro';
 import { url } from '../../lib/url';
 import { articleHref, type Article } from '../../lib/ratgeber';
 import { readingTimeLabel } from '../../lib/reading-time';
+import { pageLocale } from '../../i18n';
 
 interface Props {
   articles: Article[];
@@ -33,7 +34,7 @@ const { articles, headingLevel: Heading = 'h3', showLead = true, compact = false
         >
           <div class="md:col-span-3">
             <p class="label text-oxblood">{article.data.kicker}</p>
-            {!compact && <p class="mt-1 text-sm text-graphite">{readingTimeLabel(article.body ?? '')}</p>}
+            {!compact && <p class="mt-1 text-sm text-graphite">{readingTimeLabel(article.body ?? '', pageLocale(Astro.url))}</p>}
           </div>
           <div class="min-w-0 md:col-span-8">
             <Heading class={compact ? 'text-h4' : 'text-h3'}>

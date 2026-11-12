@@ -3,6 +3,7 @@
 import { Image } from 'astro:assets';
 import seal from '../../assets/images/siegel-dgusv-2026.png';
 import { credentials } from '../../config/site';
+import { pageLocale, t, fill } from '../../i18n';
 
 interface Props {
   width?: number;
@@ -14,7 +15,7 @@ const { width = 120, class: className } = Astro.props;
 
 <Image
   src={seal}
-  alt={`Siegel ${credentials.associationShort} ${credentials.sealYear}, zertifizierter Sachverständiger, Bestätigungs-Register Nr. ${credentials.registerNumber}`}
+  alt={fill(t(pageLocale(Astro.url)).seal.alt, { associationShort: credentials.associationShort, year: credentials.sealYear, registerNumber: credentials.registerNumber })}
   width={width}
   densities={[1, 2]}
   class:list={['h-auto', className]}

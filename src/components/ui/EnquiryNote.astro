@@ -2,7 +2,8 @@
 // Short notes next to booking and contact actions: deadline, confidentiality, documents for the
 // first contact. Content from src/data/enquiry.ts. Hairline rows like a report margin, no numbering.
 import Icon from './Icon.astro';
-import { enquiryPoints } from '../../data/enquiry';
+import { enquiryContent } from '../../data';
+import { pageLocale, t } from '../../i18n';
 
 interface Props {
   title?: string;
@@ -10,7 +11,9 @@ interface Props {
   class?: string;
 }
 
-const { title = 'Vor Ihrer Anfrage', tone = 'paper', class: className } = Astro.props;
+const locale = pageLocale(Astro.url);
+const { enquiryPoints } = enquiryContent(locale);
+const { title = t(locale).enquiryNote.title, tone = 'paper', class: className } = Astro.props;
 const onInk = tone === 'ink';
 ---
 

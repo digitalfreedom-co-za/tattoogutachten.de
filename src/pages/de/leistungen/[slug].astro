@@ -1,23 +1,23 @@
 ---
 // One page per service, generated from src/data/services.ts: answer first definition,
 // scope, result, service specific topics, typical questions, related services, booking CTA.
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import PageHeader from '../../components/ui/PageHeader.astro';
-import Section from '../../components/ui/Section.astro';
-import Button from '../../components/ui/Button.astro';
-import Card from '../../components/ui/Card.astro';
-import Checklist from '../../components/ui/Checklist.astro';
-import ExpertCard from '../../components/ui/ExpertCard.astro';
-import CompareTable from '../../components/ui/CompareTable.astro';
-import CourtReference from '../../components/ui/CourtReference.astro';
-import Faq from '../../components/ui/Faq.astro';
-import Icon from '../../components/ui/Icon.astro';
-import CtaBand from '../../components/ui/CtaBand.astro';
-import { contact, contentUpdated, primaryCta } from '../../config/site';
-import { services, serviceHref, serviceBySlug, serviceScopeNote, reportComparison, type Service } from '../../data/services';
-import { faqForService } from '../../data/faq';
-import { url } from '../../lib/url';
-import { ref, serviceId, serviceNode } from '../../lib/schema';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PageHeader from '../../../components/ui/PageHeader.astro';
+import Section from '../../../components/ui/Section.astro';
+import Button from '../../../components/ui/Button.astro';
+import Card from '../../../components/ui/Card.astro';
+import Checklist from '../../../components/ui/Checklist.astro';
+import ExpertCard from '../../../components/ui/ExpertCard.astro';
+import CompareTable from '../../../components/ui/CompareTable.astro';
+import CourtReference from '../../../components/ui/CourtReference.astro';
+import Faq from '../../../components/ui/Faq.astro';
+import Icon from '../../../components/ui/Icon.astro';
+import CtaBand from '../../../components/ui/CtaBand.astro';
+import { contact, contentUpdated, primaryCta } from '../../../config/site';
+import { services, serviceHref, serviceBySlug, serviceScopeNote, reportComparison, type Service } from '../../../data/services';
+import { faqForService } from '../../../data/faq';
+import { url } from '../../../lib/url';
+import { ref, serviceId, serviceNode } from '../../../lib/schema';
 
 export function getStaticPaths() {
   return services.map((service) => ({ params: { slug: service.slug }, props: { service } }));
@@ -32,7 +32,7 @@ const [answer, ...moreIntro] = service.intro;
 const questions = faqForService(service.slug);
 const related = service.related.map(serviceBySlug);
 const breadcrumbs = [
-  { label: 'Leistungen', href: '/leistungen/' },
+  { label: 'Leistungen', href: '/de/leistungen/' },
   { label: service.name, href: serviceHref(service) },
 ];
 
@@ -45,7 +45,7 @@ const breadcrumbs = [
   description={service.metaDescription}
   breadcrumbs={breadcrumbs}
   page={{ mainEntity: ref(serviceId(service, Astro.site)) }}
-  schema={[serviceNode(service, Astro.site)]}
+  schema={[serviceNode(service, Astro.site, 'de')]}
 >
   <PageHeader
     label={service.kicker}
@@ -65,7 +65,7 @@ const breadcrumbs = [
       ) : (
         <>
           <Button href={primaryCta.href} icon="calendar">Kostenlose Erstberatung</Button>
-          <Button href="/ablauf-kosten/" variant="text">Ablauf und Kosten</Button>
+          <Button href="/de/ablauf-kosten/" variant="text">Ablauf und Kosten</Button>
         </>
       )
     }
@@ -151,7 +151,7 @@ const breadcrumbs = [
       <Section id="fragen" label="Typische Fragen" title={`Häufige Fragen zum Thema ${service.name}`} density="support" axis>
         <p slot="note">
           Alle Antworten nach Themen:
-          <a class="link-ink not-italic" href={url('/haeufige-fragen/')}>häufige Fragen zum Tattoogutachten</a>.
+          <a class="link-ink not-italic" href={url('/de/haeufige-fragen/')}>häufige Fragen zum Tattoogutachten</a>.
         </p>
         <Faq items={questions} name={`faq-${service.slug}`} />
       </Section>
@@ -174,7 +174,7 @@ const breadcrumbs = [
         service.enquiry ? (
           <Button href={service.enquiry.audienceHref} variant="text">{service.enquiry.audienceLabel}</Button>
         ) : (
-          <Button href="/ablauf-kosten/" variant="text">Die fünf Schritte und die Kosten im Detail</Button>
+          <Button href="/de/ablauf-kosten/" variant="text">Die fünf Schritte und die Kosten im Detail</Button>
         )
       }
     </p>

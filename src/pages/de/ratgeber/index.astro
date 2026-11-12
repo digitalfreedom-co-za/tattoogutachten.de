@@ -1,19 +1,19 @@
 ---
 // Ratgeber index: all articles from the content collection, the audience pages and a CTA.
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import PageHeader from '../../components/ui/PageHeader.astro';
-import Section from '../../components/ui/Section.astro';
-import Card from '../../components/ui/Card.astro';
-import ArticleList from '../../components/ui/ArticleList.astro';
-import CtaBand from '../../components/ui/CtaBand.astro';
-import { site, credentials, contentUpdated } from '../../config/site';
-import { audiences, audienceHref } from '../../data/audiences';
-import { getArticles, articleHref } from '../../lib/ratgeber';
-import { absoluteUrl, ids, ref } from '../../lib/schema';
-import { url } from '../../lib/url';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PageHeader from '../../../components/ui/PageHeader.astro';
+import Section from '../../../components/ui/Section.astro';
+import Card from '../../../components/ui/Card.astro';
+import ArticleList from '../../../components/ui/ArticleList.astro';
+import CtaBand from '../../../components/ui/CtaBand.astro';
+import { site, credentials, contentUpdated } from '../../../config/site';
+import { audiences, audienceHref } from '../../../data/audiences';
+import { getArticles, articleHref } from '../../../lib/ratgeber';
+import { absoluteUrl, ids, ref } from '../../../lib/schema';
+import { url } from '../../../lib/url';
 
-const articles = await getArticles();
-const breadcrumbs = [{ label: 'Ratgeber', href: '/ratgeber/' }];
+const articles = await getArticles('de');
+const breadcrumbs = [{ label: 'Ratgeber', href: '/de/ratgeber/' }];
 const description = `Ratgeber von Tattoo Gutachter ${site.expert}: Tattoo misslungen, Mangel oder Geschmack, Privat- oder Gerichtsgutachten, Fotos, Hygiene, Piercing Probleme.`;
 
 const page = {
@@ -49,7 +49,7 @@ const page = {
   <Section id="beitraege" label="Beiträge" title="Alle Beiträge">
     <p slot="note">
       Gerade erst bemerkt, dass etwas nicht stimmt? Dann beginnen Sie mit
-      <a class="link-ink not-italic" href={url('/ratgeber/tattoo-misslungen-was-tun/')}>Tattoo misslungen, was jetzt?</a>
+      <a class="link-ink not-italic" href={url('/de/ratgeber/tattoo-misslungen-was-tun/')}>Tattoo misslungen, was jetzt?</a>
     </p>
     <ArticleList articles={articles} />
   </Section>

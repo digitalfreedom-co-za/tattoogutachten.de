@@ -8,6 +8,7 @@ import badge from '../../assets/images/rw-gutachterabzeichen-dgusv-logo.png';
 import Seal from './Seal.astro';
 import Container from './Container.astro';
 import { credentials } from '../../config/site';
+import { pageLocale, t, fill } from '../../i18n';
 
 interface Props {
   class?: string;
@@ -22,29 +23,31 @@ interface Fact {
   detail?: string;
 }
 
+const copy = t(pageLocale(Astro.url)).trust;
+
 const principal: Fact[] = [
   {
-    label: 'Zertifiziert durch',
+    label: copy.certifiedBy,
     value: credentials.associationShort,
     note: credentials.association,
-    detail: `Bestätigungs-Register Nr. ${credentials.registerNumber}`,
+    detail: fill(copy.register, { registerNumber: credentials.registerNumber }),
   },
-  { label: 'Erfahrung', value: `Über ${credentials.yearsInTrade} Jahre`, note: 'in der Tattoo- und Piercingbranche' },
-  { label: 'Gerichtlich bestellt', value: 'LG Frankfurt am Main', note: 'in einem Gerichtsverfahren als Sachverständiger' },
+  { label: copy.experience, value: fill(copy.experienceValue, { years: credentials.yearsInTrade }), note: copy.experienceNote },
+  { label: copy.appointed, value: copy.appointedValue, note: copy.appointedNote },
 ];
 
 const secondary: Fact[] = [
-  { label: 'Mitglied', value: credentials.membership },
-  { label: 'Einsatzgebiet', value: 'Bundesweit', note: 'und europaweit' },
-  { label: 'Unabhängig', value: 'Nach Tatsachen', note: 'nicht nach dem Auftraggeber' },
+  { label: copy.member, value: credentials.membership },
+  { label: copy.area, value: copy.areaValue, note: copy.areaNote },
+  { label: copy.independent, value: copy.independentValue, note: copy.independentNote },
 ];
 ---
 
-<section aria-label="Qualifikation und Nachweise" class:list={['border-y border-ink bg-paper-deep', className]}>
+<section aria-label={copy.label} class:list={['border-y border-ink bg-paper-deep', className]}>
   <Container class="grid gap-8 py-8 md:py-10 xl:grid-cols-[auto_minmax(0,1fr)] xl:items-start xl:gap-12">
     <div class="flex flex-wrap items-center gap-5" data-reveal>
       <Seal width={84} class="w-16 md:w-[84px]" />
-      <Image src={badge} alt="Abzeichen geprüfter und zertifizierter Gutachter des DGuSV" width={210} densities={[1, 2]} class="h-auto w-44 max-w-full md:w-[210px]" />
+      <Image src={badge} alt={copy.badgeAlt} width={210} densities={[1, 2]} class="h-auto w-44 max-w-full md:w-[210px]" />
     </div>
     <div class="grid gap-6">
       <ul class="grid gap-6 md:grid-cols-3 md:gap-x-8" data-reveal-group>

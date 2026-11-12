@@ -5,6 +5,7 @@
 import { Image } from 'astro:assets';
 import { url } from '../../lib/url';
 import { site, credentials } from '../../config/site';
+import { pageLocale, t, fill, routes, anchor } from '../../i18n';
 import portrait from '../../assets/images/patrick-wolf-portrait-kopf-schulter.jpg';
 
 interface Props {
@@ -12,13 +13,15 @@ interface Props {
 }
 
 const { class: className } = Astro.props;
+const locale = pageLocale(Astro.url);
+const copy = t(locale).expertCard;
 ---
 
-<aside class:list={['border-t border-ink pt-5', className]} aria-label="Ihr Sachverständiger" data-reveal>
+<aside class:list={['border-t border-ink pt-5', className]} aria-label={copy.label} data-reveal>
   <div class="flex flex-wrap items-start gap-4">
     <Image
       src={portrait}
-      alt={`Porträt von ${site.expert}`}
+      alt={fill(copy.portraitAlt, { expert: site.expert })}
       width={72}
       height={90}
       densities={[1, 2]}
@@ -27,15 +30,15 @@ const { class: className } = Astro.props;
       class="h-[5.625rem] w-18 shrink-0 object-cover"
     />
     <div class="min-w-0 flex-1 basis-36 hyphens-auto break-words">
-      <p class="label text-graphite">Ihr Sachverständiger</p>
+      <p class="label text-graphite">{copy.label}</p>
       <p class="mt-1.5 font-serif text-h4">{site.expert}</p>
       <ul class="mt-2 grid gap-1 text-sm text-graphite">
-        <li>Geprüft und zertifiziert vom {credentials.associationShort}</li>
-        <li>Über {credentials.yearsInTrade} Jahre in der Tattoo- und Piercingbranche</li>
+        <li>{fill(copy.certified, { associationShort: credentials.associationShort })}</li>
+        <li>{fill(copy.experience, { years: credentials.yearsInTrade })}</li>
       </ul>
     </div>
   </div>
-  <a class="link-ink mt-3 inline-flex min-h-11 items-center text-sm font-semibold" href={url('/ueber-mich/#qualifikation')}>
-    Qualifikation von {site.expert}
+  <a class="link-ink mt-3 inline-flex min-h-11 items-center text-sm font-semibold" href={url(`${routes.about[locale]}#${anchor('qualifications', locale)}`)}>
+    {fill(copy.link, { expert: site.expert })}
   </a>
 </aside>

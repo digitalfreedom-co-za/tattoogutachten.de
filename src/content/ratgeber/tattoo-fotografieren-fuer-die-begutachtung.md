@@ -67,12 +67,12 @@ Hilfreich sind alle Bilder, die den Verlauf zeigen: Fotos direkt nach dem Steche
 
 ## Reichen Fotos für ein Gutachten?
 
-Nicht immer. Eine erste fachliche Einschätzung ist anhand aussagekräftiger Fotografien unter Umständen möglich. Für eine abschließende Beurteilung kann eine persönliche Untersuchung erforderlich sein, weil sich nicht alle Merkmale einer Tätowierung ausschließlich anhand von Bildern zuverlässig bewerten lassen. Welche Merkmale geprüft werden, steht auf der Seite [Tattoo-Gutachten](/leistungen/tattoo-gutachten/).
+Nicht immer. Eine erste fachliche Einschätzung ist anhand aussagekräftiger Fotografien unter Umständen möglich. Für eine abschließende Beurteilung kann eine persönliche Untersuchung erforderlich sein, weil sich nicht alle Merkmale einer Tätowierung ausschließlich anhand von Bildern zuverlässig bewerten lassen. Welche Merkmale geprüft werden, steht auf der Seite [Tattoo-Gutachten](/de/leistungen/tattoo-gutachten/).
 
 ## Ersetzen die Fotos eine sachverständige Dokumentation?
 
-Nein. Eigene Fotos sind eine wertvolle Ergänzung. Wenn Sie das Tattoo nachstechen, überarbeiten oder entfernen lassen wollen, sollte der Zustand vorher sachverständig dokumentiert werden. Wie das mit einem Privatgutachten gelingt, erklärt die Seite [Beweissicherung mit einem Privatgutachten](/leistungen/privatgutachten/#beweissicherung).
+Nein. Eigene Fotos sind eine wertvolle Ergänzung. Wenn Sie das Tattoo nachstechen, überarbeiten oder entfernen lassen wollen, sollte der Zustand vorher sachverständig dokumentiert werden. Wie das mit einem Privatgutachten gelingt, erklärt die Seite [Beweissicherung mit einem Privatgutachten](/de/leistungen/privatgutachten/#beweissicherung).
 
 ## Was mache ich mit den Fotos?
 
-Bringen Sie die Bilder zur kostenlosen Erstberatung mit, zusammen mit Rechnung, Vereinbarung, Pflegeanweisungen und der bisherigen Korrespondenz. Welche Unterlagen im Einzelfall gebraucht werden, klären wir im Gespräch. Weitere Antworten stehen unter [häufige Fragen](/haeufige-fragen/#begutachtung).
+Bringen Sie die Bilder zur kostenlosen Erstberatung mit, zusammen mit Rechnung, Vereinbarung, Pflegeanweisungen und der bisherigen Korrespondenz. Welche Unterlagen im Einzelfall gebraucht werden, klären wir im Gespräch. Weitere Antworten stehen unter [häufige Fragen](/de/haeufige-fragen/#begutachtung).

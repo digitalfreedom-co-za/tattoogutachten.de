@@ -3,22 +3,22 @@
 // reading time, the Markdown body, the next step right after it, related services in the margin,
 // then compact, title led further reading and the CTA.
 import { render } from 'astro:content';
-import ArticleLayout from '../../layouts/ArticleLayout.astro';
-import Section from '../../components/ui/Section.astro';
-import NextStep from '../../components/ui/NextStep.astro';
-import ArticleList from '../../components/ui/ArticleList.astro';
-import CtaBand from '../../components/ui/CtaBand.astro';
-import { site, credentials, ogImage } from '../../config/site';
-import { serviceBySlug, serviceHref, serviceScopeNote } from '../../data/services';
-import { getArticles, articleHref, relatedArticles, isoDate, type Article } from '../../lib/ratgeber';
-import { readingMinutes } from '../../lib/reading-time';
-import { absoluteUrl, ids, ref, serviceId, webPageId } from '../../lib/schema';
-import { url } from '../../lib/url';
+import ArticleLayout from '../../../layouts/ArticleLayout.astro';
+import Section from '../../../components/ui/Section.astro';
+import NextStep from '../../../components/ui/NextStep.astro';
+import ArticleList from '../../../components/ui/ArticleList.astro';
+import CtaBand from '../../../components/ui/CtaBand.astro';
+import { site, credentials, ogImage } from '../../../config/site';
+import { serviceBySlug, serviceHref, serviceScopeNote } from '../../../data/services';
+import { getArticles, articleHref, relatedArticles, isoDate, type Article } from '../../../lib/ratgeber';
+import { readingMinutes } from '../../../lib/reading-time';
+import { absoluteUrl, ids, ref, serviceId, webPageId } from '../../../lib/schema';
+import { url } from '../../../lib/url';
 import { getImage } from 'astro:assets';
-import articleImage from '../../assets/images/patrick-wolf-beim-taetowieren.webp';
+import articleImage from '../../../assets/images/patrick-wolf-beim-taetowieren.webp';
 
 export async function getStaticPaths() {
-  const articles = await getArticles();
+  const articles = await getArticles('de');
   return articles.map((article) => ({
     params: { slug: article.id },
     props: { article, related: relatedArticles(articles, article) },
@@ -41,7 +41,7 @@ const minutes = readingMinutes(article.body ?? '');
 const reportType = services.find((service) => service.slug !== 'streitfaelle')?.name ?? 'Gutachten';
 const nextStepText = `Ob ein ${reportType} in Ihrem Fall weiterhilft, klären wir in einer kostenlosen Erstberatung von bis zu 60 Minuten.`;
 const breadcrumbs = [
-  { label: 'Ratgeber', href: '/ratgeber/' },
+  { label: 'Ratgeber', href: '/de/ratgeber/' },
   { label: data.title, href: articleHref(article) },
 ];
 
@@ -77,7 +77,7 @@ const schema = [
   label={data.kicker}
   breadcrumbs={breadcrumbs}
   updated={updated}
-  byline={{ author: data.author, authorHref: '/ueber-mich/', published, readingMinutes: minutes }}
+  byline={{ author: data.author, authorHref: '/de/ueber-mich/', published, readingMinutes: minutes }}
   ogType="article"
   published={published}
   modified={updated ?? published}
@@ -95,7 +95,7 @@ const schema = [
       <p class="mt-2">
         {site.role}, geprüfter und zertifizierter Gutachter des {credentials.associationShort}.
       </p>
-      <a class="link-ink mt-1 inline-flex min-h-11 items-center font-semibold" href={url('/ueber-mich/')}>Mehr über {data.author}</a>
+      <a class="link-ink mt-1 inline-flex min-h-11 items-center font-semibold" href={url('/de/ueber-mich/')}>Mehr über {data.author}</a>
     </div>
     <nav aria-label="Passende Leistungen" class="hidden border-t border-rule pt-5 lg:block">
       <p class="label text-ink">Passende Leistungen</p>

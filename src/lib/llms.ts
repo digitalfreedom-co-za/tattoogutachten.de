@@ -1,4 +1,5 @@
-// llms.txt (short) and llms-full.txt (fact dense) per llmstxt.org, in German. Both are built
+// German llms.txt (short) and llms-full.txt (fact dense) per llmstxt.org, served under /de/; the
+// English versions at the root come from src/lib/llms-en.ts. Both are built
 // from the same data as the pages (config, services, audiences, process, FAQ, Ratgeber), so the
 // facts and the absolute URLs never drift from the site.
 import { site, contact, company, credentials, credentialLines, contentUpdated } from '../config/site';
@@ -37,31 +38,31 @@ export function llmsSummary(base: URL | undefined, articles: Article[]): string 
     '',
     ...factLines(),
     ...contactLines(),
-    `- Sprache: Deutsch. Stand der Angaben: ${contentUpdated}`,
+    `- Sprachen: Deutsch (diese Fassung, unter /de/), Englisch (Standard, ohne Präfix, ${absoluteUrl('/llms.txt', base)}). Stand der Angaben: ${contentUpdated}`,
     '',
     '## Leistungen',
-    link('Alle Leistungen', '/leistungen/', base, 'Übersicht der sechs Gutachtenarten und welche zu welcher Situation passt.'),
+    link('Alle Leistungen', '/de/leistungen/', base, 'Übersicht der sechs Gutachtenarten und welche zu welcher Situation passt.'),
     ...services.map((service) => link(service.name, serviceHref(service), base, service.summary)),
     '',
     '## Ablauf, Kosten und Termin',
-    link('Ablauf und Kosten', '/ablauf-kosten/', base, 'Fünf Schritte von der kostenlosen Erstberatung bis zum Gutachten, Kostenlogik ohne erfundene Preise.'),
-    link('Termin buchen', '/termin/', base, 'Online-Buchung der kostenlosen Erstberatung mit Checkliste zur Vorbereitung.'),
-    link('Häufige Fragen', '/haeufige-fragen/', base, `${faq.length} Antworten zu Gutachten, Begutachtung, Gericht, Kosten und zur Person.`),
+    link('Ablauf und Kosten', '/de/ablauf-kosten/', base, 'Fünf Schritte von der kostenlosen Erstberatung bis zum Gutachten, Kostenlogik ohne erfundene Preise.'),
+    link('Termin buchen', '/de/termin/', base, 'Online-Buchung der kostenlosen Erstberatung mit Checkliste zur Vorbereitung.'),
+    link('Häufige Fragen', '/de/haeufige-fragen/', base, `${faq.length} Antworten zu Gutachten, Begutachtung, Gericht, Kosten und zur Person.`),
     '',
     '## Für wen',
     ...audiences.map((audience) => link(`Für ${audience.label}`, audienceHref(audience), base, audience.lead)),
     '',
     '## Über den Sachverständigen',
-    link(`Über ${site.expert}`, '/ueber-mich/', base, 'Qualifikation, gerichtliche Bestellung, Mitgliedschaften, Unabhängigkeit und Arbeitsweise.'),
-    link('Kontakt', '/kontakt/', base, 'Anschrift, Telefon, E-Mail und Online-Terminbuchung.'),
+    link(`Über ${site.expert}`, '/de/ueber-mich/', base, 'Qualifikation, gerichtliche Bestellung, Mitgliedschaften, Unabhängigkeit und Arbeitsweise.'),
+    link('Kontakt', '/de/kontakt/', base, 'Anschrift, Telefon, E-Mail und Online-Terminbuchung.'),
     '',
     '## Ratgeber',
     ...articles.map((article) => link(article.data.title, articleHref(article), base, article.data.lead)),
     '',
     '## Optional',
-    link('Vollständige Fassung für Sprachmodelle', '/llms-full.txt', base, 'Alle Fakten, Leistungen, Ablauf, Kosten und Antworten in einer Datei.'),
-    link('Impressum', '/impressum/', base),
-    link('Datenschutzerklärung', '/datenschutz/', base),
+    link('Vollständige Fassung für Sprachmodelle', '/de/llms-full.txt', base, 'Alle Fakten, Leistungen, Ablauf, Kosten und Antworten in einer Datei.'),
+    link('Impressum', '/de/impressum/', base),
+    link('Datenschutzerklärung', '/de/datenschutz/', base),
     '',
   ].join('\n');
 }
@@ -72,7 +73,7 @@ export function llmsFull(base: URL | undefined, articles: Article[]): string {
     '',
     `> ${positioning}`,
     '',
-    `Stand der Angaben: ${contentUpdated}. Website: ${absoluteUrl('/', base)}`,
+    `Stand der Angaben: ${contentUpdated}. Website: ${absoluteUrl('/de/', base)}`,
     '',
     '## Wer',
     '',
@@ -152,12 +153,12 @@ export function llmsFull(base: URL | undefined, articles: Article[]): string {
     '## Kontakt',
     '',
     ...contactLines(),
-    `- Online-Terminbuchung: ${absoluteUrl('/termin/', base)}`,
+    `- Online-Terminbuchung: ${absoluteUrl('/de/termin/', base)}`,
     '',
     '## Rechtliches',
     '',
     `Anbieter: ${company.name}, ${company.street}, ${contact.postalCode} ${contact.city}. Vertreten durch den Geschäftsführer ${company.managingDirector}. Registergericht: ${company.registerCourt}, ${company.registerNumber}. USt-IdNr.: ${company.vatId}.`,
-    `Impressum: ${absoluteUrl('/impressum/', base)}`,
+    `Impressum: ${absoluteUrl('/de/impressum/', base)}`,
     '',
   );
 

@@ -11,6 +11,8 @@ import PageHeader from '../components/ui/PageHeader.astro';
 import type { NavItem } from '../config/site';
 import type { SeoProps } from '../components/seo/SeoHead.astro';
 import { url } from '../lib/url';
+import { pageLocale, t, formatDate } from '../i18n';
+import { readingTimeText } from '../lib/reading-time';
 
 export interface Byline {
   author: string;
@@ -32,10 +34,10 @@ interface Props extends Omit<SeoProps, 'breadcrumbs'> {
   asideFirst?: boolean;
 }
 
-const { heading, lead, label = 'Ratgeber', breadcrumbs, updated, byline, asideFirst = false, ...seo } = Astro.props;
+const locale = pageLocale(Astro.url);
+const copy = t(locale).article;
+const { heading, lead, label = t(locale).nav.guides, breadcrumbs, updated, byline, asideFirst = false, ...seo } = Astro.props;
 const hasAside = Astro.slots.has('aside');
-const formatDate = (iso: string) =>
-  new Intl.DateTimeFormat('de-DE', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(iso));
 ---
 
 <BaseLayout {...seo} breadcrumbs={breadcrumbs}>
@@ -45,20 +47,20 @@ const formatDate = (iso: string) =>
         byline && (
           <dl slot="meta" class="flex flex-wrap gap-x-5 gap-y-1 md:grid md:gap-3 md:border-t md:border-rule md:pt-3">
             <div>
-              <dt class="sr-only">Autor</dt>
+              <dt class="sr-only">{copy.author}</dt>
               <dd>
-                Von <a class="link-ink font-semibold" rel="author" href={url(byline.authorHref)}>{byline.author}</a>
+                {copy.by} <a class="link-ink font-semibold" rel="author" href={url(byline.authorHref)}>{byline.author}</a>
               </dd>
             </div>
             <div>
-              <dt class="sr-only">Veröffentlicht</dt>
+              <dt class="sr-only">{copy.published}</dt>
               <dd>
-                Veröffentlicht am <time datetime={byline.published}>{formatDate(byline.published)}</time>
+                {copy.publishedOn} <time datetime={byline.published}>{formatDate(byline.published, locale)}</time>
               </dd>
             </div>
             <div>
-              <dt class="sr-only">Lesezeit</dt>
-              <dd>{byline.readingMinutes} {byline.readingMinutes === 1 ? 'Minute' : 'Minuten'} Lesezeit</dd>
+              <dt class="sr-only">{copy.readingTime}</dt>
+              <dd>{readingTimeText(byline.readingMinutes, locale)}</dd>
             </div>
           </dl>
         )

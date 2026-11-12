@@ -1,35 +1,35 @@
 ---
-// One page per audience (/fuer-privatpersonen/, /fuer-tattoo-studios/, /fuer-rechtsanwaelte/, /fuer-gerichte/),
+// One page per audience (/de/fuer-privatpersonen/, /fuer-tattoo-studios/, /fuer-rechtsanwaelte/, /fuer-gerichte/),
 // generated from src/data/audiences.ts: first steps where the audience needs them, situation, how the
 // expert helps, fitting services, what to prepare, typical questions, Ratgeber articles and the CTA.
 // Private clients and studios are led to the free first consultation; lawyers and courts (primaryAction
 // enquiry) to telephone and email, with the preparation block moved up next to the help block.
-import BaseLayout from '../layouts/BaseLayout.astro';
-import PageHeader from '../components/ui/PageHeader.astro';
-import Section from '../components/ui/Section.astro';
-import Button from '../components/ui/Button.astro';
-import Icon from '../components/ui/Icon.astro';
-import ExpertCard from '../components/ui/ExpertCard.astro';
-import ServiceList from '../components/ui/ServiceList.astro';
-import ArticleList from '../components/ui/ArticleList.astro';
-import CourtReference from '../components/ui/CourtReference.astro';
-import CompareTable from '../components/ui/CompareTable.astro';
-import Faq from '../components/ui/Faq.astro';
-import ArtImage from '../components/ui/ArtImage.astro';
-import CtaBand from '../components/ui/CtaBand.astro';
-import AudiencePrepare from '../components/audience/AudiencePrepare.astro';
-import { site, contact, contentUpdated, primaryCta } from '../config/site';
-import { url } from '../lib/url';
-import { audiences, audienceHref, type Audience, type AudienceSlug } from '../data/audiences';
-import { serviceBySlug, reportComparison } from '../data/services';
-import { faqForAudience } from '../data/faq';
-import { getArticles, articlesForAudience } from '../lib/ratgeber';
-import { ref, serviceId } from '../lib/schema';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/ui/PageHeader.astro';
+import Section from '../../components/ui/Section.astro';
+import Button from '../../components/ui/Button.astro';
+import Icon from '../../components/ui/Icon.astro';
+import ExpertCard from '../../components/ui/ExpertCard.astro';
+import ServiceList from '../../components/ui/ServiceList.astro';
+import ArticleList from '../../components/ui/ArticleList.astro';
+import CourtReference from '../../components/ui/CourtReference.astro';
+import CompareTable from '../../components/ui/CompareTable.astro';
+import Faq from '../../components/ui/Faq.astro';
+import ArtImage from '../../components/ui/ArtImage.astro';
+import CtaBand from '../../components/ui/CtaBand.astro';
+import AudiencePrepare from '../../components/audience/AudiencePrepare.astro';
+import { site, contact, contentUpdated, primaryCta } from '../../config/site';
+import { url } from '../../lib/url';
+import { audiences, audienceHref, type Audience, type AudienceSlug } from '../../data/audiences';
+import { serviceBySlug, reportComparison } from '../../data/services';
+import { faqForAudience } from '../../data/faq';
+import { getArticles, articlesForAudience } from '../../lib/ratgeber';
+import { ref, serviceId } from '../../lib/schema';
 import type { ImageMetadata } from 'astro';
 
-import atWork from '../assets/images/patrick-wolf-beim-taetowieren.webp';
-import studio from '../assets/images/patrick-wolf-studio-weit.webp';
-import portrait from '../assets/images/patrick-wolf-portrait-studio-sitzend.jpg';
+import atWork from '../../assets/images/patrick-wolf-beim-taetowieren.webp';
+import studio from '../../assets/images/patrick-wolf-studio-weit.webp';
+import portrait from '../../assets/images/patrick-wolf-portrait-studio-sitzend.jpg';
 
 export function getStaticPaths() {
   return audiences.map((audience) => ({ params: { audience: audience.slug }, props: { audience } }));
@@ -42,7 +42,7 @@ interface Props {
 const { audience } = Astro.props;
 const services = audience.services.map(serviceBySlug);
 const questions = faqForAudience(audience.slug);
-const articles = articlesForAudience(await getArticles(), audience.slug);
+const articles = articlesForAudience(await getArticles('de'), audience.slug);
 const breadcrumbs = [{ label: `Für ${audience.label}`, href: audienceHref(audience) }];
 
 const pictures: Record<AudienceSlug, { src: ImageMetadata; alt: string }> = {
@@ -214,7 +214,7 @@ const page = {
     <ServiceList services={services} />
     <div class="mt-10 md:grid md:grid-cols-12 md:gap-x-8" data-reveal>
       <p class="axis">
-        <Button href="/leistungen/" variant="text">Alle Leistungen im Überblick</Button>
+        <Button href="/de/leistungen/" variant="text">Alle Leistungen im Überblick</Button>
       </p>
     </div>
   </Section>
@@ -229,7 +229,7 @@ const page = {
         </p>
         <Faq items={questions} name={`faq-${audience.slug}`} />
         <p class="mt-8" data-reveal>
-          <Button href="/haeufige-fragen/" variant="text">Alle häufigen Fragen</Button>
+          <Button href="/de/haeufige-fragen/" variant="text">Alle häufigen Fragen</Button>
         </p>
       </Section>
     )
@@ -241,7 +241,7 @@ const page = {
         <ArticleList articles={articles} showLead={false} compact />
         <div class="mt-8 md:grid md:grid-cols-12 md:gap-x-8" data-reveal>
           <p class="axis">
-            <Button href="/ratgeber/" variant="text">Alle Beiträge im Ratgeber</Button>
+            <Button href="/de/ratgeber/" variant="text">Alle Beiträge im Ratgeber</Button>
           </p>
         </div>
       </Section>

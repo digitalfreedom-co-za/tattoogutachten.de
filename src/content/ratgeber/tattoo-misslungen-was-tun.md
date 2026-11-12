@@ -14,13 +14,13 @@ order: 1
 
 Das lässt sich erst nach einer fachlichen Prüfung sicher sagen. Eine Tätowierung, die Ihnen nicht gefällt, ist nicht automatisch handwerklich fehlerhaft. Bei der Bewertung wird zwischen persönlichem Geschmack und objektiv feststellbaren Ausführungsmängeln unterschieden.
 
-Hinweise auf einen möglichen Mangel können zum Beispiel unsaubere Linien und Konturen, ungleichmäßige Schattierungen und Farbflächen, eine ungleichmäßige Farbverteilung in der Haut, Vernarbungen oder deutliche Abweichungen von der vereinbarten Vorlage sein. Mehr dazu lesen Sie im Beitrag [Mangel oder Geschmackssache?](/ratgeber/mangel-oder-geschmackssache/).
+Hinweise auf einen möglichen Mangel können zum Beispiel unsaubere Linien und Konturen, ungleichmäßige Schattierungen und Farbflächen, eine ungleichmäßige Farbverteilung in der Haut, Vernarbungen oder deutliche Abweichungen von der vereinbarten Vorlage sein. Mehr dazu lesen Sie im Beitrag [Mangel oder Geschmackssache?](/de/ratgeber/mangel-oder-geschmackssache/).
 
 ## Warum sollte ich den Zustand sofort festhalten?
 
 Weil sich manche Fragen später nur noch schwer beantworten lassen. Je größer der zeitliche Abstand zur Tätowierung ist und je mehr sich nachträglich verändert, desto schwerer wird die Beurteilung einzelner Fragestellungen.
 
-Machen Sie deshalb möglichst früh aussagekräftige Fotos und bewahren Sie auch die Bilder aus der Stech- und Heilungsphase auf. Wie das gelingt, erklärt der Beitrag [Tattoo richtig fotografieren](/ratgeber/tattoo-fotografieren-fuer-die-begutachtung/).
+Machen Sie deshalb möglichst früh aussagekräftige Fotos und bewahren Sie auch die Bilder aus der Stech- und Heilungsphase auf. Wie das gelingt, erklärt der Beitrag [Tattoo richtig fotografieren](/de/ratgeber/tattoo-fotografieren-fuer-die-begutachtung/).
 
 Wenn Sie überlegen, das Tattoo nachstechen, überarbeiten oder entfernen zu lassen, lassen Sie den Zustand vorher sachverständig dokumentieren. Danach ist der ursprüngliche Zustand nicht mehr zu sehen.
 
@@ -35,7 +35,7 @@ Bewahren Sie alles auf, was den Auftrag und den Verlauf belegt. Hilfreich sind i
 - Fotos aus der Stech- und Heilungsphase
 - ärztliche Unterlagen, falls Sie in Behandlung waren
 
-Welche Unterlagen im Einzelfall tatsächlich gebraucht werden, klärt die [kostenlose Erstberatung](/termin/). Wie es danach weitergeht, steht unter [Ablauf und Kosten](/ablauf-kosten/).
+Welche Unterlagen im Einzelfall tatsächlich gebraucht werden, klärt die [kostenlose Erstberatung](/de/termin/). Wie es danach weitergeht, steht unter [Ablauf und Kosten](/de/ablauf-kosten/).
 
 ## Was ist, wenn die Haut sich verändert oder schmerzt?
 
@@ -43,10 +43,10 @@ Bei gesundheitlichen Beschwerden ist ein Arzt der richtige Ansprechpartner. Ein 
 
 ## Wie hilft ein Gutachten weiter?
 
-Ein [Tattoo-Gutachten](/leistungen/tattoo-gutachten/) stellt fest, was handwerklich vorliegt, und begründet es nachvollziehbar. Es kann helfen, einen Streit mit dem Studio sachlich zu führen und eine Grundlage für eine außergerichtliche Einigung zu schaffen. Mehr dazu auf der Seite [Unterstützung bei Streitfällen](/leistungen/streitfaelle/).
+Ein [Tattoo-Gutachten](/de/leistungen/tattoo-gutachten/) stellt fest, was handwerklich vorliegt, und begründet es nachvollziehbar. Es kann helfen, einen Streit mit dem Studio sachlich zu führen und eine Grundlage für eine außergerichtliche Einigung zu schaffen. Mehr dazu auf der Seite [Unterstützung bei Streitfällen](/de/leistungen/streitfaelle/).
 
 Ob Ihnen daraus ein Anspruch auf Schadensersatz oder Schmerzensgeld zusteht, ist eine Rechtsfrage. Die beantwortet nicht der Sachverständige, sondern ein Rechtsanwalt.
 
 ## Wie fange ich an?
 
-Am Anfang steht eine kostenlose und unverbindliche Erstberatung von bis zu 60 Minuten. Sie schildern Ihr Anliegen, wir sehen uns Fotos und Unterlagen an und klären, ob eine Begutachtung sinnvoll ist. Kostenpflichtig wird es erst, wenn Sie ein Gutachten schriftlich beauftragen. Antworten auf weitere Fragen finden Sie unter [häufige Fragen](/haeufige-fragen/).
+Am Anfang steht eine kostenlose und unverbindliche Erstberatung von bis zu 60 Minuten. Sie schildern Ihr Anliegen, wir sehen uns Fotos und Unterlagen an und klären, ob eine Begutachtung sinnvoll ist. Kostenpflichtig wird es erst, wenn Sie ein Gutachten schriftlich beauftragen. Antworten auf weitere Fragen finden Sie unter [häufige Fragen](/de/haeufige-fragen/).

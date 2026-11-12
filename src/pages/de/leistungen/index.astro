@@ -1,21 +1,21 @@
 ---
 // Services overview: all six services, a situation finder, what every report contains and
 // what is out of scope. Service content comes from src/data/services.ts.
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import PageHeader from '../../components/ui/PageHeader.astro';
-import Section from '../../components/ui/Section.astro';
-import Button from '../../components/ui/Button.astro';
-import ServiceList from '../../components/ui/ServiceList.astro';
-import Checklist from '../../components/ui/Checklist.astro';
-import TrustStrip from '../../components/ui/TrustStrip.astro';
-import CtaBand from '../../components/ui/CtaBand.astro';
-import { site, credentials, contentUpdated, primaryCta } from '../../config/site';
-import { services, serviceHref, serviceExclusions, clients } from '../../data/services';
-import { reportContents } from '../../data/process';
-import { url } from '../../lib/url';
-import { absoluteUrl, ref, serviceId } from '../../lib/schema';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PageHeader from '../../../components/ui/PageHeader.astro';
+import Section from '../../../components/ui/Section.astro';
+import Button from '../../../components/ui/Button.astro';
+import ServiceList from '../../../components/ui/ServiceList.astro';
+import Checklist from '../../../components/ui/Checklist.astro';
+import TrustStrip from '../../../components/ui/TrustStrip.astro';
+import CtaBand from '../../../components/ui/CtaBand.astro';
+import { site, credentials, contentUpdated, primaryCta } from '../../../config/site';
+import { services, serviceHref, serviceExclusions, clients } from '../../../data/services';
+import { reportContents } from '../../../data/process';
+import { url } from '../../../lib/url';
+import { absoluteUrl, ref, serviceId } from '../../../lib/schema';
 
-const breadcrumbs = [{ label: 'Leistungen', href: '/leistungen/' }];
+const breadcrumbs = [{ label: 'Leistungen', href: '/de/leistungen/' }];
 const page = {
   mainEntity: {
     '@type': 'ItemList',
@@ -43,7 +43,7 @@ const page = {
     updated={contentUpdated}
   >
     <Button href={primaryCta.href} icon="calendar">Kostenlose Erstberatung</Button>
-    <Button href="/ablauf-kosten/" variant="text">Ablauf und Kosten</Button>
+    <Button href="/de/ablauf-kosten/" variant="text">Ablauf und Kosten</Button>
   </PageHeader>
 
   <TrustStrip />
@@ -108,7 +108,7 @@ const page = {
     <p class="mt-10 max-w-[40rem] text-graphite" data-reveal>
       Sind medizinische Befunde oder gesundheitliche Schäden betroffen, kann zusätzlich eine ärztliche Beurteilung nötig
       sein. Rechtliche Fragen klären Sie mit einem Rechtsanwalt. Mehr dazu in den
-      <a class="link-ink" href={url('/haeufige-fragen/#auftrag')}>häufigen Fragen zu Auftrag und Gericht</a>.
+      <a class="link-ink" href={url('/de/haeufige-fragen/#auftrag')}>häufigen Fragen zu Auftrag und Gericht</a>.
     </p>
   </Section>
 

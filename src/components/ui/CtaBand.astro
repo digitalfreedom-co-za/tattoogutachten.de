@@ -9,7 +9,8 @@ import Button from './Button.astro';
 import Icon from './Icon.astro';
 import MeasureRule from './MeasureRule.astro';
 import { url } from '../../lib/url';
-import { contact, primaryCta } from '../../config/site';
+import { contact, primaryCtaFor } from '../../config/site';
+import { pageLocale, t } from '../../i18n';
 import { CAL_IS_DEMO } from '../../config/booking';
 
 interface Props {
@@ -20,6 +21,9 @@ interface Props {
   action?: 'booking' | 'contact';
 }
 
+const locale = pageLocale(Astro.url);
+const primaryCta = primaryCtaFor(locale);
+const labels = t(locale).contactLabels;
 const {
   title,
   text,
@@ -29,7 +33,7 @@ const {
 } = Astro.props;
 ---
 
-<section class="relative overflow-hidden bg-ink pt-section pb-16 text-paper md:pb-20" aria-label="Kontakt aufnehmen" data-cta-band>
+<section class="relative overflow-hidden bg-ink pt-section pb-16 text-paper md:pb-20" aria-label={t(locale).cta.contactBand} data-cta-band>
   <MeasureRule class="absolute top-0 left-0 w-full text-paper/30" />
   <Container class="grid gap-10 md:grid-cols-12 md:gap-x-8">
     <div class="md:col-span-7">
@@ -44,14 +48,14 @@ const {
             <p class="text-sm">
               <a class="link-ink inline-flex min-h-11 items-center gap-2 font-semibold hover:!text-brass-light" href={contact.phone.href}>
                 <Icon name="phone" size={16} class="shrink-0 text-brass-light" />
-                <span><span class="sr-only">Telefon </span>{contact.phone.display}</span>
+                <span><span class="sr-only">{labels.phone} </span>{contact.phone.display}</span>
               </a>
             </p>
           </>
         ) : (
           <>
             <Button href={contact.phone.href} variant="inverse" icon="phone" class="self-start">
-              <span class="sr-only">Anrufen: </span>{contact.phone.display}
+              <span class="sr-only">{labels.call} </span>{contact.phone.display}
             </Button>
             <p class="text-sm">
               <a class="link-ink inline-flex min-h-11 items-center font-semibold break-all hover:!text-brass-light" href={ctaHref.startsWith('/') ? url(ctaHref) : ctaHref}>

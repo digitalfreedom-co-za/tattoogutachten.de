@@ -8,15 +8,15 @@
 // dataprivacyframework.gov on 2026-11-12 (participant 2960, active, next certification 2027-10-02).
 // While the demo calendar is configured (CAL_IS_DEMO in src/config/booking.ts), the booking section
 // names the holder of the demo account as recipient; with the real link it switches to the operator.
-import ArticleLayout from '../layouts/ArticleLayout.astro';
-import { site, company, contact, contentUpdated, type NavItem } from '../config/site';
-import { BOOKING_ANCHOR, CAL_IS_DEMO, CAL_DEMO_ACCOUNT_HOLDER } from '../config/booking';
-import { url } from '../lib/url';
-import { CONSENT_ANCHOR, CONSENT_STORAGE_KEY } from '../config/consent';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import { site, company, contact, contentUpdated, type NavItem } from '../../config/site';
+import { BOOKING_ANCHOR, CAL_IS_DEMO, CAL_DEMO_ACCOUNT_HOLDER } from '../../config/booking';
+import { url } from '../../lib/url';
+import { CONSENT_ANCHOR, CONSENT_STORAGE_KEY } from '../../config/consent';
 
 const title = `Datenschutzerklärung | ${site.name}`;
 const description = `Datenschutzerklärung von ${site.domain}: Hosting bei GitHub Pages, Terminbuchung über cal.com, Einwilligung, Kontakt, Ihre Rechte. Keine eigenen Cookies, kein Tracking.`;
-const breadcrumbs: NavItem[] = [{ label: 'Datenschutz', href: '/datenschutz/' }];
+const breadcrumbs: NavItem[] = [{ label: 'Datenschutz', href: '/de/datenschutz/' }];
 
 const toc: NavItem[] = [
   { label: 'Verantwortlicher', href: '#verantwortlicher' },
@@ -143,7 +143,7 @@ const external = { target: '_blank', rel: 'noopener noreferrer' };
   <p>
     Ihre Einwilligung können Sie jederzeit mit Wirkung für die Zukunft widerrufen oder ändern, über den Link
     Cookie-Einstellungen am Ende jeder Seite oder
-    <a href={url(`/datenschutz/#${CONSENT_ANCHOR}`)} data-consent-open aria-haspopup="dialog">direkt hier</a>. Ist der
+    <a href={url(`/de/datenschutz/#${CONSENT_ANCHOR}`)} data-consent-open aria-haspopup="dialog">direkt hier</a>. Ist der
     Kalender bereits geladen, lädt die Seite nach dem Widerruf neu, damit er entfernt ist. Die Rechtmäßigkeit der
     Verarbeitung bis zum Widerruf bleibt davon unberührt.
   </p>
@@ -155,8 +155,8 @@ const external = { target: '_blank', rel: 'noopener noreferrer' };
   </p>
   <h3>Wann der Kalender lädt</h3>
   <p>
-    Der Kalender steht auf der <a href={url(`/#${BOOKING_ANCHOR}`)}>Startseite</a> und auf der Seite
-    <a href={url('/termin/')}>Termin buchen</a>. Er lädt nur, wenn Sie eingewilligt haben, im Hinweis zum Datenschutz,
+    Der Kalender steht auf der <a href={url(`/de/#${BOOKING_ANCHOR}`)}>Startseite</a> und auf der Seite
+    <a href={url('/de/termin/')}>Termin buchen</a>. Er lädt nur, wenn Sie eingewilligt haben, im Hinweis zum Datenschutz,
     in den Cookie-Einstellungen oder mit der Schaltfläche Kalender laden und zustimmen im Buchungsbereich. Auch dann
     wird er nicht mit der Seite geladen, sondern erst, wenn der Buchungsbereich sichtbar wird. Ab diesem Moment ruft
     Ihr Browser Inhalte von Servern von cal.com ab. Auf allen anderen Seiten wird nichts von cal.com geladen.
@@ -196,7 +196,7 @@ const external = { target: '_blank', rel: 'noopener noreferrer' };
   </p>
   <p>
     Sie können die Einwilligung jederzeit mit Wirkung für die Zukunft widerrufen, über
-    <a href={url(`/datenschutz/#${CONSENT_ANCHOR}`)} data-consent-open aria-haspopup="dialog">Cookie-Einstellungen</a>.
+    <a href={url(`/de/datenschutz/#${CONSENT_ANCHOR}`)} data-consent-open aria-haspopup="dialog">Cookie-Einstellungen</a>.
     Danach lädt der Kalender nicht mehr. Cookies, die cal.com auf seiner eigenen Domain gesetzt hat, laufen ab (__cf_bm
     nach 30 Minuten ohne Aktivität) oder lassen sich in Ihrem Browser löschen.
   </p>

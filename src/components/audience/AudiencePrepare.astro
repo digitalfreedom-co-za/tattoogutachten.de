@@ -5,7 +5,8 @@ import Section from '../ui/Section.astro';
 import Checklist from '../ui/Checklist.astro';
 import Button from '../ui/Button.astro';
 import EnquiryNote from '../ui/EnquiryNote.astro';
-import { practice } from '../../config/practice';
+import { practiceFor } from '../../config/practice';
+import { pageLocale, t, routes, anchor } from '../../i18n';
 import type { Audience } from '../../data/audiences';
 
 interface Props {
@@ -17,26 +18,27 @@ const { audience, tone } = Astro.props;
 const consultation = audience.primaryAction === 'consultation';
 // The consumer oriented enquiry notes (tattoo touch ups, medical records) do not fit a court enquiry.
 const showEnquiryNote = audience.slug !== 'fuer-gerichte';
-const availability = audience.slug === 'fuer-gerichte' ? practice.courtAvailability : null;
+const locale = pageLocale(Astro.url);
+const copy = t(locale).prepare;
+const availability = audience.slug === 'fuer-gerichte' ? practiceFor(locale).courtAvailability : null;
 ---
 
-<Section id="vorbereiten" label="Vorbereitung" title={audience.prepareTitle} tone={tone}>
+<Section id={anchor('prepare', locale)} label={copy.label} title={audience.prepareTitle} tone={tone}>
   <div class="grid gap-12 md:grid-cols-12 md:gap-x-8">
-    <Checklist items={audience.prepare} title={audience.prepareListTitle ?? 'Hilfreiche Unterlagen'} class="self-start md:col-span-9 md:col-start-4 lg:col-span-5 lg:col-start-4" />
+    <Checklist items={audience.prepare} title={audience.prepareListTitle ?? copy.listTitle} class="self-start md:col-span-9 md:col-start-4 lg:col-span-5 lg:col-start-4" />
     <div class="grid content-start gap-6 md:col-span-9 md:col-start-4 lg:col-span-4 lg:col-start-9" data-reveal>
       <p class="text-lead text-ink">{audience.prepareNote}</p>
       {availability && <p class="text-graphite">{availability}</p>}
       <p class="text-graphite">
         {
-          audience.prepareAside ??
-            'Am Anfang steht eine kostenlose Erstberatung von bis zu 60 Minuten. Kostenpflichtig wird es erst nach einer schriftlichen Beauftragung.'
+          audience.prepareAside ?? copy.consultation
         }
       </p>
       {showEnquiryNote && <EnquiryNote />}
       {
         consultation && (
           <p>
-            <Button href="/ablauf-kosten/" variant="text">Ablauf und Kosten im Detail</Button>
+            <Button href={routes.process[locale]} variant="text">{copy.processLink}</Button>
           </p>
         )
       }

@@ -8,18 +8,20 @@ import { Image } from 'astro:assets';
 import badge from '../../assets/images/rw-gutachterabzeichen-dgusv-logo.png';
 import { site } from '../../config/site';
 import { url } from '../../lib/url';
+import { pageLocale, t, fill, routes } from '../../i18n';
 
 interface Props {
   tone?: 'ink' | 'paper';
 }
 
 const { tone = 'ink' } = Astro.props;
+const locale = pageLocale(Astro.url);
 ---
 
 <a
-  href={url('/')}
+  href={url(routes.home[locale])}
   class="group/logo inline-flex min-h-11 min-w-11 items-center gap-2 rounded-xs min-[500px]:gap-3"
-  aria-label={`${site.name}, ${site.office}, zur Startseite`}
+  aria-label={fill(t(locale).site.logoLabel, { name: site.name, office: site.office })}
 >
   <Image
     src={badge}

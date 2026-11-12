@@ -1,0 +1,205 @@
+{
+  "dateLocale": "en-GB",
+  "site": {
+    "role": "Expert for tattoos and piercings",
+    "areaServed": "throughout Germany and Europe",
+    "country": "Germany",
+    "ogImageAlt": "{office}: {expert}, {role}, certified by the {association}, expert reports {areaServed}.",
+    "logoLabel": "{name}, {office}, home page"
+  },
+  "credentialLines": [
+    "Examined and certified expert of the {associationShort} ({association})",
+    "Confirmation register no. {registerNumber}",
+    "Appointed as expert witness by the {court} in court proceedings",
+    "Member of the {membership}",
+    "More than {years} years of professional experience in tattooing and piercing"
+  ],
+  "court": "Regional Court (Landgericht) Frankfurt am Main",
+  "nav": {
+    "services": "Services",
+    "process": "Process and fees",
+    "about": "About",
+    "guides": "Guides",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "booking": "Book a consultation",
+    "imprint": "Imprint",
+    "privacy": "Privacy",
+    "audiences": "Who we work for",
+    "main": "Main navigation",
+    "mainMobile": "Main navigation, mobile",
+    "menuOpen": "Open menu",
+    "menuClose": "Close menu",
+    "menu": "Menu",
+    "home": "Home",
+    "breadcrumbs": "Breadcrumbs",
+    "skipLink": "Skip to content"
+  },
+  "language": {
+    "switchLabel": "Language",
+    "switchTo": "English version of this page",
+    "short": "EN",
+    "hint": "This website is also available in English.",
+    "hintAction": "Go to the English version",
+    "hintDismiss": "Dismiss notice",
+    "hintRegion": "Language notice"
+  },
+  "contactLabels": {
+    "phone": "Telephone",
+    "email": "Email",
+    "call": "Call:",
+    "emailTo": "Email to",
+    "writeEmail": "Send an email"
+  },
+  "cta": {
+    "enquiry": "Send an enquiry",
+    "enquiryNote": ["Enquiries by telephone", "or email"],
+    "bookingNote": ["First consultation free,", "up to 60 minutes"],
+    "contactBand": "Get in touch"
+  },
+  "footer": {
+    "label": "Footer",
+    "pages": "Pages",
+    "audiences": "Who we work for",
+    "audiencePrefix": "For",
+    "certification": "Certification",
+    "certified": "Examined and certified expert of the {associationShort}",
+    "registerShort": "Reg. no. {registerNumber}",
+    "areaServed": "Working {areaServed}",
+    "cookieSettings": "Cookie settings"
+  },
+  "pageHeader": {
+    "updated": "Last reviewed:"
+  },
+  "article": {
+    "author": "Author",
+    "by": "By",
+    "published": "Published",
+    "publishedOn": "Published on",
+    "readingTime": "Reading time",
+    "minute": "minute",
+    "minutes": "minutes"
+  },
+  "steps": {
+    "step": "Step",
+    "prepare": "What you prepare"
+  },
+  "seal": {
+    "alt": "Seal of the {associationShort} {year}, certified expert, confirmation register no. {registerNumber}"
+  },
+  "trust": {
+    "label": "Qualifications and credentials",
+    "badgeAlt": "Badge of an examined and certified expert of the DGuSV",
+    "certifiedBy": "Certified by",
+    "register": "Confirmation register no. {registerNumber}",
+    "experience": "Experience",
+    "experienceValue": "More than {years} years",
+    "experienceNote": "in the tattoo and piercing trade",
+    "appointed": "Court appointed",
+    "appointedValue": "Landgericht Frankfurt",
+    "appointedNote": "as expert witness in court proceedings",
+    "member": "Member",
+    "area": "Area served",
+    "areaValue": "All of Germany",
+    "areaNote": "and Europe",
+    "independent": "Independent",
+    "independentValue": "Led by the facts",
+    "independentNote": "not by the client"
+  },
+  "expertCard": {
+    "label": "Your expert",
+    "portraitAlt": "Portrait of {expert}",
+    "certified": "Examined and certified by the {associationShort}",
+    "experience": "More than {years} years in the tattoo and piercing trade",
+    "link": "Qualifications of {expert}"
+  },
+  "courtReference": {
+    "label": "Court appointment",
+    "court": "Court",
+    "appointment": "Appointment as expert witness",
+    "role": "Appointed as expert witness in court proceedings",
+    "note": "An appointment by the court in a single case is not a public appointment and swearing in as an expert (öffentliche Bestellung und Vereidigung)."
+  },
+  "nextStep": {
+    "label": "Your next step",
+    "book": "Book a free first consultation"
+  },
+  "enquiryNote": {
+    "title": "Before you get in touch"
+  },
+  "prepare": {
+    "label": "Preparation",
+    "listTitle": "Useful documents",
+    "consultation": "Everything starts with a free first consultation of up to 60 minutes. Fees only arise once you commission a report in writing.",
+    "processLink": "Process and fees in detail"
+  },
+  "consent": {
+    "eyebrow": "Privacy",
+    "noticeTitle": "May the cal.com booking calendar load?",
+    "noticeText": "This website sets no cookies for analytics or advertising. For online booking we embed the calendar of cal.com (Cal.com, Inc., USA). When it loads, your browser sends your IP address, among other data, to cal.com in the USA, and cal.com sets a cookie to fend off automated access. This only happens with your consent.",
+    "noticeChoice": "Without consent the website works in full, and you arrange your appointment by telephone or email instead. You can change or withdraw your choice at any time under Cookie settings at the bottom of every page.",
+    "noticeMore": "More in the privacy policy",
+    "reject": "Reject",
+    "accept": "Accept",
+    "settings": "Settings",
+    "settingsTitle": "Cookie settings",
+    "closeUnchanged": "Close without changes",
+    "necessary": "Necessary",
+    "alwaysOn": "Always on",
+    "necessaryText": "Stores your choice in this browser (localStorage, entry tg-consent with the version of the notice, the time and your choice), so we do not ask again. No identifier, read only by this website. No consent required under § 25(2) no. 2 TDDDG (German Telecommunications Digital Services Data Protection Act).",
+    "bookingTitle": "External media: booking via cal.com",
+    "bookingText": "Loads the booking calendar of Cal.com, Inc., San Francisco, USA, on the home page and the booking page as soon as it comes into view. cal.com then receives your IP address, details of your browser and device, and the address of the page. Its service provider Cloudflare sets the cookie __cf_bm against automated access (30 minutes), and technical error reports go to Sentry. Transfer to the USA is based on the EU-U.S. Data Privacy Framework. The legal basis is your consent (Art. 6(1)(a) GDPR, § 25(1) TDDDG), which you can withdraw here at any time. Without it the calendar stays off, and appointments are available by telephone or email.",
+    "detailsBefore": "Details in the",
+    "detailsLink": "privacy policy",
+    "save": "Save selection"
+  },
+  "booking": {
+    "statusLoading": "The calendar is loading.",
+    "statusReady": "The calendar has loaded.",
+    "statusFailed": "The calendar could not be loaded. You can book directly at cal.com, by telephone or by email.",
+    "duration": "Duration",
+    "durationValue": "Up to 60 minutes",
+    "cost": "Cost",
+    "costValue": "None, no obligation",
+    "conversation": "Consultation",
+    "confirmation": "Confirmation",
+    "confirmationValue": "By email, with links to reschedule or cancel",
+    "weekdays": ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
+    "timezone": "Time zone",
+    "timezoneDevice": "That of your device",
+    "timezoneHint": "The calendar shows available times in this time zone.",
+    "demoLabel": "Preview",
+    "demoText": "The calendar below is a demo calendar for the preview of this website. Booking it does not create an appointment with {expert}, and its duration differs from the first consultation. Until the real calendar goes live, please arrange the first consultation by telephone or email.",
+    "frameLabel": "Booking calendar",
+    "consentTitle": "The calendar is provided by cal.com.",
+    "consentText": "So that you can pick an appointment right here, we embed the booking calendar of Cal.com, Inc. (USA). It only loads once you agree. Your browser then sends your IP address, among other data, to cal.com in the USA, and cal.com sets a cookie to fend off automated access. You can withdraw your consent at any time under Cookie settings at the bottom of the page. Details in the",
+    "consentLink": "privacy policy",
+    "consentButton": "Load calendar and consent",
+    "withoutCal": "Without cal.com",
+    "withoutCalText": "Arrange your first consultation by telephone or email.",
+    "fallbackNoJs": "The booking calendar needs JavaScript.",
+    "fallbackFailed": "The booking calendar could not be loaded.",
+    "fallbackText": "Arrange your free first consultation by telephone or email, or book directly on the cal.com booking page.",
+    "calPage": "Booking page at cal.com",
+    "newWindow": "(opens in a new window)",
+    "prepareLink": "What to have ready for the first consultation",
+    "dataNoteBefore": "To book, cal.com only needs your name and email address; photos and documents do not belong in the calendar. The calendar only loads with your consent, and only once this section comes into view. What is processed when it loads is set out in the",
+    "dataNoteLink": "privacy policy under Online booking",
+    "deviceSuffix": "your device",
+    "regions": {
+      "Africa": "Africa",
+      "America": "America",
+      "Antarctica": "Antarctica",
+      "Arctic": "Arctic",
+      "Asia": "Asia",
+      "Atlantic": "Atlantic",
+      "Australia": "Australia",
+      "Europe": "Europe",
+      "Indian": "Indian Ocean",
+      "Pacific": "Pacific"
+    }
+  },
+  "schema": {
+    "breadcrumbHome": "Home"
+  }
+}

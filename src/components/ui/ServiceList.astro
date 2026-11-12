@@ -5,7 +5,9 @@
 // grouped: two parts with their own heading, subject first, then commissioning route and occasion.
 import Icon from './Icon.astro';
 import { url } from '../../lib/url';
-import { type Service, serviceHref, serviceGroups } from '../../data/services';
+import { type Service, serviceHref } from '../../data/services';
+import { serviceContent } from '../../data';
+import { pageLocale } from '../../i18n';
 
 interface Props {
   services: Service[];
@@ -16,6 +18,7 @@ interface Props {
 }
 
 const { services, headingLevel = 'h3', grouped = false, class: className } = Astro.props;
+const { serviceGroups } = serviceContent(pageLocale(Astro.url));
 const Heading = grouped ? 'h4' : headingLevel;
 const parts = grouped
   ? serviceGroups

@@ -233,7 +233,7 @@ export const faq: FaqItem[] = [
     audiences: ['fuer-privatpersonen', 'fuer-tattoo-studios'],
     question: 'Wie buche ich die kostenlose Erstberatung?',
     answer:
-      `Am schnellsten online: Auf der Seite <a class="link-ink" href="${url('/termin/')}">Termin buchen</a> wählen Sie im Kalender einen freien Termin und tragen Namen und E-Mail-Adresse ein. Die Bestätigung kommt per E-Mail. Telefonisch oder per E-Mail lässt sich ein Termin ebenso vereinbaren.`,
+      `Am schnellsten online: Auf der Seite <a class="link-ink" href="${url('/de/termin/')}">Termin buchen</a> wählen Sie im Kalender einen freien Termin und tragen Namen und E-Mail-Adresse ein. Die Bestätigung kommt per E-Mail. Telefonisch oder per E-Mail lässt sich ein Termin ebenso vereinbaren.`,
   },
   {
     topic: 'kosten',
@@ -299,16 +299,20 @@ export const faqVariants: FaqItem[] = [
   },
 ];
 
-export const featuredFaq = faq.filter((item) => item.featured);
+/** The derived FAQ lists of one locale, built from its main entries and variants. */
+export function faqLists(entries: FaqItem[], variants: FaqItem[]) {
+  const contextual = [...entries, ...variants];
+  return {
+    featuredFaq: entries.filter((item) => item.featured),
+    /** Questions on a service page: the subject specific variants first, then the shared answers. */
+    faqForService: (slug: ServiceSlug) =>
+      contextual
+        .filter((item) => item.services?.includes(slug))
+        .sort((a, b) => Number(variants.includes(b)) - Number(variants.includes(a))),
+    faqForAudience: (slug: AudienceSlug) => contextual.filter((item) => item.audiences?.includes(slug)),
+    bookingFaq: entries.filter((item) => item.booking),
+    faqByTopic: (topic: FaqTopic) => entries.filter((item) => item.topic === topic),
+  };
+}
 
-const contextual = [...faq, ...faqVariants];
-
-/** Questions on a service page: the subject specific variants first, then the shared answers. */
-export const faqForService = (slug: ServiceSlug) =>
-  contextual.filter((item) => item.services?.includes(slug)).sort((a, b) => Number(faqVariants.includes(b)) - Number(faqVariants.includes(a)));
-
-export const faqForAudience = (slug: AudienceSlug) => contextual.filter((item) => item.audiences?.includes(slug));
-
-export const bookingFaq = faq.filter((item) => item.booking);
-
-export const faqByTopic = (topic: FaqTopic) => faq.filter((item) => item.topic === topic);
+export const { featuredFaq, faqForService, faqForAudience, bookingFaq, faqByTopic } = faqLists(faq, faqVariants);

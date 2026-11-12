@@ -4,6 +4,8 @@
 // has his own cal.com account. To switch, set PUBLIC_CAL_LINK at build time
 // (e.g. PUBLIC_CAL_LINK=patrick-wolf/erstberatung). The demo notice above the calendar and the
 // demo wording in the Datenschutzerklärung follow CAL_IS_DEMO and disappear with the real link.
+import { anchor, localeFromPath, routes } from '../i18n/routes';
+
 const DEMO_CAL_LINK = 'marcelrgberger/tattoogutachten-demo';
 export const CAL_LINK: string = import.meta.env.PUBLIC_CAL_LINK || DEMO_CAL_LINK;
 
@@ -20,18 +22,21 @@ export const CAL_EMBED_SCRIPT = `${CAL_ORIGIN}/embed/embed.js`;
 /** Public booking page, the target for visitors without JavaScript. */
 export const CAL_PUBLIC_URL = `https://cal.com/${CAL_LINK}`;
 
-/** Anchor of the booking section, on the landing page and on /termin/. */
-export const BOOKING_ANCHOR = 'termin';
+/** Anchor of the German booking section, on the landing page and on the booking page. */
+export const BOOKING_ANCHOR = anchor('booking', 'de');
 
 /**
- * Where a booking CTA points from a given page: the inline section on the landing page and on
- * /termin/ itself, the booking page everywhere else. Takes the path without base.
+ * Where a booking CTA points from a given page: the inline section on the landing page and on the
+ * booking page itself, the booking page everywhere else, all in the locale of the page. Takes the path
+ * without base.
  */
 export function bookingHref(pathWithoutBase: string): string {
   const path = `/${pathWithoutBase.replace(/^\/+/, '')}`;
-  if (path === '/') return `/#${BOOKING_ANCHOR}`;
-  if (path.startsWith('/termin/')) return `/termin/#${BOOKING_ANCHOR}`;
-  return '/termin/';
+  const locale = localeFromPath(path);
+  const section = anchor('booking', locale);
+  if (path === routes.home[locale]) return `${routes.home[locale]}#${section}`;
+  if (path.startsWith(routes.booking[locale])) return `${routes.booking[locale]}#${section}`;
+  return routes.booking[locale];
 }
 
 /**

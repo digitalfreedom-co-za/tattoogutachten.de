@@ -35,8 +35,8 @@ Die Nachbehandlung gehört zum Ablauf dazu. Deshalb sind die Pflegeanweisungen, 
 
 ## Wer beauftragt ein Hygiene-Gutachten?
 
-Kunden und Studios gleichermaßen. Ein Kunde zweifelt nach einer Tätowierung oder einem Piercing an den Abläufen im Studio, oder einem Studio werden Mängel bei Hygiene und Arbeitsabläufen vorgeworfen. Auch Rechtsanwälte und Gerichte beauftragen ein Gutachten, wenn die Hygiene Teil eines Verfahrens ist. Die Bewertung hängt nicht davon ab, wer den Auftrag erteilt. Mehr dazu auf der Seite [Hygiene-Gutachten](/leistungen/hygiene-gutachten/) und unter [Gutachten für Tattoo- und Piercingstudios](/fuer-tattoo-studios/).
+Kunden und Studios gleichermaßen. Ein Kunde zweifelt nach einer Tätowierung oder einem Piercing an den Abläufen im Studio, oder einem Studio werden Mängel bei Hygiene und Arbeitsabläufen vorgeworfen. Auch Rechtsanwälte und Gerichte beauftragen ein Gutachten, wenn die Hygiene Teil eines Verfahrens ist. Die Bewertung hängt nicht davon ab, wer den Auftrag erteilt. Mehr dazu auf der Seite [Hygiene-Gutachten](/de/leistungen/hygiene-gutachten/) und unter [Gutachten für Tattoo- und Piercingstudios](/de/fuer-tattoo-studios/).
 
 ## Kann ein Gutachten eine Infektion feststellen?
 
-Nein. Ob eine Infektion oder ein gesundheitlicher Schaden vorliegt, stellt ein Arzt fest. Das Hygiene-Gutachten bewertet die Abläufe im Studio. Bei gesundheitlichen Beschwerden ist deshalb zuerst der Arzt der richtige Ansprechpartner, ärztliche Unterlagen können später in die Begutachtung einfließen. Weitere Antworten finden Sie unter [häufige Fragen](/haeufige-fragen/#begutachtung).
+Nein. Ob eine Infektion oder ein gesundheitlicher Schaden vorliegt, stellt ein Arzt fest. Das Hygiene-Gutachten bewertet die Abläufe im Studio. Bei gesundheitlichen Beschwerden ist deshalb zuerst der Arzt der richtige Ansprechpartner, ärztliche Unterlagen können später in die Begutachtung einfließen. Weitere Antworten finden Sie unter [häufige Fragen](/de/haeufige-fragen/#begutachtung).

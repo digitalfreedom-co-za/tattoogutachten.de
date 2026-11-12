@@ -8,22 +8,36 @@
 // aria-current="page" marks only the exact page; the parent section is a visual state (data-active).
 // The audience pages form a "Für wen" group after the first nav item: a details disclosure in the
 // desktop row (works without JS; the script closes it on Escape, outside click and focus loss) and a
-// labelled group in the menu panel.
+// labelled group in the menu panel. The language switch sits next to the CTA and in the menu panel.
 import Logo from './Logo.astro';
+import LanguageSwitch from './LanguageSwitch.astro';
 import Container from '../ui/Container.astro';
 import Icon from '../ui/Icon.astro';
 import Button from '../ui/Button.astro';
-import { mainNav, contact } from '../../config/site';
-import { audiences, audienceHref } from '../../data/audiences';
+import { mainNavFor, contact } from '../../config/site';
+import { audiencesFor } from '../../data';
 import { pageCta } from '../../lib/primary-cta';
 import { url, withoutBase } from '../../lib/url';
+import { pageLocale, t, routes, anchor, type PathPair } from '../../i18n';
+
+interface Props {
+  alternates: PathPair | null;
+}
+
+const { alternates } = Astro.props;
+const locale = pageLocale(Astro.url);
+const nav = t(locale).nav;
+const labels = t(locale).contactLabels;
+const mainNav = mainNavFor(locale);
 
 const normalize = (path: string) => (path.endsWith('/') ? path : `${path}/`);
 const currentPath = normalize(Astro.url.pathname);
 const isPage = (href: string) => currentPath === normalize(url(href));
-const isSection = (href: string) => currentPath.startsWith(normalize(url(href)));
+// The locale root is no section, or every page of the locale would mark its first nav item.
+const isSection = (href: string) => href !== routes.home[locale] && currentPath.startsWith(normalize(url(href)));
 const cta = pageCta(withoutBase(currentPath));
-const audienceNav = audiences.map((audience) => ({ label: audience.navLabel, href: audienceHref(audience) }));
+const audienceNav = audiencesFor(locale).map((audience) => ({ label: audience.navLabel, href: audience.href }));
+const audiencesAnchor = `${routes.home[locale]}#${anchor('audiences', locale)}`;
 const audienceActive = audienceNav.some((item) => isPage(item.href));
 const [firstNav, ...restNav] = mainNav;
 ---
@@ -32,7 +46,7 @@ const [firstNav, ...restNav] = mainNav;
   <Container class="header-row flex min-h-(--header-height) items-center justify-between gap-2 min-[360px]:gap-4">
     <Logo />
 
-    <nav aria-label="Hauptnavigation" class="desktop-nav hidden lg:block">
+    <nav aria-label={nav.main} class="desktop-nav hidden lg:block">
       <ul class="flex flex-wrap items-center gap-x-4 xl:gap-x-9">
         {
           [firstNav, null, ...restNav].map((item) =>
@@ -53,10 +67,10 @@ const [firstNav, ...restNav] = mainNav;
                 <details class="nav-menu group/menu" data-nav-menu>
                   <summary
                     data-active={audienceActive ? '' : undefined}
-                    data-nav-href="/#zielgruppen"
+                    data-nav-href={audiencesAnchor}
                     class="nav-link relative flex min-h-11 min-w-11 cursor-pointer list-none items-center gap-1.5 whitespace-nowrap py-2 text-[0.875rem] font-medium xl:text-[0.9375rem] text-ink-soft transition-colors hover:text-ink data-active:text-oxblood [&::-webkit-details-marker]:hidden"
                   >
-                    Für wen
+                    {nav.audiences}
                     <Icon name="chevron" size={14} class="rotate-90 transition-transform duration-200 group-open/menu:-rotate-90 motion-reduce:transition-none" />
                   </summary>
                   <ul class="absolute top-full left-0 z-50 mt-3 grid w-72 border border-ink bg-paper py-2 shadow-[0_18px_40px_-20px_rgb(23_20_15/0.45)]">
@@ -81,16 +95,17 @@ const [firstNav, ...restNav] = mainNav;
     </nav>
 
     <div class="flex items-center gap-1.5 min-[360px]:gap-2">
+      <LanguageSwitch alternates={alternates} class="header-lang" />
       <Button href={cta.href} icon={cta.icon} class="header-cta whitespace-nowrap">{cta.label}</Button>
       <button
         type="button"
         class="menu-toggle hidden size-11 items-center justify-center bg-ink text-paper transition-colors hover:bg-oxblood"
         aria-expanded="false"
         aria-controls="mobile-nav"
-        aria-label="Menü öffnen"
-        title="Menü"
-        data-label-open="Menü öffnen"
-        data-label-close="Menü schließen"
+        aria-label={nav.menuOpen}
+        title={nav.menu}
+        data-label-open={nav.menuOpen}
+        data-label-close={nav.menuClose}
       >
         <Icon name="menu" size={22} class="icon-open" />
         <Icon name="close" size={22} class="icon-close hidden" />
@@ -100,7 +115,7 @@ const [firstNav, ...restNav] = mainNav;
 
   <div id="mobile-nav" class="mobile-nav border-t border-ink/15 bg-paper lg:hidden">
     <Container class="flex min-h-full flex-col py-8">
-      <nav aria-label="Hauptnavigation mobil">
+      <nav aria-label={nav.mainMobile}>
         <ul class="border-t border-ink">
           {
             [firstNav, null, ...restNav].map((item, index) =>
@@ -118,7 +133,7 @@ const [firstNav, ...restNav] = mainNav;
                 </li>
               ) : (
                 <li class="mobile-nav-item border-b border-rule py-4" style={`--i:${index}`}>
-                  <p id="mobile-nav-fuer-wen" class="label text-graphite">Für wen</p>
+                  <p id="mobile-nav-fuer-wen" class="label text-graphite">{nav.audiences}</p>
                   <ul class="mt-1 grid" aria-labelledby="mobile-nav-fuer-wen">
                     {audienceNav.map((entry) => (
                       <li>
@@ -144,14 +159,17 @@ const [firstNav, ...restNav] = mainNav;
           <li>
             <a class="link-ink inline-flex min-h-11 items-center gap-3" href={contact.phone.href}>
               <Icon name="phone" size={18} class="shrink-0 text-oxblood" />
-              <span><span class="sr-only">Telefon </span>{contact.phone.display}</span>
+              <span><span class="sr-only">{labels.phone} </span>{contact.phone.display}</span>
             </a>
           </li>
           <li>
             <a class="link-ink inline-flex min-h-11 items-center gap-3" href={contact.email.href}>
               <Icon name="mail" size={18} class="shrink-0 text-oxblood" />
-              <span class="break-all"><span class="sr-only">E-Mail </span>{contact.email.display}</span>
+              <span class="break-all"><span class="sr-only">{labels.email} </span>{contact.email.display}</span>
             </a>
+          </li>
+          <li>
+            <LanguageSwitch alternates={alternates} variant="panel" />
           </li>
         </ul>
       </div>

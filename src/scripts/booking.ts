@@ -72,20 +72,6 @@ function setState(root: HTMLElement, state: 'blocked' | 'pending' | 'loading' | 
   if (status) status.textContent = root.dataset[`status${state[0].toUpperCase()}${state.slice(1)}`] ?? '';
 }
 
-/** German names of the IANA regions, for the timezone select. */
-const REGIONS: Record<string, string> = {
-  Africa: 'Afrika',
-  America: 'Amerika',
-  Antarctica: 'Antarktis',
-  Arctic: 'Arktis',
-  Asia: 'Asien',
-  Atlantic: 'Atlantik',
-  Australia: 'Australien',
-  Europe: 'Europa',
-  Indian: 'Indischer Ozean',
-  Pacific: 'Pazifik',
-};
-
 /** Selected timezone per booking block; the device timezone until the visitor picks another. */
 const timezones = new WeakMap<HTMLElement, string>();
 const deviceTimezone = (): string => Intl.DateTimeFormat().resolvedOptions().timeZone || 'Europe/Berlin';
@@ -99,10 +85,13 @@ function setupTimezone(root: HTMLElement): void {
   const device = deviceTimezone();
   const zones = Intl.supportedValuesOf('timeZone');
   if (!zones.includes(device)) zones.push(device);
+  // Region names and the device label come in the page language from the block (BookingEmbed.astro).
+  const regions = JSON.parse(root.dataset.regions ?? '{}') as Record<string, string>;
+  const deviceSuffix = root.dataset.deviceSuffix ?? '';
   const groups = new Map<string, HTMLOptGroupElement>();
   for (const zone of zones) {
     const [region, ...rest] = zone.split('/');
-    const regionLabel = REGIONS[region] ?? region;
+    const regionLabel = regions[region] ?? region;
     const place = rest.length > 0 ? rest.join(', ').replaceAll('_', ' ') : zone;
     let group = groups.get(regionLabel);
     if (!group) {
@@ -110,7 +99,7 @@ function setupTimezone(root: HTMLElement): void {
       group.label = regionLabel;
       groups.set(regionLabel, group);
     }
-    const option = new Option(zone === device ? `${place}, Ihr Gerät` : place, zone, false, zone === device);
+    const option = new Option(zone === device ? `${place}, ${deviceSuffix}` : place, zone, false, zone === device);
     group.append(option);
   }
   select.replaceChildren(...groups.values());

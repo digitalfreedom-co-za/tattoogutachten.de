@@ -3,9 +3,9 @@
 // consultation: there the CTA leads to the contact details for an enquiry by telephone or email.
 // Everywhere else it books the first consultation.
 import { bookingHref } from '../config/booking';
-import { primaryCta } from '../config/site';
-import { audiences, audienceHref } from '../data/audiences';
-import { services, serviceHref } from '../data/services';
+import { primaryCtaFor } from '../config/site';
+import { audiencesFor, servicesFor } from '../data';
+import { locales, localeFromPath, routes, anchor, t } from '../i18n';
 import type { IconName } from '../components/ui/Icon.astro';
 
 export interface PageCta {
@@ -18,10 +18,16 @@ export interface PageCta {
 }
 
 /** Pages whose visitors send an enquiry instead of booking a consultation. Paths without base. */
-const enquiryPaths = new Set<string>([
-  ...audiences.filter((audience) => audience.primaryAction === 'enquiry').map(audienceHref),
-  ...services.filter((service) => service.enquiry).map(serviceHref),
-]);
+const enquiryPaths = new Set<string>(
+  locales.flatMap((locale) => [
+    ...audiencesFor(locale)
+      .filter((audience) => audience.primaryAction === 'enquiry')
+      .map((audience) => audience.href),
+    ...servicesFor(locale)
+      .filter((service) => service.enquiry)
+      .map((service) => service.href),
+  ]),
+);
 
 const normalize = (path: string) => {
   const withSlash = `/${path.replace(/^\/+/, '')}`;
@@ -29,18 +35,20 @@ const normalize = (path: string) => {
 };
 
 export function pageCta(pathWithoutBase: string): PageCta {
+  const locale = localeFromPath(pathWithoutBase);
+  const copy = t(locale).cta;
   if (enquiryPaths.has(normalize(pathWithoutBase))) {
     return {
-      label: 'Anfrage stellen',
-      href: '/kontakt/#kontaktdaten',
+      label: copy.enquiry,
+      href: `${routes.contact[locale]}#${anchor('contact-details', locale)}`,
       icon: 'mail',
-      note: ['Anfrage per Telefon', 'oder E-Mail'],
+      note: [copy.enquiryNote[0], copy.enquiryNote[1]],
     };
   }
   return {
-    label: primaryCta.label,
+    label: primaryCtaFor(locale).label,
     href: bookingHref(pathWithoutBase),
     icon: 'calendar',
-    note: ['Erstberatung kostenlos,', 'bis zu 60 Minuten'],
+    note: [copy.bookingNote[0], copy.bookingNote[1]],
   };
 }

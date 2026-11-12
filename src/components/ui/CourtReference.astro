@@ -1,7 +1,10 @@
 ---
 // Court reference block, set like the header of a court file.
 // The legal note is mandatory: a court appointment in a single case is not a public appointment.
-import { credentials } from '../../config/site';
+import { pageLocale, t } from '../../i18n';
+
+const locale = pageLocale(Astro.url);
+const copy = t(locale).courtReference;
 
 interface Props {
   court?: string;
@@ -11,18 +14,18 @@ interface Props {
 }
 
 const {
-  court = credentials.court,
-  role = 'Als Sachverständiger in einem Gerichtsverfahren bestellt',
-  note = 'Die gerichtliche Bestellung in einem einzelnen Verfahren stellt keine öffentliche Bestellung und Vereidigung als Sachverständiger dar.',
+  court = t(locale).court,
+  role = copy.role,
+  note = copy.note,
   class: className,
 } = Astro.props;
 ---
 
-<aside class:list={['relative border-y border-ink py-8 md:py-10', className]} aria-label="Gerichtliche Bestellung" data-reveal>
+<aside class:list={['relative border-y border-ink py-8 md:py-10', className]} aria-label={copy.label} data-reveal>
   <div class="grid gap-6 md:grid-cols-12 md:gap-x-8">
     <div class="md:col-span-3">
-      <p class="label text-oxblood">Gericht</p>
-      <p class="numeral mt-2 text-sm text-graphite">Bestellung als Sachverständiger</p>
+      <p class="label text-oxblood">{copy.court}</p>
+      <p class="numeral mt-2 text-sm text-graphite">{copy.appointment}</p>
     </div>
     <div class="min-w-0 md:col-span-9 lg:col-span-8">
       <p class="font-serif text-h3">{court}</p>

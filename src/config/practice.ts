@@ -2,6 +2,8 @@
 // he has confirmed the wording; components render a line only when its field is set, so nothing here
 // is ever guessed. The open fields are listed in README.md (Offene Punkte vor dem Livegang).
 
+import type { Locale } from '../i18n/routes';
+
 export interface PracticeFacts {
   /** How the free first consultation takes place and who calls whom, e.g. telephone or video. */
   consultationMethod: string | null;
@@ -25,15 +27,35 @@ export interface PracticeFacts {
   courtAvailability: string | null;
 }
 
-export const practice: PracticeFacts = {
-  consultationMethod: null,
-  documentHandover: null,
-  responseTime: null,
-  reportTurnaround: null,
-  officeVisits: null,
-  conflictHandling: null,
-  travelCosts: null,
-  vat: null,
-  rate: null,
-  courtAvailability: null,
+/** Confirmed wording per locale; German and English are filled in together. */
+const facts: Record<Locale, PracticeFacts> = {
+  de: {
+    consultationMethod: null,
+    documentHandover: null,
+    responseTime: null,
+    reportTurnaround: null,
+    officeVisits: null,
+    conflictHandling: null,
+    travelCosts: null,
+    vat: null,
+    rate: null,
+    courtAvailability: null,
+  },
+  en: {
+    consultationMethod: null,
+    documentHandover: null,
+    responseTime: null,
+    reportTurnaround: null,
+    officeVisits: null,
+    conflictHandling: null,
+    travelCosts: null,
+    vat: null,
+    rate: null,
+    courtAvailability: null,
+  },
 };
+
+export const practiceFor = (locale: Locale): PracticeFacts => facts[locale];
+
+/** German facts, read by the German content modules and pages. */
+export const practice: PracticeFacts = facts.de;

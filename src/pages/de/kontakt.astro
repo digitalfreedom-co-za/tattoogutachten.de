@@ -1,23 +1,23 @@
 ---
 // Contact: office address with a plain maps link, phone, email, area served and the booking CTA.
 // No form and no embedded map on purpose, so nothing loads from third parties on this page.
-import BaseLayout from '../layouts/BaseLayout.astro';
-import PageHeader from '../components/ui/PageHeader.astro';
-import Section from '../components/ui/Section.astro';
-import Button from '../components/ui/Button.astro';
-import Icon, { type IconName } from '../components/ui/Icon.astro';
-import Seal from '../components/ui/Seal.astro';
-import CtaBand from '../components/ui/CtaBand.astro';
-import EnquiryNote from '../components/ui/EnquiryNote.astro';
-import { site, contact, credentials, contentUpdated, primaryCta, type NavItem } from '../config/site';
-import { practice } from '../config/practice';
-import { audiences, audienceHref } from '../data/audiences';
-import { ids, ref } from '../lib/schema';
-import { url } from '../lib/url';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/ui/PageHeader.astro';
+import Section from '../../components/ui/Section.astro';
+import Button from '../../components/ui/Button.astro';
+import Icon, { type IconName } from '../../components/ui/Icon.astro';
+import Seal from '../../components/ui/Seal.astro';
+import CtaBand from '../../components/ui/CtaBand.astro';
+import EnquiryNote from '../../components/ui/EnquiryNote.astro';
+import { site, contact, credentials, contentUpdated, primaryCta, type NavItem } from '../../config/site';
+import { practice } from '../../config/practice';
+import { audiences, audienceHref } from '../../data/audiences';
+import { ids, ref } from '../../lib/schema';
+import { url } from '../../lib/url';
 
 const title = `Kontakt: ${site.office}, Tattoo Gutachter in ${contact.city}`;
 const description = `Tattoo Gutachter ${site.expert}: ${site.office}, ${contact.street}, ${contact.postalCode} ${contact.city}. Telefon ${contact.phone.display}, E-Mail oder Online-Termin.`;
-const breadcrumbs: NavItem[] = [{ label: 'Kontakt', href: '/kontakt/' }];
+const breadcrumbs: NavItem[] = [{ label: 'Kontakt', href: '/de/kontakt/' }];
 
 interface Channel {
   icon: IconName;
@@ -73,7 +73,7 @@ const channels: Channel[] = [
       <span class="sr-only">Anrufen: </span>{contact.phone.display}
     </Button>
     <Button href={contact.email.href} variant="secondary" icon="mail">E-Mail schreiben</Button>
-    <Button href="/termin/" variant="text" icon="calendar">{primaryCta.label}</Button>
+    <Button href="/de/termin/" variant="text" icon="calendar">{primaryCta.label}</Button>
   </PageHeader>
 
   <Section
@@ -116,7 +116,7 @@ const channels: Channel[] = [
             Freie Termine sehen Sie direkt im Kalender. Die Bestätigung kommt per E-Mail.
           </p>
           <div class="mt-6">
-            <Button href="/termin/" variant="secondary" icon="calendar">Termin online buchen</Button>
+            <Button href="/de/termin/" variant="secondary" icon="calendar">Termin online buchen</Button>
           </div>
       </aside>
     </div>
@@ -150,7 +150,7 @@ const channels: Channel[] = [
         <p class="min-w-0 flex-1 basis-64 text-sm text-graphite">
           Geprüfter und zertifizierter Gutachter des {credentials.associationShort}, Bestätigungs-Register
           <span class="numeral whitespace-nowrap text-ink">Nr. {credentials.registerNumber}</span>. Mehr zur Qualifikation auf der Seite
-          <a class="link-ink" href={url('/ueber-mich/')}>über {site.expert}</a>.
+          <a class="link-ink" href={url('/de/ueber-mich/')}>über {site.expert}</a>.
         </p>
       </div>
     </div>

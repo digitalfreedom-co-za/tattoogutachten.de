@@ -8,6 +8,8 @@
 // wording of the dialog changes in substance; a stored choice of an older version counts as no
 // choice and the dialog asks again. The Datenschutzerklärung (#einwilligung) lists the key.
 
+import { anchor, routes, type Locale } from '../i18n/routes';
+
 export const CONSENT_STORAGE_KEY = 'tg-consent';
 
 /** Version of the dialog text a stored choice refers to (Art. 7 Abs. 1 DSGVO). */
@@ -23,5 +25,9 @@ export interface ConsentRecord {
   categories: Record<ConsentCategory, boolean>;
 }
 
-/** Anchor of the consent section in the Datenschutzerklärung, also the no-JS target of the footer link. */
-export const CONSENT_ANCHOR = 'einwilligung';
+/** Anchor of the consent section in the German Datenschutzerklärung, also the no-JS target of the footer link. */
+export const CONSENT_ANCHOR = anchor('consent', 'de');
+
+/** The consent section and the booking section of the privacy policy of a locale (path without base). */
+export const privacySection = (locale: Locale, section: 'consent' | 'booking-calendar') =>
+  `${routes.privacy[locale]}#${anchor(section, locale)}`;

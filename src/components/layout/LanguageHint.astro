@@ -1,0 +1,83 @@
+---
+// Language suggestion instead of an automatic redirect (Google: "Avoid automatically redirecting users
+// from one language version of a site to a different language version"). Only on the locale roots:
+// the English root offers German to browsers whose first language is German, the German root offers
+// English to browsers without German in their language list. Fixed below the header, so it never
+// shifts the layout; hidden until the inline script decides to show it. Not shown again after a
+// dismissal or an explicit choice in the language switch (both store localStorage locale-explicit,
+// listed in the privacy policy). Text and link are in the offered language and carry its lang.
+import Icon from '../ui/Icon.astro';
+import { url, withoutBase } from '../../lib/url';
+import { pageLocale, t, localeMeta, routes, anchorMap } from '../../i18n';
+
+const here = pageLocale(Astro.url);
+const target = here === 'de' ? 'en' : 'de';
+const isRoot = withoutBase(Astro.url.pathname) === routes.home[here];
+const copy = t(target).language;
+const anchors = anchorMap(here, target);
+---
+
+{
+  isRoot && (
+    <div
+      id="language-hint"
+      role="region"
+      aria-label={copy.hintRegion}
+      lang={localeMeta[target].lang}
+      hidden
+      class="language-hint fixed inset-x-3 z-30 mx-auto flex max-w-md items-center gap-3 border border-ink bg-paper py-2 pr-2 pl-4 shadow-[0_18px_40px_-20px_rgb(23_20_15/0.45)] sm:right-6 sm:left-auto sm:mx-0"
+    >
+      <p class="flex-1 text-sm leading-snug text-ink">
+        {copy.hint}{' '}
+        <a href={url(routes.home[target])} hreflang={localeMeta[target].lang} data-locale-choice data-language-hint-link class="link-ink font-semibold">
+          {copy.hintAction}
+        </a>
+      </p>
+      <button
+        type="button"
+        data-language-hint-close
+        aria-label={copy.hintDismiss}
+        title={copy.hintDismiss}
+        class="inline-flex size-11 shrink-0 items-center justify-center text-ink transition-colors hover:text-oxblood"
+      >
+        <Icon name="close" size={18} />
+      </button>
+    </div>
+  )
+}
+{
+  isRoot && (
+    <script is:inline define:vars={{ target, anchors }}>
+      (function () {
+        var el = document.getElementById('language-hint');
+        if (!el) return;
+        try {
+          if (localStorage.getItem('locale-explicit')) return;
+        } catch (e) {}
+        var prefs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ''];
+        var langs = [];
+        for (var i = 0; i < prefs.length; i++) langs.push(String(prefs[i]).toLowerCase().split('-')[0]);
+        // English root: offer German when German is the first browser language.
+        // German root: offer English when German is not among the browser languages at all.
+        var offer = target === 'de' ? langs[0] === 'de' : langs.indexOf('de') === -1;
+        if (!offer) return;
+        var link = el.querySelector('[data-language-hint-link]');
+        var hash = location.hash.slice(1);
+        if (link && hash) link.hash = anchors[hash] || hash;
+        el.hidden = false;
+        el.querySelector('[data-language-hint-close]').addEventListener('click', function () {
+          try {
+            localStorage.setItem('locale-explicit', '1');
+          } catch (e) {}
+          el.hidden = true;
+        });
+      })();
+    </script>
+  )
+}
+
+<style>
+  .language-hint {
+    top: calc(var(--header-height) + 0.75rem);
+  }
+</style>

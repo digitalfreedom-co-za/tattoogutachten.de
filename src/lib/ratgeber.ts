@@ -1,18 +1,21 @@
-// Queries over the Ratgeber collection, shared by the article pages, /ratgeber/,
-// the audience pages and the landing page.
+// Queries over the guide articles (German collection ratgeber, English collection guides), shared by
+// the article pages, the guide index, the audience pages and the landing page.
 import { getCollection, type CollectionEntry } from 'astro:content';
 import type { AudienceSlug } from '../data/audiences';
 import type { ServiceSlug } from '../data/services';
+import { articlePath, type Locale } from '../i18n/routes';
 
-export type Article = CollectionEntry<'ratgeber'>;
+export type Article = CollectionEntry<'ratgeber'> | CollectionEntry<'guides'>;
 
-export const articleHref = (article: Article) => `/ratgeber/${article.id}/`;
+export const articleLocale = (article: Article): Locale => (article.collection === 'guides' ? 'en' : 'de');
+
+export const articleHref = (article: Article) => articlePath(article.id, articleLocale(article));
 
 export const isoDate = (date: Date) => date.toISOString().slice(0, 10);
 
-/** All articles in display order. */
-export async function getArticles(): Promise<Article[]> {
-  const articles = await getCollection('ratgeber');
+/** All articles of a locale in display order. */
+export async function getArticles(locale: Locale): Promise<Article[]> {
+  const articles: Article[] = locale === 'en' ? await getCollection('guides') : await getCollection('ratgeber');
   return articles.sort((a, b) => a.data.order - b.data.order);
 }
 

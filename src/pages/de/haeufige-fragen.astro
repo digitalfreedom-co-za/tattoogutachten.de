@@ -1,26 +1,26 @@
 ---
 // All FAQ entries grouped by topic, every answer visible. The entries come from src/data/faq.ts,
 // the same list the landing page teaser and the FAQPage JSON-LD use.
-import BaseLayout from '../layouts/BaseLayout.astro';
-import PageHeader from '../components/ui/PageHeader.astro';
-import Section from '../components/ui/Section.astro';
-import Container from '../components/ui/Container.astro';
-import Button from '../components/ui/Button.astro';
-import Faq from '../components/ui/Faq.astro';
-import CtaBand from '../components/ui/CtaBand.astro';
-import { contentUpdated, primaryCta, type NavItem } from '../config/site';
-import { faq, faqTopics, faqByTopic, type FaqTopic } from '../data/faq';
-import { faqQuestions } from '../lib/schema';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/ui/PageHeader.astro';
+import Section from '../../components/ui/Section.astro';
+import Container from '../../components/ui/Container.astro';
+import Button from '../../components/ui/Button.astro';
+import Faq from '../../components/ui/Faq.astro';
+import CtaBand from '../../components/ui/CtaBand.astro';
+import { contentUpdated, primaryCta, type NavItem } from '../../config/site';
+import { faq, faqTopics, faqByTopic, type FaqTopic } from '../../data/faq';
+import { faqQuestions } from '../../lib/schema';
 
-const breadcrumbs: NavItem[] = [{ label: 'Häufige Fragen', href: '/haeufige-fragen/' }];
+const breadcrumbs: NavItem[] = [{ label: 'Häufige Fragen', href: '/de/haeufige-fragen/' }];
 
 /** Where each topic continues in depth. */
 const topicLinks: Record<FaqTopic, NavItem> = {
-  grundlagen: { label: 'Tattoo-Gutachten bei handwerklichen Mängeln', href: '/leistungen/tattoo-gutachten/' },
-  begutachtung: { label: 'Alle Leistungen im Überblick', href: '/leistungen/' },
-  auftrag: { label: 'Privatgutachten oder Gerichtsgutachten', href: '/leistungen/privatgutachten/#privat-oder-gericht' },
-  kosten: { label: 'Ablauf und Kosten im Detail', href: '/ablauf-kosten/' },
-  person: { label: 'Mehr über Patrick Wolf', href: '/ueber-mich/' },
+  grundlagen: { label: 'Tattoo-Gutachten bei handwerklichen Mängeln', href: '/de/leistungen/tattoo-gutachten/' },
+  begutachtung: { label: 'Alle Leistungen im Überblick', href: '/de/leistungen/' },
+  auftrag: { label: 'Privatgutachten oder Gerichtsgutachten', href: '/de/leistungen/privatgutachten/#privat-oder-gericht' },
+  kosten: { label: 'Ablauf und Kosten im Detail', href: '/de/ablauf-kosten/' },
+  person: { label: 'Mehr über Patrick Wolf', href: '/de/ueber-mich/' },
 };
 ---
 

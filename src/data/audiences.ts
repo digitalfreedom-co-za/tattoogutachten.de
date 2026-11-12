@@ -1,7 +1,8 @@
 // Who commissions a report. The landing page shows the teaser fields, the audience pages
-// (/<slug>/) read the full entry. Facts only from docs/source-content.
+// read the full entry. Facts only from docs/source-content.
 
 import type { ServiceSlug } from './services';
+import { audiencePath, type Locale } from '../i18n/routes';
 
 export type AudienceSlug = 'fuer-privatpersonen' | 'fuer-tattoo-studios' | 'fuer-rechtsanwaelte' | 'fuer-gerichte';
 
@@ -20,7 +21,10 @@ export interface FirstStep {
 }
 
 export interface Audience {
+  /** Shared id of the audience in both locales; German pages also use it as the URL segment. */
   slug: AudienceSlug;
+  /** Path of the audience page (without base) in the locale of this entry. */
+  href: string;
   label: string;
   /** Short label for navigation menus. */
   navLabel: string;
@@ -55,7 +59,13 @@ export interface Audience {
   ctaText: string;
 }
 
-export const audiences: Audience[] = [
+/** An audience as written in a content module; the page path is added per locale. */
+export type AudienceEntry = Omit<Audience, 'href'>;
+
+export const localizeAudiences = (entries: AudienceEntry[], locale: Locale): Audience[] =>
+  entries.map((entry) => ({ ...entry, href: audiencePath(entry.slug, locale) }));
+
+const entries: AudienceEntry[] = [
   {
     slug: 'fuer-privatpersonen',
     label: 'Privatpersonen',
@@ -96,12 +106,12 @@ export const audiences: Audience[] = [
       {
         title: 'Den Zustand festhalten',
         text: 'Machen Sie aussagekräftige Fotos bei Tageslicht und bewahren Sie die Bilder aus der Stech- und Heilungsphase auf. Lassen Sie vor dem Nachstechen, Überarbeiten oder Entfernen den Zustand dokumentieren.',
-        link: { label: 'Tattoo fotografieren für die Begutachtung', href: '/ratgeber/tattoo-fotografieren-fuer-die-begutachtung/' },
+        link: { label: 'Tattoo fotografieren für die Begutachtung', href: '/de/ratgeber/tattoo-fotografieren-fuer-die-begutachtung/' },
       },
       {
         title: 'Unterlagen aufbewahren',
         text: 'Vorlage, Rechnung, Pflegeanweisungen und die Nachrichten mit dem Studio belegen Auftrag und Verlauf. Fehlt etwas, ist das kein Grund, das Gespräch aufzuschieben.',
-        link: { label: 'Tattoo misslungen, was jetzt?', href: '/ratgeber/tattoo-misslungen-was-tun/' },
+        link: { label: 'Tattoo misslungen, was jetzt?', href: '/de/ratgeber/tattoo-misslungen-was-tun/' },
       },
       {
         title: 'Bei Beschwerden zum Arzt',
@@ -273,10 +283,14 @@ export const audiences: Audience[] = [
   },
 ];
 
-export const audienceHref = (audience: Audience) => `/${audience.slug}/`;
+export const audiences: Audience[] = localizeAudiences(entries, 'de');
 
-export const audienceBySlug = (slug: AudienceSlug): Audience => {
-  const audience = audiences.find((entry) => entry.slug === slug);
+export const audienceHref = (audience: Audience) => audience.href;
+
+export const findAudience = (list: Audience[], slug: AudienceSlug): Audience => {
+  const audience = list.find((entry) => entry.slug === slug);
   if (!audience) throw new Error(`Unknown audience: ${slug}`);
   return audience;
 };
+
+export const audienceBySlug = (slug: AudienceSlug): Audience => findAudience(audiences, slug);

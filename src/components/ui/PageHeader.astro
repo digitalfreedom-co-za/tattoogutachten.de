@@ -11,6 +11,7 @@ import Breadcrumbs from './Breadcrumbs.astro';
 import Eyebrow from './Eyebrow.astro';
 import type { NavItem } from '../../config/site';
 import { withDisplayBreaks } from '../../lib/display-breaks';
+import { pageLocale, t, formatDate } from '../../i18n';
 
 interface Props {
   heading: string;
@@ -25,9 +26,8 @@ interface Props {
 const { heading, lead, label, breadcrumbs, updated, class: className } = Astro.props;
 const hasMeta = Astro.slots.has('meta');
 const hasActions = Astro.slots.has('default');
-const updatedText = updated
-  ? new Intl.DateTimeFormat('de-DE', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(updated))
-  : undefined;
+const locale = pageLocale(Astro.url);
+const updatedText = updated ? formatDate(updated, locale) : undefined;
 ---
 
 <Container class:list={['pt-10 pb-12 md:pt-14 md:pb-16', className]}>
@@ -48,7 +48,7 @@ const updatedText = updated
     {
       (updatedText || hasMeta) && (
         <div class="flex min-w-0 flex-wrap items-baseline gap-x-5 gap-y-1 border-t border-rule pt-3 text-sm text-graphite md:col-span-3 md:col-start-1 md:row-start-2 md:block md:border-t-0 md:pt-0">
-          {updatedText && <p class="md:mt-3">Stand: <time datetime={updated}>{updatedText}</time></p>}
+          {updatedText && <p class="md:mt-3">{t(locale).pageHeader.updated} <time datetime={updated}>{updatedText}</time></p>}
           {hasMeta && <div class="md:mt-3"><slot name="meta" /></div>}
         </div>
       )

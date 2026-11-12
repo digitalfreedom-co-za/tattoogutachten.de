@@ -1,8 +1,9 @@
 // The six services, defined once. The landing page shows the teaser fields,
-// /leistungen/ and the service pages (/leistungen/<slug>/) read the full entry,
+// the service index and the service pages read the full entry,
 // the Service JSON-LD will read the same list.
 
 import type { NavItem } from '../config/site';
+import { servicePath, type Locale } from '../i18n/routes';
 
 export type ServiceSlug =
   | 'tattoo-gutachten'
@@ -49,7 +50,10 @@ export const serviceGroups: ServiceGroupInfo[] = [
 ];
 
 export interface Service {
+  /** Shared id of the service in both locales; German pages also use it as the URL segment. */
   slug: ServiceSlug;
+  /** Path of the service page (without base) in the locale of this entry. */
+  href: string;
   group: ServiceGroup;
   /** Short name, used in breadcrumbs, related links and running text. */
   name: string;
@@ -103,7 +107,13 @@ const evidenceTopic: ServiceTopic = {
   ],
 };
 
-export const services: Service[] = [
+/** A service as written in a content module; the page path is added per locale. */
+export type ServiceEntry = Omit<Service, 'href'>;
+
+export const localizeServices = (entries: ServiceEntry[], locale: Locale): Service[] =>
+  entries.map((entry) => ({ ...entry, href: servicePath(entry.slug, locale) }));
+
+const entries: ServiceEntry[] = [
   {
     slug: 'tattoo-gutachten',
     group: 'gegenstand',
@@ -307,13 +317,13 @@ export const services: Service[] = [
           'Bei einer Bestellung durch das Gericht richtet sich die Vergütung nach dem Justizvergütungs- und Entschädigungsgesetz (JVEG) und wird über das Gericht abgerechnet.',
           'Für Rechtsanwälte, die vorab ein Privatgutachten für ihre Mandanten beauftragen, gelten dagegen die im Sachverständigenvertrag vereinbarten Bedingungen.',
         ],
-        link: { label: 'Ablauf und Kosten im Detail', href: '/ablauf-kosten/#kosten' },
+        link: { label: 'Ablauf und Kosten im Detail', href: '/de/ablauf-kosten/#kosten' },
       },
     ],
     showCourtReference: true,
     showComparison: true,
     enquiry: {
-      audienceHref: '/fuer-gerichte/',
+      audienceHref: '/de/fuer-gerichte/',
       audienceLabel: 'Informationen für Gerichte',
       nextIntro:
         'Ein Gericht fragt telefonisch oder per E-Mail an, mit Gericht, Aktenzeichen und Beweisthema. Verfügbarkeit und voraussichtliche Bearbeitungszeit klären wir für das konkrete Verfahren. Rechtsanwälte, die vorab ein Privatgutachten brauchen, beauftragen es nach den Bedingungen des Sachverständigenvertrags.',
@@ -359,7 +369,7 @@ export const services: Service[] = [
       {
         ...evidenceTopic,
         paragraphs: [evidenceTopic.paragraphs[0]],
-        link: { label: 'Beweissicherung mit einem Privatgutachten', href: '/leistungen/privatgutachten/#beweissicherung' },
+        link: { label: 'Beweissicherung mit einem Privatgutachten', href: '/de/leistungen/privatgutachten/#beweissicherung' },
       },
       {
         id: 'grenzen',
@@ -379,13 +389,17 @@ export const services: Service[] = [
   },
 ];
 
-export const serviceHref = (service: Service) => `/leistungen/${service.slug}/`;
+export const services: Service[] = localizeServices(entries, 'de');
 
-export const serviceBySlug = (slug: ServiceSlug): Service => {
-  const service = services.find((entry) => entry.slug === slug);
+export const serviceHref = (service: Service) => service.href;
+
+export const findService = (list: Service[], slug: ServiceSlug): Service => {
+  const service = list.find((entry) => entry.slug === slug);
   if (!service) throw new Error(`Unknown service: ${slug}`);
   return service;
 };
+
+export const serviceBySlug = (slug: ServiceSlug): Service => findService(services, slug);
 
 /** Scope limit that belongs next to every service listing. */
 export const serviceScopeNote =

@@ -1,26 +1,26 @@
 ---
 // Process and costs: the five steps in detail, the cost logic without invented prices,
 // private versus court commission, the preparation checklist and the cost FAQ.
-import BaseLayout from '../layouts/BaseLayout.astro';
-import PageHeader from '../components/ui/PageHeader.astro';
-import Section from '../components/ui/Section.astro';
-import Button from '../components/ui/Button.astro';
-import Steps from '../components/ui/Steps.astro';
-import KeyFacts from '../components/ui/KeyFacts.astro';
-import Checklist from '../components/ui/Checklist.astro';
-import CompareTable from '../components/ui/CompareTable.astro';
-import Faq from '../components/ui/Faq.astro';
-import CtaBand from '../components/ui/CtaBand.astro';
-import EnquiryNote from '../components/ui/EnquiryNote.astro';
-import { practice } from '../config/practice';
-import { contentUpdated, primaryCta } from '../config/site';
-import { steps, costFacts, costDrivers, contractTerms, preparationChecklist } from '../data/process';
-import { reportComparison } from '../data/services';
-import { faqByTopic } from '../data/faq';
-import { url } from '../lib/url';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/ui/PageHeader.astro';
+import Section from '../../components/ui/Section.astro';
+import Button from '../../components/ui/Button.astro';
+import Steps from '../../components/ui/Steps.astro';
+import KeyFacts from '../../components/ui/KeyFacts.astro';
+import Checklist from '../../components/ui/Checklist.astro';
+import CompareTable from '../../components/ui/CompareTable.astro';
+import Faq from '../../components/ui/Faq.astro';
+import CtaBand from '../../components/ui/CtaBand.astro';
+import EnquiryNote from '../../components/ui/EnquiryNote.astro';
+import { practice } from '../../config/practice';
+import { contentUpdated, primaryCta } from '../../config/site';
+import { steps, costFacts, costDrivers, contractTerms, preparationChecklist } from '../../data/process';
+import { reportComparison } from '../../data/services';
+import { faqByTopic } from '../../data/faq';
+import { url } from '../../lib/url';
 
 const costQuestions = faqByTopic('kosten');
-const breadcrumbs = [{ label: 'Ablauf und Kosten', href: '/ablauf-kosten/' }];
+const breadcrumbs = [{ label: 'Ablauf und Kosten', href: '/de/ablauf-kosten/' }];
 ---
 
 <BaseLayout
@@ -86,8 +86,8 @@ const breadcrumbs = [{ label: 'Ablauf und Kosten', href: '/ablauf-kosten/' }];
     <CompareTable caption="Privatgutachten und Gerichtsgutachten im Vergleich" {...reportComparison} />
     <p class="mt-10 max-w-[40rem] text-graphite" data-reveal>
       Mehr zu beiden Wegen auf den Seiten
-      <a class="link-ink" href={url('/leistungen/privatgutachten/')}>Privatgutachten und Beweissicherung</a> und
-      <a class="link-ink" href={url('/leistungen/gerichtsgutachten/')}>Gutachten für Gerichte</a>.
+      <a class="link-ink" href={url('/de/leistungen/privatgutachten/')}>Privatgutachten und Beweissicherung</a> und
+      <a class="link-ink" href={url('/de/leistungen/gerichtsgutachten/')}>Gutachten für Gerichte</a>.
     </p>
   </Section>
 
@@ -114,7 +114,7 @@ const breadcrumbs = [{ label: 'Ablauf und Kosten', href: '/ablauf-kosten/' }];
   <Section id="fragen" label="Häufige Fragen" title="Fragen zu Kosten und Ablauf" tone="deep">
     <p slot="note">
       Alle Fragen nach Themen:
-      <a class="link-ink not-italic" href={url('/haeufige-fragen/')}>häufige Fragen zum Tattoogutachten</a>.
+      <a class="link-ink not-italic" href={url('/de/haeufige-fragen/')}>häufige Fragen zum Tattoogutachten</a>.
     </p>
     <Faq items={costQuestions} name="faq-kosten" />
   </Section>

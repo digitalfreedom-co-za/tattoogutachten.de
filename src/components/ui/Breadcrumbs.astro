@@ -2,6 +2,7 @@
 // Breadcrumb trail. The last item is the current page and is not linked.
 import { url } from '../../lib/url';
 import type { NavItem } from '../../config/site';
+import { pageLocale, t, routes } from '../../i18n';
 
 interface Props {
   items: NavItem[];
@@ -9,10 +10,11 @@ interface Props {
 }
 
 const { items, class: className } = Astro.props;
-const trail: NavItem[] = [{ label: 'Start', href: '/' }, ...items];
+const locale = pageLocale(Astro.url);
+const trail: NavItem[] = [{ label: t(locale).nav.home, href: routes.home[locale] }, ...items];
 ---
 
-<nav aria-label="Brotkrumen" class:list={['label text-graphite', className]}>
+<nav aria-label={t(locale).nav.breadcrumbs} class:list={['label text-graphite', className]}>
   <ol class="flex flex-wrap items-center gap-x-3">
     {
       trail.map((item, index) => {

@@ -23,7 +23,7 @@ Je nach Fragestellung gehören dazu:
 - die dokumentierten Arbeitsabläufe
 - die Nachbehandlung und die Pflegehinweise
 
-Wenn Zweifel an der Hygiene bestehen, können auch die Abläufe im Studio Gegenstand der Begutachtung sein. Mehr dazu im Beitrag [Hygiene im Tattoostudio](/ratgeber/hygiene-im-tattoostudio/).
+Wenn Zweifel an der Hygiene bestehen, können auch die Abläufe im Studio Gegenstand der Begutachtung sein. Mehr dazu im Beitrag [Hygiene im Tattoostudio](/de/ratgeber/hygiene-im-tattoostudio/).
 
 ## Wann ist der Arzt zuständig?
 
@@ -31,7 +31,7 @@ Bei Schmerzen, Entzündungen oder anderen gesundheitlichen Beschwerden. Soweit m
 
 ## Was sollte ich aufbewahren?
 
-Alles, was den Ablauf belegt: Rechnung oder Quittung, die Pflegehinweise des Studios, Nachrichten mit dem Studio und Fotos, die Sitz und Umgebung des Piercings zeigen, möglichst auch aus der ersten Zeit nach dem Stechen. Tipps für aussagekräftige Bilder gibt der Beitrag [Tattoo richtig fotografieren](/ratgeber/tattoo-fotografieren-fuer-die-begutachtung/), sie gelten für Piercings genauso.
+Alles, was den Ablauf belegt: Rechnung oder Quittung, die Pflegehinweise des Studios, Nachrichten mit dem Studio und Fotos, die Sitz und Umgebung des Piercings zeigen, möglichst auch aus der ersten Zeit nach dem Stechen. Tipps für aussagekräftige Bilder gibt der Beitrag [Tattoo richtig fotografieren](/de/ratgeber/tattoo-fotografieren-fuer-die-begutachtung/), sie gelten für Piercings genauso.
 
 ## Können auch Studios ein Piercing-Gutachten beauftragen?
 
@@ -39,4 +39,4 @@ Ja. Auch Tattoo- und Piercingstudios können eine Begutachtung beauftragen, etwa
 
 ## Wie geht es weiter?
 
-In der kostenlosen Erstberatung von bis zu 60 Minuten klären wir, ob eine Begutachtung sinnvoll ist und welchen Umfang sie hätte. Mehr zur Leistung lesen Sie auf der Seite [Piercing-Gutachten](/leistungen/piercing-gutachten/), weitere Antworten unter [häufige Fragen](/haeufige-fragen/).
+In der kostenlosen Erstberatung von bis zu 60 Minuten klären wir, ob eine Begutachtung sinnvoll ist und welchen Umfang sie hätte. Mehr zur Leistung lesen Sie auf der Seite [Piercing-Gutachten](/de/leistungen/piercing-gutachten/), weitere Antworten unter [häufige Fragen](/de/haeufige-fragen/).

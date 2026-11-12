@@ -1,42 +1,42 @@
 ---
 // Landing page. Content lives in src/data (services, audiences, process, FAQ) and
 // src/config/site.ts (contact, credentials), so subpages and JSON-LD reuse the same facts.
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Container from '../components/ui/Container.astro';
-import Section from '../components/ui/Section.astro';
-import Eyebrow from '../components/ui/Eyebrow.astro';
-import Button from '../components/ui/Button.astro';
-import Card from '../components/ui/Card.astro';
-import Icon from '../components/ui/Icon.astro';
-import Quote from '../components/ui/Quote.astro';
-import Seal from '../components/ui/Seal.astro';
-import Steps from '../components/ui/Steps.astro';
-import Faq from '../components/ui/Faq.astro';
-import CtaBand from '../components/ui/CtaBand.astro';
-import TrustStrip from '../components/ui/TrustStrip.astro';
-import Checklist from '../components/ui/Checklist.astro';
-import KeyFacts from '../components/ui/KeyFacts.astro';
-import CourtReference from '../components/ui/CourtReference.astro';
-import ServiceList from '../components/ui/ServiceList.astro';
-import ArtImage from '../components/ui/ArtImage.astro';
-import NeedleLine from '../components/ui/NeedleLine.astro';
-import ArticleList from '../components/ui/ArticleList.astro';
-import BookingEmbed from '../components/booking/BookingEmbed.astro';
-import { site, contact, credentials, credentialLines } from '../config/site';
-import { practice } from '../config/practice';
-import { services, serviceScopeNote } from '../data/services';
-import { audiences, audienceHref } from '../data/audiences';
-import { steps, costFacts, preparationChecklist } from '../data/process';
-import { featuredFaq } from '../data/faq';
-import { url } from '../lib/url';
-import { getArticles } from '../lib/ratgeber';
-import { ids, ref } from '../lib/schema';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/ui/Container.astro';
+import Section from '../../components/ui/Section.astro';
+import Eyebrow from '../../components/ui/Eyebrow.astro';
+import Button from '../../components/ui/Button.astro';
+import Card from '../../components/ui/Card.astro';
+import Icon from '../../components/ui/Icon.astro';
+import Quote from '../../components/ui/Quote.astro';
+import Seal from '../../components/ui/Seal.astro';
+import Steps from '../../components/ui/Steps.astro';
+import Faq from '../../components/ui/Faq.astro';
+import CtaBand from '../../components/ui/CtaBand.astro';
+import TrustStrip from '../../components/ui/TrustStrip.astro';
+import Checklist from '../../components/ui/Checklist.astro';
+import KeyFacts from '../../components/ui/KeyFacts.astro';
+import CourtReference from '../../components/ui/CourtReference.astro';
+import ServiceList from '../../components/ui/ServiceList.astro';
+import ArtImage from '../../components/ui/ArtImage.astro';
+import NeedleLine from '../../components/ui/NeedleLine.astro';
+import ArticleList from '../../components/ui/ArticleList.astro';
+import BookingEmbed from '../../components/booking/BookingEmbed.astro';
+import { site, contact, credentials, credentialLines } from '../../config/site';
+import { practice } from '../../config/practice';
+import { services, serviceScopeNote } from '../../data/services';
+import { audiences, audienceHref } from '../../data/audiences';
+import { steps, costFacts, preparationChecklist } from '../../data/process';
+import { featuredFaq } from '../../data/faq';
+import { url } from '../../lib/url';
+import { getArticles } from '../../lib/ratgeber';
+import { ids, ref } from '../../lib/schema';
 
-import portrait from '../assets/images/patrick-wolf-portrait-studio-sitzend.jpg';
-import atWork from '../assets/images/patrick-wolf-beim-taetowieren.webp';
-import studio from '../assets/images/patrick-wolf-studio-weit.webp';
+import portrait from '../../assets/images/patrick-wolf-portrait-studio-sitzend.jpg';
+import atWork from '../../assets/images/patrick-wolf-beim-taetowieren.webp';
+import studio from '../../assets/images/patrick-wolf-studio-weit.webp';
 
-const featuredArticles = (await getArticles()).slice(0, 3);
+const featuredArticles = (await getArticles('de')).slice(0, 3);
 ---
 
 <BaseLayout
@@ -64,8 +64,8 @@ const featuredArticles = (await getArticles()).slice(0, 3);
           es Ihnen weiterhilft, klären wir vorher in einer kostenlosen Erstberatung.
         </p>
         <div class="mt-6 flex flex-wrap items-center gap-x-8 gap-y-5" data-primary-action>
-          <Button href="/#termin" icon="calendar">Kostenlose Erstberatung</Button>
-          <Button href="/leistungen/" variant="text">Leistungen</Button>
+          <Button href="/de/#termin" icon="calendar">Kostenlose Erstberatung</Button>
+          <Button href="/de/leistungen/" variant="text">Leistungen</Button>
         </div>
         <p class="mt-4 flex items-start gap-3 text-sm text-graphite">
           <Icon name="check" size={18} class="mt-0.5 shrink-0 text-oxblood" />
@@ -191,7 +191,7 @@ const featuredArticles = (await getArticles()).slice(0, 3);
   >
     <Steps steps={steps} />
     <p class="mt-12">
-      <Button href="/ablauf-kosten/" variant="text">Ablauf und Kosten im Detail</Button>
+      <Button href="/de/ablauf-kosten/" variant="text">Ablauf und Kosten im Detail</Button>
     </p>
   </Section>
 
@@ -255,7 +255,7 @@ const featuredArticles = (await getArticles()).slice(0, 3);
           Begründungen und Objektivität.
         </Quote>
         <p class="mt-10">
-          <Button href="/ueber-mich/" variant="text">Mehr über {site.expert}</Button>
+          <Button href="/de/ueber-mich/" variant="text">Mehr über {site.expert}</Button>
         </p>
       </div>
     </Container>
@@ -272,7 +272,7 @@ const featuredArticles = (await getArticles()).slice(0, 3);
   >
     <p slot="note">
       Was Sie bereitlegen sollten und was nach der Buchung passiert:
-      <a class="link-ink not-italic" href={url('/termin/')}>alles zur Terminbuchung</a>.
+      <a class="link-ink not-italic" href={url('/de/termin/')}>alles zur Terminbuchung</a>.
     </p>
     <BookingEmbed variant="compact" />
   </Section>
@@ -280,7 +280,7 @@ const featuredArticles = (await getArticles()).slice(0, 3);
   <Section id="fragen" label="Häufige Fragen" title="Antworten auf die häufigsten Fragen.">
     <p slot="note">
       Alle Fragen zu Begutachtung, Auftrag und Kosten:
-      <a class="link-ink not-italic" href={url('/haeufige-fragen/')}>häufige Fragen zum Tattoogutachten</a>.
+      <a class="link-ink not-italic" href={url('/de/haeufige-fragen/')}>häufige Fragen zum Tattoogutachten</a>.
     </p>
     <Faq items={featuredFaq} name="faq-start" />
   </Section>
@@ -295,7 +295,7 @@ const featuredArticles = (await getArticles()).slice(0, 3);
     <ArticleList articles={featuredArticles} />
     <div class="mt-10 md:grid md:grid-cols-12 md:gap-x-8" data-reveal>
       <p class="axis">
-        <Button href="/ratgeber/" variant="text">Alle Beiträge im Ratgeber</Button>
+        <Button href="/de/ratgeber/" variant="text">Alle Beiträge im Ratgeber</Button>
       </p>
     </div>
   </Section>

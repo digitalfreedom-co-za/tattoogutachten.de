@@ -1,20 +1,28 @@
 ---
-// HTML frame for every page: lang de, fonts, skip link, header, main, footer, motion script.
-// SEO tags come from SeoHead (props pass through), extra head tags go into the "head" slot.
+// HTML frame for every page: lang of the page locale, fonts, skip link, header, main, footer, motion
+// script. SEO tags come from SeoHead (props pass through), extra head tags go into the "head" slot.
+// The language versions of the page (src/i18n/alternates.ts) feed hreflang, the language switcher in
+// the header and the language hint on the locale roots.
 import '../styles/global.css';
 import { Font } from 'astro:assets';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import StickyCta from '../components/layout/StickyCta.astro';
 import ConsentDialog from '../components/layout/ConsentDialog.astro';
+import LanguageHint from '../components/layout/LanguageHint.astro';
 import SeoHead, { type SeoProps } from '../components/seo/SeoHead.astro';
-import { url } from '../lib/url';
+import { url, withoutBase } from '../lib/url';
+import { pageLocale, t, localeMeta } from '../i18n';
+import { alternatesFor } from '../i18n/alternates';
 
 type Props = SeoProps;
+
+const locale = pageLocale(Astro.url);
+const alternates = Astro.props.noindex ? null : await alternatesFor(withoutBase(Astro.url.pathname));
 ---
 
 <!doctype html>
-<html lang="de">
+<html lang={localeMeta[locale].lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -28,7 +36,7 @@ type Props = SeoProps;
         }, 3000);
       })(document.documentElement);
     </script>
-    <SeoHead {...Astro.props} />
+    <SeoHead {...Astro.props} alternates={alternates} />
     <link rel="icon" type="image/svg+xml" href={url('/favicon.svg')} />
     <meta name="theme-color" content="#f4efe6" />
     <Font cssVariable="--font-schibsted" preload={[{ style: 'normal' }]} />
@@ -37,13 +45,14 @@ type Props = SeoProps;
   </head>
   <body class="flex min-h-screen flex-col">
     <a
-      href="#inhalt"
+      href="#content"
       class="label fixed top-3 left-3 z-50 -translate-y-24 bg-ink px-4 py-3 text-paper transition-transform focus:translate-y-0 motion-reduce:transition-none"
     >
-      Zum Inhalt springen
+      {t(locale).nav.skipLink}
     </a>
-    <Header />
-    <main id="inhalt" data-inert-when-menu tabindex="-1" class="flex-1 focus:outline-none">
+    <Header alternates={alternates} />
+    <LanguageHint />
+    <main id="content" data-inert-when-menu tabindex="-1" class="flex-1 focus:outline-none">
       <slot />
     </main>
     <Footer />

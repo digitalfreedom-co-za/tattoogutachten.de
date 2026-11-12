@@ -27,7 +27,7 @@ Bei einer sachverständigen Untersuchung können unter anderem folgende Aspekte 
 - Unregelmäßigkeiten, Vernarbungen und mögliche Ausführungsmängel
 - Abweichungen zwischen vereinbarter Vorlage und tatsächlichem Ergebnis
 
-Ziel ist, mögliche handwerkliche Fehler fachlich zu erkennen, zu dokumentieren und nachvollziehbar einzuordnen. Was ein Gutachten dabei im Einzelnen leistet, zeigt die Seite [Tattoo-Gutachten](/leistungen/tattoo-gutachten/).
+Ziel ist, mögliche handwerkliche Fehler fachlich zu erkennen, zu dokumentieren und nachvollziehbar einzuordnen. Was ein Gutachten dabei im Einzelnen leistet, zeigt die Seite [Tattoo-Gutachten](/de/leistungen/tattoo-gutachten/).
 
 ## Welche Rolle spielt die vereinbarte Vorlage?
 
@@ -39,8 +39,8 @@ Wer die Qualität einer Tätowierung fachgerecht bewerten will, muss die technis
 
 ## Reichen Fotos für die Bewertung?
 
-Für eine erste Einschätzung oft ja, für eine abschließende Beurteilung nicht immer. Nicht alle Merkmale einer Tätowierung lassen sich auf Bildern zuverlässig bewerten, dann ist eine persönliche Untersuchung nötig. Tipps für aussagekräftige Bilder gibt der Beitrag [Tattoo richtig fotografieren](/ratgeber/tattoo-fotografieren-fuer-die-begutachtung/).
+Für eine erste Einschätzung oft ja, für eine abschließende Beurteilung nicht immer. Nicht alle Merkmale einer Tätowierung lassen sich auf Bildern zuverlässig bewerten, dann ist eine persönliche Untersuchung nötig. Tipps für aussagekräftige Bilder gibt der Beitrag [Tattoo richtig fotografieren](/de/ratgeber/tattoo-fotografieren-fuer-die-begutachtung/).
 
 ## Was folgt aus dem Ergebnis?
 
-Das Gutachten liefert fachliche Feststellungen. Ob aus einem festgestellten Mangel rechtliche Ansprüche folgen, ist eine juristische Frage, die ein Rechtsanwalt beantwortet. Auch wenn das Gutachten keinen Mangel feststellt, schafft es Klarheit, für Kunde und Studio gleichermaßen. Weitere Antworten finden Sie unter [häufige Fragen](/haeufige-fragen/#grundlagen).
+Das Gutachten liefert fachliche Feststellungen. Ob aus einem festgestellten Mangel rechtliche Ansprüche folgen, ist eine juristische Frage, die ein Rechtsanwalt beantwortet. Auch wenn das Gutachten keinen Mangel feststellt, schafft es Klarheit, für Kunde und Studio gleichermaßen. Weitere Antworten finden Sie unter [häufige Fragen](/de/haeufige-fragen/#grundlagen).
