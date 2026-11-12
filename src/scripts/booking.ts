@@ -1,0 +1,132 @@
+// Lazy cal.com inline embed. Nothing from cal.com loads until a [data-booking] block comes near
+// the viewport; then the official embed snippet is installed and the calendar rendered into the
+// reserved frame. The skeleton fades out once cal.com reports the booking page as ready.
+import { CAL_THEME_VARS } from '../config/booking';
+
+type CalFn = ((...args: unknown[]) => void) & {
+  q?: unknown[];
+  ns?: Record<string, CalFn>;
+  loaded?: boolean;
+};
+
+declare global {
+  interface Window {
+    Cal?: CalFn;
+  }
+}
+
+/** Gives up waiting for cal.com after this long and offers the direct alternatives. */
+const LOAD_TIMEOUT_MS = 15000;
+
+/* eslint-disable */
+// Official cal.com embed snippet (calcom/cal.com, packages/embeds/embed-snippet), unchanged apart
+// from the types. It defines window.Cal as a queue and appends embed.js on the first call.
+function installCalSnippet(src: string): void {
+  (function (C: any, A: string, L: string) {
+    let p = function (a: any, ar: any) {
+      a.q.push(ar);
+    };
+    let d = C.document;
+    C.Cal =
+      C.Cal ||
+      function () {
+        let cal = C.Cal;
+        let ar = arguments;
+        if (!cal.loaded) {
+          cal.ns = {};
+          cal.q = cal.q || [];
+          d.head.appendChild(d.createElement('script')).src = A;
+          cal.loaded = true;
+        }
+        if (ar[0] === L) {
+          const api: any = function () {
+            p(api, arguments);
+          };
+          const namespace = ar[1];
+          api.q = api.q || [];
+          if (typeof namespace === 'string') {
+            cal.ns[namespace] = cal.ns[namespace] || api;
+            p(cal.ns[namespace], ar);
+            p(cal, ['initNamespace', namespace]);
+          } else p(cal, ar);
+          return;
+        }
+        p(cal, ar);
+      };
+  })(window, src, 'init');
+}
+/* eslint-enable */
+
+function setState(root: HTMLElement, state: 'pending' | 'loading' | 'ready' | 'failed'): void {
+  root.dataset.state = state;
+  // A half loaded iframe under the fallback must not stay in the focus order.
+  const target = root.dataset.target ? document.getElementById(root.dataset.target) : null;
+  if (target) target.inert = state === 'failed';
+  if (state === 'pending') return;
+  const status = root.querySelector<HTMLElement>('[data-booking-status]');
+  if (status) status.textContent = root.dataset[`status${state[0].toUpperCase()}${state.slice(1)}`] ?? '';
+}
+
+function mount(root: HTMLElement): void {
+  const { calLink, calOrigin, calScript, namespace, target } = root.dataset;
+  if (!calLink || !calOrigin || !calScript || !namespace || !target) return;
+
+  setState(root, 'loading');
+  installCalSnippet(calScript);
+  const Cal = window.Cal!;
+  Cal('init', namespace, { origin: calOrigin });
+  const api = Cal.ns![namespace];
+
+  const timeout = window.setTimeout(() => setState(root, 'failed'), LOAD_TIMEOUT_MS);
+  const ready = () => {
+    window.clearTimeout(timeout);
+    setState(root, 'ready');
+  };
+  const failed = () => {
+    window.clearTimeout(timeout);
+    setState(root, 'failed');
+  };
+
+  api('on', { action: 'linkReady', callback: ready });
+  api('on', { action: 'linkFailed', callback: failed });
+  api('inline', {
+    elementOrSelector: `#${target}`,
+    calLink,
+    config: { layout: 'month_view', theme: 'light' },
+  });
+  api('ui', {
+    theme: 'light',
+    layout: 'month_view',
+    hideEventTypeDetails: root.dataset.hideDetails === 'true',
+    cssVarsPerTheme: { light: CAL_THEME_VARS, dark: CAL_THEME_VARS },
+  });
+
+  // embed.js blocked (content blocker, offline): no cal.com event will ever fire.
+  document.querySelector<HTMLScriptElement>(`script[src="${calScript}"]`)?.addEventListener('error', failed);
+}
+
+function init(): void {
+  const roots = Array.from(document.querySelectorAll<HTMLElement>('[data-booking]'));
+  if (roots.length === 0) return;
+  roots.forEach((root) => setState(root, 'pending'));
+
+  if (!('IntersectionObserver' in window)) {
+    roots.forEach(mount);
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        observer.unobserve(entry.target);
+        mount(entry.target as HTMLElement);
+      }
+    },
+    // Start shortly before the frame scrolls in, so the calendar is usually there on arrival.
+    { rootMargin: '400px 0px' },
+  );
+  roots.forEach((root) => observer.observe(root));
+}
+
+init();

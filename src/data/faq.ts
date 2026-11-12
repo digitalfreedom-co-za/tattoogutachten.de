@@ -6,6 +6,7 @@ import type { FaqEntry } from '../components/ui/Faq.astro';
 import type { ServiceSlug } from './services';
 import type { AudienceSlug } from './audiences';
 import { credentials } from '../config/site';
+import { url } from '../lib/url';
 
 export type FaqTopic = 'grundlagen' | 'begutachtung' | 'auftrag' | 'kosten' | 'person';
 
@@ -17,6 +18,8 @@ export interface FaqItem extends FaqEntry {
   audiences?: AudienceSlug[];
   /** Shown in the FAQ teaser on the landing page. */
   featured?: boolean;
+  /** Shown on the booking page /termin/. */
+  booking?: boolean;
 }
 
 export interface FaqTopicInfo {
@@ -177,6 +180,7 @@ export const faq: FaqItem[] = [
   },
   {
     topic: 'kosten',
+    booking: true,
     question: 'Ist die erste Beratung wirklich kostenlos?',
     answer:
       'Ja. Das erste Beratungsgespräch ist bis zu 60 Minuten kostenlos und unverbindlich. Kostenpflichtig wird erst eine weiterführende Leistung, für die ein schriftlicher Vertrag geschlossen wird.',
@@ -184,6 +188,7 @@ export const faq: FaqItem[] = [
   {
     topic: 'kosten',
     featured: true,
+    booking: true,
     question: 'Muss ich nach der Erstberatung ein Gutachten beauftragen?',
     answer:
       'Nein. Die kostenlose Erstberatung verpflichtet Sie zu nichts. Sie entscheiden danach selbst, ob Sie eine Untersuchung oder ein Gutachten beauftragen.',
@@ -191,15 +196,38 @@ export const faq: FaqItem[] = [
   {
     topic: 'kosten',
     services: ['hygiene-gutachten'],
+    booking: true,
     question: 'Welche Unterlagen benötige ich?',
     answer:
       'Hilfreich sind aussagekräftige Fotos, Vereinbarungen mit dem Studio, Rechnungen, Pflegeanweisungen und bisherige Korrespondenz. Wenn vorhanden, zählen auch frühere Fotos der Tätowierung und ärztliche Unterlagen. Was genau gebraucht wird, klären wir in der Erstberatung.',
   },
   {
     topic: 'kosten',
+    booking: true,
     question: 'Werden meine Angaben vertraulich behandelt?',
     answer:
       'Ja. Personenbezogene Daten, Unterlagen und Informationen werden vertraulich behandelt und nach den geltenden datenschutzrechtlichen Vorgaben verarbeitet.',
+  },
+  {
+    topic: 'kosten',
+    booking: true,
+    question: 'Wie buche ich die kostenlose Erstberatung?',
+    answer:
+      `Am schnellsten online: Auf der Seite <a class="link-ink" href="${url('/termin/')}">Termin buchen</a> wählen Sie im Kalender einen freien Termin und tragen Namen und E-Mail-Adresse ein. Die Bestätigung kommt per E-Mail. Telefonisch oder per E-Mail lässt sich ein Termin ebenso vereinbaren.`,
+  },
+  {
+    topic: 'kosten',
+    booking: true,
+    question: 'Was tun, wenn kein passender Termin frei ist?',
+    answer:
+      'Rufen Sie an oder schreiben Sie eine E-Mail. Telefon und E-Mail-Adresse stehen direkt unter dem Kalender, dann vereinbaren wir den Termin persönlich.',
+  },
+  {
+    topic: 'kosten',
+    booking: true,
+    question: 'Kann ich einen gebuchten Termin verschieben oder absagen?',
+    answer:
+      'Ja. Die Bestätigungs-E-Mail enthält Links zum Verschieben und Absagen. Eine Absage kostet nichts, denn die Erstberatung ist kostenlos.',
   },
   {
     topic: 'person',
@@ -226,5 +254,7 @@ export const featuredFaq = faq.filter((item) => item.featured);
 export const faqForService = (slug: ServiceSlug) => faq.filter((item) => item.services?.includes(slug));
 
 export const faqForAudience = (slug: AudienceSlug) => faq.filter((item) => item.audiences?.includes(slug));
+
+export const bookingFaq = faq.filter((item) => item.booking);
 
 export const faqByTopic = (topic: FaqTopic) => faq.filter((item) => item.topic === topic);

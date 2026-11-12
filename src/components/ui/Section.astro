@@ -11,9 +11,11 @@ interface Props {
   intro?: string;
   tone?: 'paper' | 'deep' | 'ink';
   class?: string;
+  /** Marks a booking section: the mobile booking bar steps aside while it is on screen. */
+  'data-booking-section'?: boolean;
 }
 
-const { id, label, title, intro, tone = 'paper', class: className } = Astro.props;
+const { id, label, title, intro, tone = 'paper', class: className, 'data-booking-section': bookingSection } = Astro.props;
 const headingId = id && title ? `${id}-titel` : undefined;
 const hasHeader = Boolean(label || title || intro || Astro.slots.has('note'));
 
@@ -24,7 +26,12 @@ const toneClass = {
 }[tone];
 ---
 
-<section id={id} aria-labelledby={headingId} class:list={['py-section', toneClass, className]}>
+<section
+  id={id}
+  aria-labelledby={headingId}
+  class:list={['py-section', toneClass, className]}
+  data-booking-section={bookingSection || undefined}
+>
   <Container>
     {
       hasHeader && (

@@ -1,0 +1,94 @@
+---
+// Mobile only booking bar fixed to the bottom edge, above the home indicator (safe area).
+// It needs JS to know when to step aside: it hides while a booking section ([data-booking-section])
+// or the footer is on screen, so it never covers the calendar or the contact details. While hidden
+// it leaves the focus order, as it does while the mobile menu is open. The body gets matching bottom padding, so no content sits under it.
+import Container from '../ui/Container.astro';
+import Icon from '../ui/Icon.astro';
+import { primaryCta } from '../../config/site';
+import { bookingHref } from '../../config/booking';
+import { url, withoutBase } from '../../lib/url';
+
+const href = url(bookingHref(withoutBase(Astro.url.pathname)));
+---
+
+<div class="sticky-cta md:hidden" data-sticky-cta hidden>
+  <Container class="flex items-center justify-between gap-4 py-3">
+    <p class="text-sm leading-snug text-paper/75">
+      Erstberatung kostenlos,<br />bis zu 60 Minuten
+    </p>
+    <a
+      href={href}
+      class="inline-flex min-h-11 shrink-0 items-center gap-3 rounded-xs border border-paper bg-paper px-5 py-3 text-[0.9375rem] font-semibold leading-none text-ink transition-colors hover:border-brass-light hover:bg-brass-light"
+    >
+      <span>{primaryCta.label}</span>
+      <Icon name="calendar" size={18} class="shrink-0" />
+    </a>
+  </Container>
+</div>
+
+<style>
+  .sticky-cta {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 30;
+    padding-bottom: env(safe-area-inset-bottom);
+    background: var(--color-ink);
+    color: var(--color-paper);
+    box-shadow: 0 -10px 30px -18px rgb(23 20 15 / 0.6);
+    transition:
+      transform 300ms var(--ease-out-quint),
+      visibility 0s linear 0s;
+  }
+
+  .sticky-cta[data-away] {
+    transform: translateY(100%);
+    visibility: hidden;
+    transition:
+      transform 300ms var(--ease-out-quint),
+      visibility 0s linear 300ms;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sticky-cta,
+    .sticky-cta[data-away] {
+      transition: none;
+    }
+  }
+
+  /* Room for the bar at the end of the page, mobile only and only when the bar exists. */
+  @media (max-width: 47.99rem) {
+    :global(html.has-sticky-cta body) {
+      padding-bottom: calc(4.5rem + env(safe-area-inset-bottom));
+    }
+  }
+</style>
+
+<script>
+  const bar = document.querySelector<HTMLElement>('[data-sticky-cta]');
+  const blockers = document.querySelectorAll<HTMLElement>('[data-booking-section], footer');
+  const menu = document.getElementById('mobile-nav');
+
+  if (bar && 'IntersectionObserver' in window) {
+    const visible = new Set<Element>();
+    const update = () => {
+      const away = visible.size > 0;
+      bar.toggleAttribute('data-away', away);
+      bar.inert = away || Boolean(menu?.hasAttribute('data-open'));
+    };
+
+    if (menu) new MutationObserver(update).observe(menu, { attributes: true, attributeFilter: ['data-open'] });
+
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) visible.add(entry.target);
+        else visible.delete(entry.target);
+      }
+      update();
+    });
+
+    blockers.forEach((el) => observer.observe(el));
+    bar.hidden = false;
+    document.documentElement.classList.add('has-sticky-cta');
+  }
+</script>

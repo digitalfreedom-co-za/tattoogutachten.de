@@ -15,7 +15,7 @@ const { class: className } = Astro.props;
 ---
 
 <aside class:list={['border border-ink bg-paper p-6 md:p-8', className]} aria-label="Ihr Sachverständiger" data-reveal>
-  <div class="flex items-start gap-5">
+  <div class="flex flex-col items-start gap-5 min-[360px]:flex-row">
     <Image
       src={portrait}
       alt={`Porträt von ${site.expert}`}
@@ -26,10 +26,10 @@ const { class: className } = Astro.props;
       position="left top"
       class="h-28 w-24 shrink-0 object-cover"
     />
-    <div>
+    <div class="min-w-0">
       <p class="label text-graphite">Ihr Sachverständiger</p>
       <p class="mt-2 font-serif text-h4">{site.expert}</p>
-      <p class="mt-1 text-sm text-graphite">{site.office}</p>
+      <p class="mt-1 text-sm text-graphite hyphens-auto">{site.office}</p>
     </div>
   </div>
   <ul class="mt-6 grid gap-3 border-t border-rule pt-5 text-sm">

@@ -122,3 +122,26 @@ export const preparationChecklist: string[] = [
   'Frühere Fotos aus der Stech- und Heilungsphase',
   'Ärztliche Unterlagen, falls vorhanden',
 ];
+
+/** What happens between booking the first consultation online and the decision about a report. */
+export const afterBookingSteps: Step[] = [
+  {
+    title: 'Bestätigung per E-Mail',
+    duration: 'direkt nach der Buchung',
+    text: 'Sie erhalten eine Bestätigung mit Datum und Uhrzeit. Darin stehen auch die Links, mit denen Sie den Termin verschieben oder absagen.',
+  },
+  {
+    title: 'Unterlagen bereitlegen',
+    text: 'Legen Sie Fotos, Rechnung und die Nachrichten mit dem Studio griffbereit. Je vollständiger die Unterlagen, desto genauer wird die erste Einschätzung.',
+    prepare: 'Fotos bei Tageslicht, aus der Nähe und mit etwas Abstand.',
+  },
+  {
+    title: 'Das Gespräch',
+    duration: 'bis zu 60 Minuten, kostenlos',
+    text: 'Sie schildern Ihr Anliegen, wir sehen uns Fotos und Unterlagen an und klären, welche fachlichen Fragen ein Gutachten beantworten müsste.',
+  },
+  {
+    title: 'Ihre Entscheidung',
+    text: 'Sie wissen danach, ob ein Gutachten sinnvoll ist, welchen Umfang es hätte und was es voraussichtlich kostet. Kostenpflichtig wird es erst mit einer schriftlichen Beauftragung, und nur wenn Sie das möchten.',
+  },
+];

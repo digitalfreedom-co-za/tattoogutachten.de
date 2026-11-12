@@ -1,5 +1,6 @@
 ---
-// Site header: logo, main navigation, booking CTA (icon only up to xl, so six nav items fit at lg). Below lg the navigation moves into a
+// Site header: logo, main navigation, booking CTA on every breakpoint (icon only below sm and between lg
+// and xl, where the six nav items need the room). Below lg the navigation moves into a
 // full screen panel behind a menu button (aria-expanded, Escape closes, focus is trapped
 // and returned). Without JS the panel renders as a plain list under the header.
 import Logo from './Logo.astro';
@@ -7,14 +8,16 @@ import Container from '../ui/Container.astro';
 import Icon from '../ui/Icon.astro';
 import Button from '../ui/Button.astro';
 import { mainNav, primaryCta, contact } from '../../config/site';
-import { url } from '../../lib/url';
+import { bookingHref } from '../../config/booking';
+import { url, withoutBase } from '../../lib/url';
 
 const currentPath = Astro.url.pathname;
 const isCurrent = (href: string) => currentPath.startsWith(url(href));
+const ctaHref = bookingHref(withoutBase(currentPath));
 ---
 
 <header id="site-header" class="relative z-40 border-b border-ink/15 bg-paper">
-  <Container class="flex h-(--header-height) items-center justify-between gap-4">
+  <Container class="flex h-(--header-height) items-center justify-between gap-2 min-[360px]:gap-4">
     <Logo />
 
     <nav aria-label="Hauptnavigation" class="hidden lg:block">
@@ -35,13 +38,13 @@ const isCurrent = (href: string) => currentPath.startsWith(url(href));
       </ul>
     </nav>
 
-    <div class="flex items-center gap-2">
-      <div class="hidden xl:block">
-        <Button href={primaryCta.href} icon="calendar">{primaryCta.label}</Button>
+    <div class="flex items-center gap-1.5 min-[360px]:gap-2">
+      <div class="hidden sm:block lg:hidden xl:block">
+        <Button href={ctaHref} icon="calendar">{primaryCta.label}</Button>
       </div>
       <a
-        href={url(primaryCta.href)}
-        class="hidden size-11 items-center justify-center border border-ink text-ink transition-colors hover:bg-ink hover:text-paper min-[360px]:inline-flex xl:hidden"
+        href={url(ctaHref)}
+        class="inline-flex size-11 items-center justify-center border border-ink text-ink transition-colors hover:bg-ink hover:text-paper sm:hidden lg:inline-flex xl:hidden"
         aria-label={primaryCta.label}
         title={primaryCta.label}
       >
@@ -83,7 +86,7 @@ const isCurrent = (href: string) => currentPath.startsWith(url(href));
         </ul>
       </nav>
       <div class="mobile-nav-item mt-8 flex flex-col gap-6" style={`--i:${mainNav.length}`}>
-        <Button href={primaryCta.href} icon="calendar" class="self-start">{primaryCta.label}</Button>
+        <Button href={ctaHref} icon="calendar" class="self-start">{primaryCta.label}</Button>
         <ul class="grid gap-3 text-sm text-graphite">
           <li><a class="link-ink" href={contact.phone.href}>{contact.phone.display}</a></li>
           <li><a class="link-ink break-all" href={contact.email.href}>{contact.email.display}</a></li>

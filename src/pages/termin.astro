@@ -1,0 +1,145 @@
+---
+// Booking page: the free first consultation at a glance, the full cal.com calendar (lazy, see
+// BookingEmbed), what to prepare, what happens after booking and the booking FAQ.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/ui/PageHeader.astro';
+import Section from '../components/ui/Section.astro';
+import Button from '../components/ui/Button.astro';
+import KeyFacts, { type Fact } from '../components/ui/KeyFacts.astro';
+import Checklist from '../components/ui/Checklist.astro';
+import Steps from '../components/ui/Steps.astro';
+import Faq from '../components/ui/Faq.astro';
+import CtaBand from '../components/ui/CtaBand.astro';
+import Icon from '../components/ui/Icon.astro';
+import JsonLd from '../components/seo/JsonLd.astro';
+import BookingEmbed from '../components/booking/BookingEmbed.astro';
+import { contact, contentUpdated, credentials, site, type NavItem } from '../config/site';
+import { steps, preparationChecklist, afterBookingSteps } from '../data/process';
+import { bookingFaq } from '../data/faq';
+import { absoluteUrl, breadcrumbList, organizationRef } from '../lib/schema';
+import { url } from '../lib/url';
+
+const title = 'Termin buchen: kostenlose Erstberatung zum Tattoo-Gutachten | Patrick Wolf';
+const description = `Buchen Sie online Ihre kostenlose Erstberatung bei Tattoo Gutachter ${site.expert}: bis zu 60 Minuten, unverbindlich, bundesweit. Mit Checkliste, was Sie vorbereiten sollten, und was nach der Buchung passiert.`;
+const breadcrumbs: NavItem[] = [{ label: 'Termin buchen', href: '/termin/' }];
+
+const consultationFacts: Fact[] = [
+  { term: 'Dauer', value: 'Bis zu 60 Minuten' },
+  { term: 'Kosten', value: 'Keine', note: 'Eine vollständige Begutachtung oder schriftliche Stellungnahme ist nicht enthalten.' },
+  { term: 'Verpflichtung', value: 'Keine', note: 'Ob Sie danach ein Gutachten beauftragen, entscheiden Sie allein.' },
+  { term: 'Ergebnis', value: 'Klarheit über den nächsten Schritt', note: 'Ob ein Gutachten sinnvoll ist, welchen Umfang es hätte und was es voraussichtlich kostet.' },
+  { term: 'Einsatzgebiet', value: `${credentials.areaServed[0].toUpperCase()}${credentials.areaServed.slice(1)}`, note: `Sitz des ${site.office} in ${contact.city}.` },
+];
+
+const discussed = steps[0].detail?.items ?? [];
+
+const schema = {
+  '@graph': [
+    {
+      '@type': 'WebPage',
+      name: 'Kostenlose Erstberatung online buchen',
+      description,
+      inLanguage: 'de-DE',
+      url: absoluteUrl('/termin/', Astro.site),
+      publisher: organizationRef(Astro.site),
+      potentialAction: {
+        '@type': 'ReserveAction',
+        name: 'Kostenlose Erstberatung buchen',
+        target: absoluteUrl('/termin/#termin', Astro.site),
+      },
+    },
+    breadcrumbList(breadcrumbs, Astro.site),
+  ],
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <JsonLd slot="head" data={schema} />
+
+  <PageHeader
+    label="Termin buchen"
+    heading="Kostenlose Erstberatung online buchen."
+    lead={`Die Erstberatung bei ${site.expert} dauert bis zu 60 Minuten, ist kostenlos und verpflichtet Sie zu nichts. Wählen Sie im Kalender einen freien Termin, die Bestätigung kommt per E-Mail.`}
+    breadcrumbs={breadcrumbs}
+    updated={contentUpdated}
+  >
+    <Button href="#termin" icon="calendar">Zum Kalender</Button>
+    <a class="link-ink inline-flex min-h-11 items-center gap-3 font-semibold" href={contact.phone.href}>
+      <Icon name="phone" size={18} class="text-oxblood" />
+      <span><span class="sr-only">Lieber anrufen: </span>{contact.phone.display}</span>
+    </a>
+  </PageHeader>
+
+  <Section
+    id="erstberatung"
+    label="Erstberatung"
+    title="Was ist die kostenlose Erstberatung?"
+    intro="Ein Gespräch von bis zu 60 Minuten, in dem Sie Ihr Anliegen schildern und erfahren, ob ein Gutachten weiterhilft. Bezahlt wird erst eine Leistung, die Sie danach schriftlich beauftragen."
+    tone="deep"
+  >
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-x-8">
+      <KeyFacts facts={consultationFacts} class="lg:col-span-7" />
+      <Checklist title="Im Gespräch besprechen wir" items={discussed} class="self-start lg:col-span-5" />
+    </div>
+  </Section>
+
+  <Section
+    id="termin"
+    label="Kalender"
+    title="Wählen Sie einen freien Termin."
+    intro="Tag wählen, Uhrzeit wählen, Namen und E-Mail-Adresse eintragen. Mehr braucht die Buchung nicht."
+    data-booking-section
+  >
+    <p slot="note">
+      Kein passender Termin dabei? Rufen Sie an oder schreiben Sie eine E-Mail, dann vereinbaren wir ihn persönlich.
+    </p>
+    <BookingEmbed variant="full" />
+  </Section>
+
+  <Section
+    id="vorbereitung"
+    label="Vorbereitung"
+    title="Was sollten Sie zur Erstberatung bereitlegen?"
+    intro="Fotos und Unterlagen machen die erste Einschätzung genauer. Was davon wirklich gebraucht wird, klären wir im Gespräch."
+    tone="deep"
+  >
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-x-8">
+      <Checklist title="Für die Erstberatung bereitlegen" items={preparationChecklist} class="self-start lg:col-span-7" />
+      <div class="grid content-start gap-5 lg:col-span-5" data-reveal>
+        <h3 class="text-h4">Gute Fotos sind die halbe Einschätzung.</h3>
+        <p class="text-graphite">
+          Gleichmäßiges Tageslicht ohne Blitz, keine Filter, eine Übersicht und scharfe Nahaufnahmen der auffälligen Stellen,
+          dazu die Originaldateien. Wie das am besten gelingt, zeigt der Ratgeber
+          <a class="link-ink" href={url('/ratgeber/tattoo-fotografieren-fuer-die-begutachtung/')}>Tattoo fotografieren für die Begutachtung</a>.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <Section
+    id="nach-der-buchung"
+    label="Nach der Buchung"
+    title="Was passiert nach der Buchung?"
+    intro="Vier Schritte bis zu Ihrer Entscheidung. Kosten entstehen auf diesem Weg nicht."
+  >
+    <Steps steps={afterBookingSteps} />
+    <p class="mt-12" data-reveal>
+      <Button href="/ablauf-kosten/" variant="text">Wie es nach einer Beauftragung weitergeht</Button>
+    </p>
+  </Section>
+
+  <Section id="fragen" label="Häufige Fragen" title="Fragen zur Terminbuchung" tone="deep">
+    <p slot="note">
+      Alle Fragen nach Themen:
+      <a class="link-ink not-italic" href={url('/haeufige-fragen/')}>häufige Fragen zum Tattoogutachten</a>.
+    </p>
+    <Faq items={bookingFaq} variant="list" />
+  </Section>
+
+  <CtaBand
+    title="Lieber erst kurz sprechen?"
+    text="Rufen Sie an oder schreiben Sie eine E-Mail. Die Erstberatung lässt sich genauso gut telefonisch vereinbaren."
+    ctaLabel="Zum Kalender"
+    ctaHref="/termin/#termin"
+  />
+</BaseLayout>

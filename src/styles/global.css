@@ -95,6 +95,8 @@
     font-weight: 400;
     letter-spacing: var(--tracking-tightish);
     text-wrap: balance;
+    /* Long German compounds (Sachverständigenbüro) break instead of widening the page on phones. */
+    hyphens: auto;
   }
 
   p {

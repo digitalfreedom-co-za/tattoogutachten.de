@@ -27,6 +27,8 @@ export const contact = {
     display: 'Kurstadttattoo@web.de',
     href: 'mailto:Kurstadttattoo@web.de',
   },
+  /** Plain Google Maps search link (no embedded map, so nothing loads from Google on our pages). */
+  mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Benekestr.%209%2C%2061231%20Bad%20Nauheim',
 } as const;
 
 export const credentials = {
