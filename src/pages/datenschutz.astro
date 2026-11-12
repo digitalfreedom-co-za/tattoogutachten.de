@@ -150,10 +150,21 @@ const external = { target: '_blank', rel: 'noopener noreferrer' };
   </p>
   <h3>Speicherdauer und Alternativen</h3>
   <p>
-    Buchungsdaten löschen wir, sobald sie für die Durchführung und Nachbereitung des Termins nicht mehr benötigt
-    werden, soweit keine gesetzlichen Aufbewahrungspflichten bestehen. Wenn Sie cal.com nicht nutzen möchten,
-    vereinbaren Sie Ihren Termin einfach telefonisch unter <a href={contact.phone.href}>{contact.phone.display}</a> oder
-    per E-Mail.
+    {
+      CAL_IS_DEMO ? (
+        <>
+          Buchungsdaten aus dem Demo-Kalender erhalten wir nicht. Sie liegen im cal.com Konto von{' '}
+          {CAL_DEMO_ACCOUNT_HOLDER} und werden nach den Regeln von cal.com gespeichert und gelöscht.
+        </>
+      ) : (
+        <>
+          Buchungsdaten löschen wir, sobald sie für die Durchführung und Nachbereitung des Termins nicht mehr benötigt
+          werden, soweit keine gesetzlichen Aufbewahrungspflichten bestehen.
+        </>
+      )
+    }{' '}
+    Wenn Sie cal.com nicht nutzen möchten, vereinbaren Sie Ihren Termin einfach telefonisch unter{' '}
+    <a href={contact.phone.href}>{contact.phone.display}</a> oder per E-Mail.
   </p>
 
   <h2 id="kontakt">Kontakt per E-Mail und Telefon</h2>
