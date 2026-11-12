@@ -10,6 +10,7 @@ import { site, credentials, contentUpdated } from '../../config/site';
 import { audiences, audienceHref } from '../../data/audiences';
 import { getArticles, articleHref } from '../../lib/ratgeber';
 import { absoluteUrl, ids, ref } from '../../lib/schema';
+import { url } from '../../lib/url';
 
 const articles = await getArticles();
 const breadcrumbs = [{ label: 'Ratgeber', href: '/ratgeber/' }];
@@ -46,7 +47,10 @@ const page = {
   />
 
   <Section id="beitraege" label="Beiträge" title="Alle Beiträge">
-    <p slot="note">Jeder Beitrag beginnt mit der Antwort und verweist auf die passenden Leistungen und Fragen.</p>
+    <p slot="note">
+      Gerade erst bemerkt, dass etwas nicht stimmt? Dann beginnen Sie mit
+      <a class="link-ink not-italic" href={url('/ratgeber/tattoo-misslungen-was-tun/')}>Tattoo misslungen, was jetzt?</a>
+    </p>
     <ArticleList articles={articles} />
   </Section>
 
@@ -54,10 +58,10 @@ const page = {
     id="fuer-wen"
     label="Für wen"
     title="Informationen nach Auftraggeber"
-    intro="Privatpersonen, Studios, Rechtsanwälte und Gerichte haben unterschiedliche Fragen. Hier finden Sie, was für Ihre Seite wichtig ist."
+    intro="Ein Kunde fragt nach dem Mangel, ein Studio nach dem Vorwurf, ein Gericht nach den Beweisfragen. Wählen Sie Ihre Seite."
     tone="deep"
   >
-    <div class="grid gap-x-8 gap-y-4 md:grid-cols-3" data-reveal-group>
+    <div class="grid gap-x-8 gap-y-4 md:grid-cols-2 xl:grid-cols-4" data-reveal-group>
       {
         audiences.map((audience) => (
           <Card kicker={audience.label} title={audience.title} href={audienceHref(audience)} linkLabel={`Mehr für ${audience.label}`}>

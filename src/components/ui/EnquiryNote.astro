@@ -1,0 +1,32 @@
+---
+// Short notes next to booking and contact actions: deadline, confidentiality, documents for the
+// first contact. Content from src/data/enquiry.ts. Hairline rows like a report margin, no numbering.
+import Icon from './Icon.astro';
+import { enquiryPoints } from '../../data/enquiry';
+
+interface Props {
+  title?: string;
+  tone?: 'paper' | 'ink';
+  class?: string;
+}
+
+const { title = 'Vor Ihrer Anfrage', tone = 'paper', class: className } = Astro.props;
+const onInk = tone === 'ink';
+---
+
+<div class:list={['text-sm', className]} data-reveal>
+  <p class:list={['label', onInk ? 'text-paper/70' : 'text-graphite']}>{title}</p>
+  <dl class:list={['mt-3 grid border-t', onInk ? 'border-paper/20' : 'border-ink']}>
+    {
+      enquiryPoints.map((point) => (
+        <div class:list={['border-b py-4', onInk ? 'border-paper/15' : 'border-rule']}>
+          <dt class:list={['flex items-start gap-3 font-semibold', onInk ? 'text-paper' : 'text-ink']}>
+            <Icon name={point.icon} size={18} class:list={['mt-0.5 shrink-0', onInk ? 'text-brass-light' : 'text-oxblood']} />
+            {point.term}
+          </dt>
+          <dd class:list={['mt-1 pl-[1.875rem]', onInk ? 'text-paper/75' : 'text-graphite']}>{point.text}</dd>
+        </div>
+      ))
+    }
+  </dl>
+</div>

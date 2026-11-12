@@ -6,7 +6,7 @@ metaDescription: 'Hygiene beim Tätowieren und Piercen: Welche Bereiche ein Sach
 lead: Im Tattoostudio kommt es bei der Hygiene auf den ganzen Ablauf an, von der Vorbereitung des Arbeitsplatzes über den Umgang mit Instrumenten und die Desinfektion der Haut bis zur Wundversorgung und zu dokumentierten Arbeitsanweisungen. Genau diese Bereiche prüft ein Hygiene-Gutachten.
 published: 2026-11-12
 services: [hygiene-gutachten, piercing-gutachten, streitfaelle]
-audiences: [fuer-tattoo-studios, fuer-privatpersonen, fuer-rechtsanwaelte-und-gerichte]
+audiences: [fuer-tattoo-studios, fuer-privatpersonen, fuer-rechtsanwaelte, fuer-gerichte]
 order: 5
 ---
 

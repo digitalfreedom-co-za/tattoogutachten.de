@@ -23,8 +23,34 @@ export interface ServiceTopic {
   link?: NavItem;
 }
 
+/**
+ * Services answer two different questions: what is assessed (subject) and how and why the report is
+ * commissioned (route). One case can touch both, e.g. a tattoo assessment commissioned privately.
+ */
+export type ServiceGroup = 'gegenstand' | 'auftrag';
+
+export interface ServiceGroupInfo {
+  id: ServiceGroup;
+  title: string;
+  text: string;
+}
+
+export const serviceGroups: ServiceGroupInfo[] = [
+  {
+    id: 'gegenstand',
+    title: 'Was begutachtet wird',
+    text: 'Der Gegenstand der Prüfung: eine Tätowierung, ein Piercing oder die Hygiene im Studio.',
+  },
+  {
+    id: 'auftrag',
+    title: 'Wie beauftragt wird und aus welchem Anlass',
+    text: 'Der Weg des Auftrags und der Anlass. Sie gelten für jeden Gegenstand, ein Tattoo-Gutachten kann zum Beispiel als Privatgutachten in einem Streitfall entstehen. Mehrere Leistungen buchen Sie dafür nicht.',
+  },
+];
+
 export interface Service {
   slug: ServiceSlug;
+  group: ServiceGroup;
   /** Short name, used in breadcrumbs, related links and running text. */
   name: string;
   /** Short topic label shown above the title. */
@@ -53,6 +79,17 @@ export interface Service {
   showCourtReference?: boolean;
   /** Shows the private versus court report comparison on the page. */
   showComparison?: boolean;
+  /**
+   * Replaces the consultation funnel for professional commissions (court reports): the page leads to
+   * telephone and email and to the audience page instead of the free first consultation.
+   */
+  enquiry?: {
+    audienceHref: string;
+    audienceLabel: string;
+    nextIntro: string;
+    ctaTitle: string;
+    ctaText: string;
+  };
   related: ServiceSlug[];
 }
 
@@ -69,6 +106,7 @@ const evidenceTopic: ServiceTopic = {
 export const services: Service[] = [
   {
     slug: 'tattoo-gutachten',
+    group: 'gegenstand',
     name: 'Tattoo-Gutachten',
     kicker: 'Tätowierung',
     title: 'Tattoo-Gutachten bei handwerklichen Mängeln',
@@ -105,6 +143,7 @@ export const services: Service[] = [
   },
   {
     slug: 'hygiene-gutachten',
+    group: 'gegenstand',
     name: 'Hygiene-Gutachten',
     kicker: 'Hygiene',
     title: 'Hygiene und Arbeitsabläufe im Studio',
@@ -154,6 +193,7 @@ export const services: Service[] = [
   },
   {
     slug: 'piercing-gutachten',
+    group: 'gegenstand',
     name: 'Piercing-Gutachten',
     kicker: 'Piercing',
     title: 'Piercing-Gutachten',
@@ -185,6 +225,7 @@ export const services: Service[] = [
   },
   {
     slug: 'privatgutachten',
+    group: 'auftrag',
     name: 'Privatgutachten',
     kicker: 'Parteiauftrag',
     title: 'Privatgutachten und Stellungnahmen',
@@ -219,6 +260,7 @@ export const services: Service[] = [
   },
   {
     slug: 'gerichtsgutachten',
+    group: 'auftrag',
     name: 'Gerichtsgutachten',
     kicker: 'Justiz',
     title: 'Gutachten für Gerichte',
@@ -227,7 +269,7 @@ export const services: Service[] = [
     situation: 'Ein Gericht braucht in einem laufenden Verfahren Antworten auf Beweisfragen zu einer Tätowierung oder einem Piercing.',
     metaTitle: 'Gerichtsgutachten Tattoo | Sachverständiger für Gerichte, Patrick Wolf',
     metaDescription:
-      'Gerichtsgutachten zu Tätowierungen und Piercings: Beweisfragen präzise beantwortet, verständlich dokumentiert. Bestellt durch das LG Frankfurt am Main, JVEG.',
+      'Gerichtsgutachten zu Tätowierungen und Piercings: Beweisfragen präzise beantwortet, verständlich dokumentiert. In einem Verfahren vom LG Frankfurt am Main bestellt, JVEG.',
     definitionTitle: 'Was ist ein Gerichtsgutachten?',
     intro: [
       'Ein Gerichtsgutachten beantwortet die Beweisfragen, die ein Gericht in einem Verfahren formuliert hat. Grundlage sind die zur Verfügung stehenden Unterlagen und, wenn nötig, eigene Untersuchungen.',
@@ -270,10 +312,20 @@ export const services: Service[] = [
     ],
     showCourtReference: true,
     showComparison: true,
+    enquiry: {
+      audienceHref: '/fuer-gerichte/',
+      audienceLabel: 'Informationen für Gerichte',
+      nextIntro:
+        'Ein Gericht fragt telefonisch oder per E-Mail an, mit Gericht, Aktenzeichen und Beweisthema. Verfügbarkeit und voraussichtliche Bearbeitungszeit klären wir für das konkrete Verfahren. Rechtsanwälte, die vorab ein Privatgutachten brauchen, beauftragen es nach den Bedingungen des Sachverständigenvertrags.',
+      ctaTitle: 'Anfrage zu einem Verfahren.',
+      ctaText:
+        'Rufen Sie an oder schreiben Sie eine E-Mail mit Gericht, Aktenzeichen und Beweisthema. Die Vergütung richtet sich nach dem JVEG.',
+    },
     related: ['privatgutachten', 'streitfaelle', 'tattoo-gutachten'],
   },
   {
     slug: 'streitfaelle',
+    group: 'auftrag',
     name: 'Streitfälle',
     kicker: 'Streitfall',
     title: 'Unterstützung bei Streitfällen',

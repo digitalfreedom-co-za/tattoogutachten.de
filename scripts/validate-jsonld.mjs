@@ -106,6 +106,13 @@ for (const file of files) {
     continue;
   }
 
+  // Redirect stubs of moved pages (meta refresh) carry noindex and no JSON-LD.
+  if (html.includes('http-equiv="refresh"')) {
+    if (!html.includes('<meta name="robots" content="noindex"')) fail(page, 'redirect stub must carry noindex');
+    if (blocks.length) fail(page, 'redirect stub must not carry JSON-LD');
+    continue;
+  }
+
   if (!canonical) fail(page, 'canonical URL missing');
   else if (!canonical.startsWith(siteRoot)) fail(page, `canonical ${canonical} is outside ${siteRoot}`);
   if (blocks.length !== 1) fail(page, `expected one JSON-LD block, found ${blocks.length}`);

@@ -29,6 +29,8 @@ Website des Sachverständigenbüros Wolf (Patrick Wolf, Bad Nauheim), Gutachten 
 | `astro.config.mjs` | Konfiguration, Zieladresse der Seite in der Konstante `SITE` |
 | `src/lib/url.ts` | `url()` setzt den Basispfad vor interne Links und Dateien aus `public/` |
 | `src/config/site.ts` | Kontaktdaten, Navigation, Nachweise (Registernummer, Gericht). Einzige Quelle, nie im Markup wiederholen |
+| `src/config/practice.ts` | Angaben, die nur der Betreiber bestätigen kann (Gesprächsform, Antwortzeit, Fahrtkosten und mehr). Felder bleiben `null`, bis sie bestätigt sind; erst dann erscheinen sie auf der Seite |
+| `src/data/enquiry.ts` | Hinweise vor der Anfrage (Frist, Vertraulichkeit, Unterlagen), gezeigt neben Kalender und Kontaktwegen |
 | `src/layouts/BaseLayout.astro` | HTML-Gerüst mit `lang="de"`, Schriften, Sprunglink, Header, Footer, Slot `head` für SEO |
 | `src/layouts/ArticleLayout.astro` | Langtext (Ratgeber, Rechtstexte) mit Brotkrumen, Randspalte und `prose-report` |
 | `src/components/layout/` | `Header` (mit mobilem Menü), `Footer`, `Logo` |
@@ -85,6 +87,25 @@ flowchart TD
   pages --> ui[components/ui]
   BaseLayout --> motion[scripts/motion.ts]
 ```
+
+## Offene Punkte vor dem Livegang
+
+Diese Angaben fehlen, weil nur Patrick Wolf sie liefern kann. Nichts davon wird geraten; die Struktur steht, der Wert kommt in `src/config/practice.ts` oder in die genannte Datei.
+
+| Punkt | Wohin | Wirkung |
+|---|---|---|
+| Eigenes cal.com Ereignis (Gastgeber, 60 Minuten, Pflichtfelder, Bestätigungstext), dann Testbuchung mit Verschieben und Absagen | `PUBLIC_CAL_LINK` beim Build | Demo-Hinweis verschwindet, Abschlussbänder und Ratgeber führen wieder mit dem Kalender statt mit dem Telefon (`CAL_IS_DEMO`) |
+| Form der Erstberatung (Telefon, Video oder vor Ort, wer ruft an) | `consultationMethod` | Zeile über beiden Kalendern und auf `/termin/` |
+| Wie Fotos und Unterlagen nach der Buchung übermittelt werden | `documentHandover` | Hinweis Unterlagen |
+| Antwortzeit auf Anrufe und E-Mails | `responseTime` | Hinweis Frist |
+| Übliche Bearbeitungszeit eines Gutachtens mit Bedingungen | `reportTurnaround` | Ablauf und Kosten, FAQ zur Dauer |
+| Besuche im Büro nur mit Termin? | `officeVisits` | Kontaktseite bei der Anschrift |
+| Umgang mit früheren Berührungspunkten zu Studio oder Beteiligten | `conflictHandling` | Startseite, Über mich, FAQ zur Unabhängigkeit |
+| Fahrtkosten, Umsatzsteuer, Honorar oder Beispielrahmen | `travelCosts`, `vat`, `rate` | Kostenübersicht |
+| Verfügbarkeit für Gerichtsaufträge | `courtAvailability` | `/fuer-gerichte/` |
+| Eigenes Postfach des Sachverständigenbüros statt der Studioadresse | `contact.email` in `src/config/site.ts` | überall |
+| Datum der Zertifizierung, Link auf einen offiziellen Registereintrag | `credentials` in `src/config/site.ts` | Nachweise auf `/ueber-mich/`. Der Eintrag auf deutsche-gutachterauskunft.de nennt eine andere Anschrift und Rechtsberatung als Schwerpunkt und wird deshalb nicht verlinkt |
+| Antwort zu Piercing-Fotos und Unterlagen bei Hygienefragen bestätigen | `faqVariants` in `src/data/faq.ts` | Fragen auf Piercing- und Hygieneseite |
 
 ## Basispfad und Links
 

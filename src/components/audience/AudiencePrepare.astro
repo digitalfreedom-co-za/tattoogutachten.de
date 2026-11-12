@@ -1,0 +1,45 @@
+---
+// Preparation block of an audience page: what to have ready, the next step and the notes before an
+// enquiry. Placed after the help block for lawyers and courts, after the services for the others.
+import Section from '../ui/Section.astro';
+import Checklist from '../ui/Checklist.astro';
+import Button from '../ui/Button.astro';
+import EnquiryNote from '../ui/EnquiryNote.astro';
+import { practice } from '../../config/practice';
+import type { Audience } from '../../data/audiences';
+
+interface Props {
+  audience: Audience;
+  tone: 'paper' | 'deep';
+}
+
+const { audience, tone } = Astro.props;
+const consultation = audience.primaryAction === 'consultation';
+// The consumer oriented enquiry notes (tattoo touch ups, medical records) do not fit a court enquiry.
+const showEnquiryNote = audience.slug !== 'fuer-gerichte';
+const availability = audience.slug === 'fuer-gerichte' ? practice.courtAvailability : null;
+---
+
+<Section id="vorbereiten" label="Vorbereitung" title={audience.prepareTitle} tone={tone}>
+  <div class="grid gap-12 lg:grid-cols-12 lg:gap-x-8">
+    <Checklist items={audience.prepare} title={audience.prepareListTitle ?? 'Hilfreiche Unterlagen'} class="self-start lg:col-span-7" />
+    <div class="grid content-start gap-6 lg:col-span-5" data-reveal>
+      <p class="text-lead text-ink">{audience.prepareNote}</p>
+      {availability && <p class="text-graphite">{availability}</p>}
+      <p class="text-graphite">
+        {
+          audience.prepareAside ??
+            'Am Anfang steht eine kostenlose Erstberatung von bis zu 60 Minuten. Kostenpflichtig wird es erst nach einer schriftlichen Beauftragung.'
+        }
+      </p>
+      {showEnquiryNote && <EnquiryNote />}
+      {
+        consultation && (
+          <p>
+            <Button href="/ablauf-kosten/" variant="text">Ablauf und Kosten im Detail</Button>
+          </p>
+        )
+      }
+    </div>
+  </div>
+</Section>

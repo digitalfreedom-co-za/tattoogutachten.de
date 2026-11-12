@@ -11,8 +11,10 @@ import Checklist from '../components/ui/Checklist.astro';
 import CompareTable from '../components/ui/CompareTable.astro';
 import Faq from '../components/ui/Faq.astro';
 import CtaBand from '../components/ui/CtaBand.astro';
+import EnquiryNote from '../components/ui/EnquiryNote.astro';
+import { practice } from '../config/practice';
 import { contentUpdated, primaryCta } from '../config/site';
-import { steps, costFacts, costDrivers, preparationChecklist } from '../data/process';
+import { steps, costFacts, costDrivers, contractTerms, preparationChecklist } from '../data/process';
 import { reportComparison } from '../data/services';
 import { faqByTopic } from '../data/faq';
 import { url } from '../lib/url';
@@ -63,8 +65,15 @@ const breadcrumbs = [{ label: 'Ablauf und Kosten', href: '/ablauf-kosten/' }];
     </p>
     <div class="grid gap-12 lg:grid-cols-12 lg:gap-x-8">
       <KeyFacts facts={costFacts} class="lg:col-span-7" />
-      <Checklist title="Wovon die Kosten abhängen" items={costDrivers} class="self-start lg:col-span-5" />
+      <div class="grid content-start gap-8 lg:col-span-5">
+        <Checklist title="Wovon die Kosten abhängen" items={costDrivers} />
+        <Checklist title="Vor dem Auftrag schriftlich festgelegt" items={contractTerms} />
+      </div>
     </div>
+    <p class="mt-10 max-w-[40rem] text-graphite" data-reveal>
+      Sie erhalten die Vergütungsbedingungen und die voraussichtlichen Kosten, bevor eine kostenpflichtige Leistung
+      beginnt.
+    </p>
   </Section>
 
   <Section
@@ -93,10 +102,11 @@ const breadcrumbs = [{ label: 'Ablauf und Kosten', href: '/ablauf-kosten/' }];
       <div class="grid content-start gap-5 lg:col-span-5" data-reveal>
         <h3 class="text-h4">Wie lange dauert ein Gutachten?</h3>
         <p class="text-graphite">
-          Das hängt vom Umfang des Auftrags, den vorhandenen Unterlagen und dem Untersuchungsaufwand ab. Nach der
-          Erstberatung lässt sich der Zeitbedarf in der Regel genauer einschätzen, der voraussichtliche
-          Bearbeitungszeitraum steht dann im Vertrag.
+          Das hängt vom Umfang des Auftrags, den vorhandenen Unterlagen und dem Untersuchungsaufwand ab.
+          {practice.reportTurnaround && ` ${practice.reportTurnaround}`} Nach der Erstberatung lässt sich der Zeitbedarf
+          in der Regel genauer einschätzen, der voraussichtliche Bearbeitungszeitraum steht dann im Vertrag.
         </p>
+        <EnquiryNote />
       </div>
     </div>
   </Section>

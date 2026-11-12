@@ -1,19 +1,30 @@
 ---
-// Closing call to action on ink: serif statement left, booking, direct contact and office address right.
+// Closing call to action on ink: serif statement left, the primary action, direct contact and office
+// address right. action="booking" leads with the calendar, action="contact" with the telephone and keeps
+// the calendar as a secondary link. Default: contact while the calendar is the preview demo.
 import Container from './Container.astro';
 import Button from './Button.astro';
 import Icon from './Icon.astro';
 import MeasureRule from './MeasureRule.astro';
+import { url } from '../../lib/url';
 import { contact, credentials, primaryCta, site } from '../../config/site';
+import { CAL_IS_DEMO } from '../../config/booking';
 
 interface Props {
   title: string;
   text?: string;
   ctaLabel?: string;
   ctaHref?: string;
+  action?: 'booking' | 'contact';
 }
 
-const { title, text, ctaLabel = primaryCta.label, ctaHref = primaryCta.href } = Astro.props;
+const {
+  title,
+  text,
+  ctaLabel = primaryCta.label,
+  ctaHref = primaryCta.href,
+  action = CAL_IS_DEMO ? 'contact' : 'booking',
+} = Astro.props;
 ---
 
 <section class="relative overflow-hidden bg-ink py-section text-paper" aria-label="Kontakt aufnehmen">
@@ -24,14 +35,31 @@ const { title, text, ctaLabel = primaryCta.label, ctaHref = primaryCta.href } = 
       {text && <p class="mt-6 max-w-[34rem] text-lead text-paper/75" data-reveal>{text}</p>}
     </div>
     <div class="flex flex-col gap-8 md:col-span-4 md:col-start-9 md:justify-end">
-      <Button href={ctaHref} variant="inverse" icon="calendar" class="self-start">{ctaLabel}</Button>
+      {
+        action === 'booking' ? (
+          <Button href={ctaHref} variant="inverse" icon="calendar" class="self-start">{ctaLabel}</Button>
+        ) : (
+          <div class="flex flex-wrap items-center gap-x-6 gap-y-4">
+            <Button href={contact.phone.href} variant="inverse" icon="phone">
+              <span class="sr-only">Anrufen: </span>{contact.phone.display}
+            </Button>
+            <a class="link-ink inline-flex min-h-11 items-center text-sm font-semibold hover:!text-brass-light" href={ctaHref.startsWith('/') ? url(ctaHref) : ctaHref}>
+              {ctaLabel}
+            </a>
+          </div>
+        )
+      }
       <ul class="grid gap-1 border-t border-paper/20 pt-4 text-sm">
-        <li>
-          <a class="link-ink inline-flex min-h-11 items-center gap-3 hover:!text-brass-light" href={contact.phone.href}>
-            <Icon name="phone" size={18} class="shrink-0 text-brass-light" />
-            <span><span class="sr-only">Telefon </span>{contact.phone.display}</span>
-          </a>
-        </li>
+        {
+          action === 'booking' && (
+            <li>
+              <a class="link-ink inline-flex min-h-11 items-center gap-3 hover:!text-brass-light" href={contact.phone.href}>
+                <Icon name="phone" size={18} class="shrink-0 text-brass-light" />
+                <span><span class="sr-only">Telefon </span>{contact.phone.display}</span>
+              </a>
+            </li>
+          )
+        }
         <li>
           <a class="link-ink inline-flex min-h-11 items-center gap-3 hover:!text-brass-light" href={contact.email.href}>
             <Icon name="mail" size={18} class="shrink-0 text-brass-light" />

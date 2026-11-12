@@ -6,7 +6,7 @@ metaDescription: 'Privatgutachten oder Gerichtsgutachten? Wer beauftragt, wer be
 lead: Den Unterschied macht der Auftraggeber. Ein Privatgutachten geben Sie selbst, Ihr Studio oder Ihr Rechtsanwalt in Auftrag, ein Gerichtsgutachten holt das Gericht in einem laufenden Verfahren ein. Daraus folgen Unterschiede bei Fragestellung, Vergütung und Gewicht im Verfahren.
 published: 2026-11-12
 services: [privatgutachten, gerichtsgutachten, streitfaelle]
-audiences: [fuer-privatpersonen, fuer-tattoo-studios, fuer-rechtsanwaelte-und-gerichte]
+audiences: [fuer-privatpersonen, fuer-tattoo-studios, fuer-rechtsanwaelte, fuer-gerichte]
 order: 3
 ---
 

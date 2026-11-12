@@ -13,7 +13,7 @@ import CourtReference from '../../components/ui/CourtReference.astro';
 import Faq from '../../components/ui/Faq.astro';
 import Icon from '../../components/ui/Icon.astro';
 import CtaBand from '../../components/ui/CtaBand.astro';
-import { contentUpdated, primaryCta } from '../../config/site';
+import { contact, contentUpdated, primaryCta } from '../../config/site';
 import { services, serviceHref, serviceBySlug, serviceScopeNote, reportComparison, type Service } from '../../data/services';
 import { faqForService } from '../../data/faq';
 import { url } from '../../lib/url';
@@ -55,8 +55,21 @@ const nextTone = () => (toneIndex++ % 2 === 0 ? 'deep' : 'paper');
     breadcrumbs={breadcrumbs}
     updated={contentUpdated}
   >
-    <Button href={primaryCta.href} icon="calendar">Kostenlose Erstberatung</Button>
-    <Button href="/ablauf-kosten/" variant="text">Ablauf und Kosten</Button>
+    {
+      service.enquiry ? (
+        <>
+          <Button href={contact.phone.href} icon="phone">
+            <span class="sr-only">Anrufen: </span>{contact.phone.display}
+          </Button>
+          <Button href={service.enquiry.audienceHref} variant="text">{service.enquiry.audienceLabel}</Button>
+        </>
+      ) : (
+        <>
+          <Button href={primaryCta.href} icon="calendar">Kostenlose Erstberatung</Button>
+          <Button href="/ablauf-kosten/" variant="text">Ablauf und Kosten</Button>
+        </>
+      )
+    }
   </PageHeader>
 
   <Section id="definition" label="Kurz erklärt" title={service.definitionTitle} tone={nextTone()}>
@@ -151,11 +164,20 @@ const nextTone = () => (toneIndex++ % 2 === 0 ? 'deep' : 'paper');
     id="ablauf"
     label="Ablauf"
     title="Wie geht es weiter?"
-    intro="Am Anfang steht eine kostenlose Erstberatung von bis zu 60 Minuten. Kostenpflichtig wird es erst, wenn Sie ein Gutachten schriftlich beauftragen."
+    intro={
+      service.enquiry?.nextIntro ??
+      'Am Anfang steht eine kostenlose Erstberatung von bis zu 60 Minuten. Kostenpflichtig wird es erst, wenn Sie ein Gutachten schriftlich beauftragen.'
+    }
     tone={nextTone()}
   >
     <p class="mb-12" data-reveal>
-      <Button href="/ablauf-kosten/" variant="text">Die fünf Schritte und die Kosten im Detail</Button>
+      {
+        service.enquiry ? (
+          <Button href={service.enquiry.audienceHref} variant="text">{service.enquiry.audienceLabel}</Button>
+        ) : (
+          <Button href="/ablauf-kosten/" variant="text">Die fünf Schritte und die Kosten im Detail</Button>
+        )
+      }
     </p>
     <h3 class="label mb-6 text-graphite">Verwandte Leistungen</h3>
     <div class="grid gap-x-8 gap-y-4 md:grid-cols-3" data-reveal-group>
@@ -169,8 +191,20 @@ const nextTone = () => (toneIndex++ % 2 === 0 ? 'deep' : 'paper');
     </div>
   </Section>
 
-  <CtaBand
-    title="Klären wir, ob ein Gutachten in Ihrem Fall sinnvoll ist."
-    text="Die Erstberatung dauert bis zu 60 Minuten, ist kostenlos und verpflichtet Sie zu nichts. Gutachten bundesweit und europaweit."
-  />
+  {
+    service.enquiry ? (
+      <CtaBand
+        title={service.enquiry.ctaTitle}
+        text={service.enquiry.ctaText}
+        action="contact"
+        ctaLabel={`E-Mail an ${contact.email.display}`}
+        ctaHref={contact.email.href}
+      />
+    ) : (
+      <CtaBand
+        title="Klären wir, ob ein Gutachten in Ihrem Fall sinnvoll ist."
+        text="Die Erstberatung dauert bis zu 60 Minuten, ist kostenlos und verpflichtet Sie zu nichts. Gutachten bundesweit und europaweit."
+      />
+    )
+  }
 </BaseLayout>

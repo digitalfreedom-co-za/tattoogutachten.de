@@ -1,0 +1,41 @@
+---
+// Restrained next step right after an article's conclusion, before any further reading: one sentence
+// for the reader's situation, the booking link (telephone first while the calendar is the preview demo)
+// and the telephone number. Set apart by a hairline, not a coloured box.
+import Button from './Button.astro';
+import Icon from './Icon.astro';
+import { contact } from '../../config/site';
+import { CAL_IS_DEMO } from '../../config/booking';
+
+interface Props {
+  text: string;
+  class?: string;
+}
+
+const { text, class: className } = Astro.props;
+---
+
+<aside class:list={['not-prose border-t border-ink pt-6', className]} aria-labelledby="naechster-schritt">
+  <p id="naechster-schritt" class="label text-oxblood">Ihr nächster Schritt</p>
+  <p class="mt-3 font-serif text-h4 text-ink">{text}</p>
+  <div class="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3">
+    {
+      CAL_IS_DEMO ? (
+        <>
+          <Button href={contact.phone.href} icon="phone">
+            <span class="sr-only">Anrufen: </span>{contact.phone.display}
+          </Button>
+          <a class="link-ink inline-flex min-h-11 items-center font-semibold" href={contact.email.href}>E-Mail schreiben</a>
+        </>
+      ) : (
+        <>
+          <Button href="/termin/" icon="calendar">Kostenlose Erstberatung buchen</Button>
+          <a class="link-ink inline-flex min-h-11 items-center gap-3 font-semibold" href={contact.phone.href}>
+            <Icon name="phone" size={18} class="shrink-0 text-oxblood" />
+            <span><span class="sr-only">Telefon </span>{contact.phone.display}</span>
+          </a>
+        </>
+      )
+    }
+  </div>
+</aside>

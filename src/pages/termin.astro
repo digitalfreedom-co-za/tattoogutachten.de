@@ -1,6 +1,8 @@
 ---
-// Booking page: the free first consultation at a glance, the full cal.com calendar (lazy, see
-// BookingEmbed), what to prepare, what happens after booking and the booking FAQ.
+// Booking page: a compact header, then straight to the full cal.com calendar (lazy, see BookingEmbed,
+// which shows the consultation at a glance above the frame), then the consultation in detail, what to
+// prepare, what happens after booking and the booking FAQ. Anchor links in the header reach the
+// explanations first for visitors who want them.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from '../components/ui/PageHeader.astro';
 import Section from '../components/ui/Section.astro';
@@ -13,6 +15,7 @@ import CtaBand from '../components/ui/CtaBand.astro';
 import Icon from '../components/ui/Icon.astro';
 import BookingEmbed from '../components/booking/BookingEmbed.astro';
 import { contact, contentUpdated, credentials, site, type NavItem } from '../config/site';
+import { practice } from '../config/practice';
 import { steps, preparationChecklist, afterBookingSteps } from '../data/process';
 import { bookingFaq } from '../data/faq';
 import { absoluteUrl, ids, ref } from '../lib/schema';
@@ -24,6 +27,7 @@ const breadcrumbs: NavItem[] = [{ label: 'Termin buchen', href: '/termin/' }];
 
 const consultationFacts: Fact[] = [
   { term: 'Dauer', value: 'Bis zu 60 Minuten' },
+  ...(practice.consultationMethod ? [{ term: 'Gespräch', value: practice.consultationMethod }] : []),
   { term: 'Kosten', value: 'Keine', note: 'Eine vollständige Begutachtung oder schriftliche Stellungnahme ist nicht enthalten.' },
   { term: 'Verpflichtung', value: 'Keine', note: 'Ob Sie danach ein Gutachten beauftragen, entscheiden Sie allein.' },
   { term: 'Ergebnis', value: 'Klarheit über den nächsten Schritt', note: 'Ob ein Gutachten sinnvoll ist, welchen Umfang es hätte und was es voraussichtlich kostet.' },
@@ -56,29 +60,19 @@ const page = {
     breadcrumbs={breadcrumbs}
     updated={contentUpdated}
   >
-    <Button href="#termin" icon="calendar">Zum Kalender</Button>
     <a class="link-ink inline-flex min-h-11 items-center gap-3 font-semibold" href={contact.phone.href}>
       <Icon name="phone" size={18} class="text-oxblood" />
       <span><span class="sr-only">Lieber anrufen: </span>{contact.phone.display}</span>
     </a>
+    <a class="link-ink inline-flex min-h-11 items-center text-sm" href="#vorbereitung">Was Sie bereitlegen</a>
+    <a class="link-ink inline-flex min-h-11 items-center text-sm" href="#nach-der-buchung">Was nach der Buchung passiert</a>
   </PageHeader>
 
-  <Section
-    id="erstberatung"
-    label="Erstberatung"
-    title="Was ist die kostenlose Erstberatung?"
-    intro="Ein Gespräch von bis zu 60 Minuten, in dem Sie Ihr Anliegen schildern und erfahren, ob ein Gutachten weiterhilft. Bezahlt wird erst eine Leistung, die Sie danach schriftlich beauftragen."
-    tone="deep"
-  >
-    <div class="grid gap-12 lg:grid-cols-12 lg:gap-x-8">
-      <KeyFacts facts={consultationFacts} class="lg:col-span-7" />
-      <Checklist title="Im Gespräch besprechen wir" items={discussed} class="self-start lg:col-span-5" />
-    </div>
-  </Section>
 
   <Section
     id="termin"
     label="Kalender"
+    tone="deep"
     title="Wählen Sie einen freien Termin."
     intro="Tag wählen, Uhrzeit wählen, Namen und E-Mail-Adresse eintragen. Mehr braucht die Buchung nicht."
     data-booking-section
@@ -87,6 +81,19 @@ const page = {
       Kein passender Termin dabei? Rufen Sie an oder schreiben Sie eine E-Mail, dann vereinbaren wir ihn persönlich.
     </p>
     <BookingEmbed variant="full" />
+  </Section>
+
+  <Section
+    id="erstberatung"
+    label="Erstberatung"
+    title="Was ist die kostenlose Erstberatung?"
+    intro="Ein Gespräch von bis zu 60 Minuten, in dem Sie Ihr Anliegen schildern und erfahren, ob ein Gutachten weiterhilft. Bezahlt wird erst eine Leistung, die Sie danach schriftlich beauftragen."
+    tone="paper"
+  >
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-x-8">
+      <KeyFacts facts={consultationFacts} class="lg:col-span-7" />
+      <Checklist title="Im Gespräch besprechen wir" items={discussed} class="self-start lg:col-span-5" />
+    </div>
   </Section>
 
   <Section
@@ -132,7 +139,8 @@ const page = {
   <CtaBand
     title="Lieber erst kurz sprechen?"
     text="Rufen Sie an oder schreiben Sie eine E-Mail. Die Erstberatung lässt sich genauso gut telefonisch vereinbaren."
-    ctaLabel="Zum Kalender"
+    action="contact"
+    ctaLabel="Oder online im Kalender buchen"
     ctaHref="/termin/#termin"
   />
 </BaseLayout>

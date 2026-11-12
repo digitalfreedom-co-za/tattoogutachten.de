@@ -8,7 +8,9 @@ import Button from '../components/ui/Button.astro';
 import Icon, { type IconName } from '../components/ui/Icon.astro';
 import Seal from '../components/ui/Seal.astro';
 import CtaBand from '../components/ui/CtaBand.astro';
+import EnquiryNote from '../components/ui/EnquiryNote.astro';
 import { site, contact, credentials, contentUpdated, primaryCta, type NavItem } from '../config/site';
+import { practice } from '../config/practice';
 import { audiences, audienceHref } from '../data/audiences';
 import { ids, ref } from '../lib/schema';
 import { url } from '../lib/url';
@@ -46,7 +48,7 @@ const channels: Channel[] = [
     term: 'Büroanschrift',
     value: `${contact.street}, ${contact.postalCode} ${contact.city}`,
     href: contact.mapsUrl,
-    note: 'Der Link öffnet die Route in Google Maps.',
+    note: [practice.officeVisits, 'Der Link öffnet die Route in Google Maps.'].filter(Boolean).join(' '),
     external: true,
   },
 ];
@@ -67,14 +69,18 @@ const channels: Channel[] = [
     breadcrumbs={breadcrumbs}
     updated={contentUpdated}
   >
-    <Button href="/termin/" icon="calendar">{primaryCta.label}</Button>
+    <Button href={contact.phone.href} icon="phone">
+      <span class="sr-only">Anrufen: </span>{contact.phone.display}
+    </Button>
+    <Button href={contact.email.href} variant="secondary" icon="mail">E-Mail schreiben</Button>
+    <Button href="/termin/" variant="text" icon="calendar">{primaryCta.label}</Button>
   </PageHeader>
 
   <Section
     id="kontaktdaten"
     label="Kontaktdaten"
     title="Telefon, E-Mail und Büroanschrift."
-    intro="Für die kostenlose Erstberatung buchen Sie am einfachsten online einen Termin. Telefon und E-Mail stehen Ihnen ebenso offen."
+    intro="Rufen Sie an, schreiben Sie eine E-Mail oder buchen Sie die kostenlose Erstberatung online."
     tone="deep"
   >
     <div class="grid gap-12 lg:grid-cols-12 lg:gap-x-8">
@@ -102,16 +108,19 @@ const channels: Channel[] = [
         }
       </dl>
 
-      <aside class="self-start border border-ink bg-paper p-6 md:p-8 lg:col-span-4" data-reveal>
-        <p class="label text-graphite">Erstberatung</p>
-        <p class="mt-4 font-serif text-h3 tracking-tightish">Kostenlos, bis zu 60 Minuten.</p>
-        <p class="mt-4 text-graphite">
-          Freie Termine sehen Sie direkt im Kalender. Die Bestätigung kommt per E-Mail.
-        </p>
-        <div class="mt-6">
-          <Button href="/termin/" icon="calendar">Termin online buchen</Button>
-        </div>
-      </aside>
+      <div class="grid content-start gap-10 lg:col-span-4">
+        <EnquiryNote />
+        <aside class="border border-ink bg-paper p-6 md:p-8" data-reveal>
+          <p class="label text-graphite">Erstberatung</p>
+          <p class="mt-4 font-serif text-h3 tracking-tightish">Kostenlos, bis zu 60 Minuten.</p>
+          <p class="mt-4 text-graphite">
+            Freie Termine sehen Sie direkt im Kalender. Die Bestätigung kommt per E-Mail.
+          </p>
+          <div class="mt-6">
+            <Button href="/termin/" variant="secondary" icon="calendar">Termin online buchen</Button>
+          </div>
+        </aside>
+      </div>
     </div>
   </Section>
 

@@ -6,6 +6,7 @@ import type { FaqEntry } from '../components/ui/Faq.astro';
 import type { ServiceSlug } from './services';
 import type { AudienceSlug } from './audiences';
 import { credentials } from '../config/site';
+import { practice } from '../config/practice';
 import { url } from '../lib/url';
 
 export type FaqTopic = 'grundlagen' | 'begutachtung' | 'auftrag' | 'kosten' | 'person';
@@ -72,8 +73,8 @@ export const faq: FaqItem[] = [
   {
     topic: 'begutachtung',
     featured: true,
-    services: ['tattoo-gutachten', 'piercing-gutachten'],
-    audiences: ['fuer-privatpersonen', 'fuer-rechtsanwaelte-und-gerichte'],
+    services: ['tattoo-gutachten'],
+    audiences: ['fuer-privatpersonen', 'fuer-rechtsanwaelte'],
     question: 'Kann eine Tätowierung anhand von Fotos beurteilt werden?',
     answer:
       'Eine erste Einschätzung ist mit aussagekräftigen Fotos oft möglich. Für eine abschließende Beurteilung kann eine persönliche Untersuchung nötig sein, weil sich nicht jedes Merkmal auf Bildern zuverlässig zeigt.',
@@ -81,6 +82,7 @@ export const faq: FaqItem[] = [
   {
     topic: 'begutachtung',
     services: ['tattoo-gutachten', 'piercing-gutachten'],
+    audiences: ['fuer-privatpersonen'],
     question: 'Können auch Narben oder Hautveränderungen untersucht werden?',
     answer:
       'Sichtbare Veränderungen werden dokumentiert und aus handwerklicher Sicht eingeordnet. Die medizinische Diagnose, die Feststellung gesundheitlicher Schäden und die medizinische Ursachenklärung bleiben Ärzten vorbehalten. Bei Bedarf sind zusätzliche ärztliche Untersuchungen nötig.',
@@ -88,6 +90,7 @@ export const faq: FaqItem[] = [
   {
     topic: 'begutachtung',
     services: ['piercing-gutachten'],
+    audiences: ['fuer-privatpersonen', 'fuer-tattoo-studios'],
     question: 'Begutachten Sie auch Piercings?',
     answer:
       'Ja. Begutachtet werden zum Beispiel die handwerkliche Durchführung, die Platzierung, dokumentierte Arbeitsabläufe und Fragen zur Nachbehandlung.',
@@ -95,7 +98,7 @@ export const faq: FaqItem[] = [
   {
     topic: 'begutachtung',
     services: ['hygiene-gutachten'],
-    audiences: ['fuer-tattoo-studios'],
+    audiences: ['fuer-tattoo-studios', 'fuer-gerichte'],
     question: 'Prüfen Sie auch die Hygiene in einem Studio?',
     answer:
       'Ja. Geprüft werden die Vorbereitung des Arbeitsplatzes, der Umgang mit Instrumenten und Verbrauchsmaterialien, Hautvorbereitung und Desinfektion, Wundversorgung und Nachbehandlung sowie Hygieneunterlagen und Arbeitsanweisungen. Bei Bedarf gehört eine Besichtigung der Räume dazu.',
@@ -103,7 +106,7 @@ export const faq: FaqItem[] = [
   {
     topic: 'auftrag',
     services: ['streitfaelle', 'privatgutachten'],
-    audiences: ['fuer-tattoo-studios'],
+    audiences: ['fuer-privatpersonen', 'fuer-tattoo-studios', 'fuer-rechtsanwaelte'],
     question: 'Beraten Sie auch rechtlich?',
     answer:
       'Nein. Die Tätigkeit umfasst die fachliche Begutachtung. Rechtsberatung, anwaltliche Vertretung sowie die Diagnose und Behandlung medizinischer Erkrankungen gehören nicht dazu.',
@@ -111,6 +114,7 @@ export const faq: FaqItem[] = [
   {
     topic: 'auftrag',
     services: ['privatgutachten', 'gerichtsgutachten'],
+    audiences: ['fuer-rechtsanwaelte'],
     question: 'Wer kann ein Gutachten beauftragen?',
     answer:
       'Auftraggeber sind Privatpersonen, Rechtsanwälte, Tattoo- und Piercingstudios, Unternehmen und andere Institutionen. Bei einer gerichtlichen Bestellung kommt der Auftrag direkt vom zuständigen Gericht.',
@@ -118,7 +122,7 @@ export const faq: FaqItem[] = [
   {
     topic: 'person',
     services: ['gerichtsgutachten'],
-    audiences: ['fuer-rechtsanwaelte-und-gerichte'],
+    audiences: ['fuer-rechtsanwaelte', 'fuer-gerichte'],
     question: 'Sind Sie auch als Gerichtsgutachter tätig?',
     answer:
       'Ja. Patrick Wolf wurde erstmals durch das Landgericht Frankfurt am Main in einem Gerichtsverfahren als Sachverständiger bestellt. Außerdem ist er geprüfter und zertifizierter Gutachter des Deutschen Gutachter und Sachverständigen Verbandes (DGuSV).',
@@ -127,7 +131,7 @@ export const faq: FaqItem[] = [
     topic: 'auftrag',
     featured: true,
     services: ['privatgutachten', 'gerichtsgutachten'],
-    audiences: ['fuer-tattoo-studios', 'fuer-rechtsanwaelte-und-gerichte'],
+    audiences: ['fuer-tattoo-studios', 'fuer-rechtsanwaelte'],
     question: 'Ist ein Privatgutachten vor Gericht verwendbar?',
     answer:
       'Ein Privatgutachten kann im Verfahren vorgelegt werden und hilft, den Sachverhalt fachlich darzustellen. Es steht aber nicht automatisch einem vom Gericht eingeholten Gutachten gleich. Welches Gewicht es erhält, entscheidet das Gericht.',
@@ -143,21 +147,30 @@ export const faq: FaqItem[] = [
   {
     topic: 'auftrag',
     services: ['streitfaelle', 'privatgutachten'],
-    audiences: ['fuer-privatpersonen', 'fuer-rechtsanwaelte-und-gerichte'],
+    audiences: ['fuer-privatpersonen', 'fuer-rechtsanwaelte'],
     question: 'Kann ein Gutachten meinen Anspruch auf Schadensersatz bestätigen?',
     answer:
       'Nein, das entscheidet nicht der Sachverständige. Das Gutachten liefert fachliche Feststellungen zu Ausführungsmängeln, Arbeitsabläufen und weiteren Umständen. Ob daraus ein Anspruch auf Schadensersatz oder Schmerzensgeld folgt, ist eine Rechtsfrage für einen Rechtsanwalt.',
   },
   {
     topic: 'kosten',
-    audiences: ['fuer-rechtsanwaelte-und-gerichte'],
+    services: ['tattoo-gutachten', 'piercing-gutachten', 'hygiene-gutachten', 'privatgutachten', 'streitfaelle'],
+    audiences: ['fuer-privatpersonen', 'fuer-tattoo-studios', 'fuer-rechtsanwaelte'],
     question: 'Wie lange dauert die Erstellung eines Gutachtens?',
     answer:
-      'Die Dauer hängt vom Umfang des Auftrags, den vorhandenen Unterlagen und dem Untersuchungsaufwand ab. Nach der Erstberatung lässt sich der Zeitbedarf in der Regel genauer einschätzen.',
+      [
+        'Die Dauer hängt vom Umfang des Auftrags, den vorhandenen Unterlagen und dem Untersuchungsaufwand ab.',
+        practice.reportTurnaround,
+        'Nach der Erstberatung lässt sich der Zeitbedarf in der Regel genauer einschätzen, der voraussichtliche Bearbeitungszeitraum steht dann im Vertrag. Läuft bereits eine Frist, nennen Sie sie gleich bei der ersten Anfrage. Ob ein Gutachten bis dahin möglich ist, klären wir vorab.',
+      ]
+        .filter(Boolean)
+        .join(' '),
   },
   {
     topic: 'kosten',
     featured: true,
+    services: ['tattoo-gutachten', 'piercing-gutachten', 'hygiene-gutachten', 'privatgutachten', 'streitfaelle'],
+    audiences: ['fuer-privatpersonen', 'fuer-tattoo-studios', 'fuer-rechtsanwaelte'],
     question: 'Was kostet ein Tattoo-Gutachten?',
     answer:
       'Die Kosten richten sich nach dem Aufwand und der Art des Gutachtens. Vor einer privaten Beauftragung werden Vergütung und voraussichtlicher Kostenrahmen besprochen und schriftlich festgehalten. Bei einer Bestellung durch das Gericht gilt das Justizvergütungs- und Entschädigungsgesetz (JVEG).',
@@ -165,7 +178,7 @@ export const faq: FaqItem[] = [
   {
     topic: 'kosten',
     services: ['gerichtsgutachten'],
-    audiences: ['fuer-rechtsanwaelte-und-gerichte'],
+    audiences: ['fuer-rechtsanwaelte', 'fuer-gerichte'],
     question: 'Wer bezahlt ein Gutachten, das ein Gericht anordnet?',
     answer:
       'Bei einer Bestellung durch das Gericht kommt der Auftrag unmittelbar vom Gericht. Die Vergütung richtet sich dann nach dem Justizvergütungs- und Entschädigungsgesetz (JVEG) und läuft über das Gericht.',
@@ -181,6 +194,8 @@ export const faq: FaqItem[] = [
   {
     topic: 'kosten',
     booking: true,
+    services: ['tattoo-gutachten', 'piercing-gutachten', 'hygiene-gutachten', 'privatgutachten', 'streitfaelle'],
+    audiences: ['fuer-privatpersonen', 'fuer-tattoo-studios'],
     question: 'Ist die erste Beratung wirklich kostenlos?',
     answer:
       'Ja. Das erste Beratungsgespräch ist bis zu 60 Minuten kostenlos und unverbindlich. Kostenpflichtig wird erst eine weiterführende Leistung, für die ein schriftlicher Vertrag geschlossen wird.',
@@ -189,14 +204,16 @@ export const faq: FaqItem[] = [
     topic: 'kosten',
     featured: true,
     booking: true,
+    audiences: ['fuer-privatpersonen', 'fuer-tattoo-studios'],
     question: 'Muss ich nach der Erstberatung ein Gutachten beauftragen?',
     answer:
       'Nein. Die kostenlose Erstberatung verpflichtet Sie zu nichts. Sie entscheiden danach selbst, ob Sie eine Untersuchung oder ein Gutachten beauftragen.',
   },
   {
     topic: 'kosten',
-    services: ['hygiene-gutachten'],
     booking: true,
+    services: ['tattoo-gutachten', 'piercing-gutachten', 'privatgutachten', 'streitfaelle'],
+    audiences: ['fuer-privatpersonen'],
     question: 'Welche Unterlagen benötige ich?',
     answer:
       'Hilfreich sind aussagekräftige Fotos, Vereinbarungen mit dem Studio, Rechnungen, Pflegeanweisungen und bisherige Korrespondenz. Wenn vorhanden, zählen auch frühere Fotos der Tätowierung und ärztliche Unterlagen. Was genau gebraucht wird, klären wir in der Erstberatung.',
@@ -204,13 +221,16 @@ export const faq: FaqItem[] = [
   {
     topic: 'kosten',
     booking: true,
+    services: ['tattoo-gutachten', 'piercing-gutachten', 'hygiene-gutachten', 'privatgutachten', 'gerichtsgutachten', 'streitfaelle'],
+    audiences: ['fuer-privatpersonen', 'fuer-tattoo-studios', 'fuer-rechtsanwaelte', 'fuer-gerichte'],
     question: 'Werden meine Angaben vertraulich behandelt?',
     answer:
-      'Ja. Personenbezogene Daten, Unterlagen und Informationen werden vertraulich behandelt und nach den geltenden datenschutzrechtlichen Vorgaben verarbeitet.',
+      'Ja. Personenbezogene Daten, Unterlagen und Informationen werden vertraulich behandelt und nach den geltenden datenschutzrechtlichen Vorgaben verarbeitet. Für die erste Anfrage genügen Name, Kontaktdaten und ein paar Sätze zum Anliegen. Sensible Fotos oder ärztliche Unterlagen müssen Sie dafür nicht mitschicken, welche gebraucht werden, klären wir im Gespräch.',
   },
   {
     topic: 'kosten',
     booking: true,
+    audiences: ['fuer-privatpersonen', 'fuer-tattoo-studios'],
     question: 'Wie buche ich die kostenlose Erstberatung?',
     answer:
       `Am schnellsten online: Auf der Seite <a class="link-ink" href="${url('/termin/')}">Termin buchen</a> wählen Sie im Kalender einen freien Termin und tragen Namen und E-Mail-Adresse ein. Die Bestätigung kommt per E-Mail. Telefonisch oder per E-Mail lässt sich ein Termin ebenso vereinbaren.`,
@@ -231,29 +251,63 @@ export const faq: FaqItem[] = [
   },
   {
     topic: 'person',
+    services: ['gerichtsgutachten'],
+    audiences: ['fuer-rechtsanwaelte', 'fuer-gerichte'],
     question: 'Welche Qualifikation hat Patrick Wolf?',
     answer: `Patrick Wolf ist geprüfter und zertifizierter Gutachter des Deutschen Gutachter und Sachverständigen Verbandes (${credentials.associationShort}), Bestätigungs-Register Nr. ${credentials.registerNumber}. Er ist Mitglied im ${credentials.membership} und seit über ${credentials.yearsInTrade} Jahren beruflich in der Tattoo- und Piercingbranche tätig.`,
   },
   {
     topic: 'person',
-    audiences: ['fuer-tattoo-studios'],
+    audiences: ['fuer-privatpersonen', 'fuer-tattoo-studios'],
     question: 'Sind Sie unabhängig, obwohl Sie selbst tätowieren?',
     answer:
-      'Ja. Patrick Wolf tätowiert weiterhin, führt die Gutachten aber über das Sachverständigenbüro Wolf und diese eigenständige Website, die sich ausschließlich der Sachverständigentätigkeit widmet. Die Bewertung stützt sich allein auf feststellbare Tatsachen, nicht darauf, wer den Auftrag erteilt.',
+      [
+        'Ja. Patrick Wolf tätowiert weiterhin, die Gutachten erstellt er als Sachverständiger des Sachverständigenbüros Wolf. Die Bewertung stützt sich allein auf feststellbare Tatsachen und fachliche Standards, nicht darauf, wer den Auftrag erteilt oder welches Ergebnis er sich wünscht.',
+        practice.conflictHandling,
+      ]
+        .filter(Boolean)
+        .join(' '),
   },
   {
     topic: 'person',
+    audiences: ['fuer-rechtsanwaelte', 'fuer-gerichte'],
     question: 'Wo sind Sie tätig?',
     answer:
       'Das Sachverständigenbüro Wolf hat seinen Sitz in Bad Nauheim. Gutachten entstehen bundesweit und europaweit, für Gerichte, Rechtsanwälte und Privatpersonen.',
   },
 ];
 
+/**
+ * Subject specific wordings of a main entry, shown only on the matching service or audience page.
+ * They stay off /haeufige-fragen/ and its FAQPage JSON-LD, where the main entry answers once.
+ */
+export const faqVariants: FaqItem[] = [
+  {
+    topic: 'begutachtung',
+    services: ['piercing-gutachten'],
+    question: 'Kann ein Piercing anhand von Fotos beurteilt werden?',
+    answer:
+      'Eine erste Einschätzung ist mit aussagekräftigen Fotos unter Umständen möglich. Für eine abschließende Beurteilung kann eine persönliche Untersuchung nötig sein, weil sich nicht jedes Merkmal auf Bildern zuverlässig zeigt.',
+  },
+  {
+    topic: 'kosten',
+    services: ['hygiene-gutachten'],
+    audiences: ['fuer-tattoo-studios'],
+    question: 'Welche Unterlagen helfen bei einer Frage zur Hygiene?',
+    answer:
+      'Hilfreich sind die Hygieneunterlagen und Arbeitsanweisungen des Studios, Fotos aus dem Studio, die Pflegeanweisungen für den Kunden und die bisherige Korrespondenz. Bei Bedarf gehört eine Besichtigung der Räume dazu. Was genau gebraucht wird, klären wir in der Erstberatung.',
+  },
+];
+
 export const featuredFaq = faq.filter((item) => item.featured);
 
-export const faqForService = (slug: ServiceSlug) => faq.filter((item) => item.services?.includes(slug));
+const contextual = [...faq, ...faqVariants];
 
-export const faqForAudience = (slug: AudienceSlug) => faq.filter((item) => item.audiences?.includes(slug));
+/** Questions on a service page: the subject specific variants first, then the shared answers. */
+export const faqForService = (slug: ServiceSlug) =>
+  contextual.filter((item) => item.services?.includes(slug)).sort((a, b) => Number(faqVariants.includes(b)) - Number(faqVariants.includes(a)));
+
+export const faqForAudience = (slug: AudienceSlug) => contextual.filter((item) => item.audiences?.includes(slug));
 
 export const bookingFaq = faq.filter((item) => item.booking);
 

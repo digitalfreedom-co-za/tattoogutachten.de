@@ -1,18 +1,21 @@
 ---
 // Booking calendar (cal.com inline embed) in a reserved frame. Nothing from cal.com loads with the
 // page: src/scripts/booking.ts injects the official embed once the frame scrolls into view.
-// While the demo calendar is configured (CAL_IS_DEMO), a notice above the frame says so.
+// Above the frame: the consultation at a glance (identical on both pages) and, while the demo
+// calendar is configured (CAL_IS_DEMO), a notice that makes telephone and email the real way to book.
 // While it loads, a calendar sheet skeleton holds the height of the month view, so nothing shifts;
 // once ready, the frame follows the iframe, including the shorter form step after a time is chosen.
 // Without JavaScript, or when cal.com fails, no height is reserved: the alternatives (booking link,
 // phone, email) sit in the normal flow.
-// Both variants hide the cal.com event details (see src/scripts/booking.ts); they differ in the fallback:
-//   compact: landing page, fallback link to /termin/.
-//   full:    /termin/, fallback link straight to the cal.com booking page.
+// Both variants hide the cal.com event details (see src/scripts/booking.ts) and offer the cal.com
+// booking page, phone and email in the fallback; the compact one (landing page) also links the
+// preparation notes on /termin/.
 import Button from '../ui/Button.astro';
 import Icon from '../ui/Icon.astro';
+import EnquiryNote from '../ui/EnquiryNote.astro';
 import { CAL_LINK, CAL_ORIGIN, CAL_EMBED_SCRIPT, CAL_PUBLIC_URL, CAL_IS_DEMO } from '../../config/booking';
 import { contact, site } from '../../config/site';
+import { practice } from '../../config/practice';
 import { url } from '../../lib/url';
 
 interface Props {
@@ -24,9 +27,16 @@ const { variant = 'full', class: className } = Astro.props;
 const compact = variant === 'compact';
 const namespace = `erstberatung-${variant}`;
 const targetId = `kalender-${variant}`;
-const fallback = compact
-  ? { href: '/termin/', label: 'Zur Terminseite' }
-  : { href: CAL_PUBLIC_URL, label: 'Termin direkt bei cal.com buchen' };
+const external = { target: '_blank', rel: 'noopener noreferrer' } as const;
+
+/** The consultation at a glance, right above the calendar. A line appears only for confirmed facts. */
+const glance = [
+  { term: 'Dauer', value: 'Bis zu 60 Minuten' },
+  { term: 'Kosten', value: 'Keine, unverbindlich' },
+  ...(practice.consultationMethod ? [{ term: 'Gespräch', value: practice.consultationMethod }] : []),
+  { term: 'Uhrzeiten', value: 'In der Zeitzone Ihres Geräts' },
+  { term: 'Bestätigung', value: 'Per E-Mail, mit Links zum Verschieben und Absagen' },
+];
 const weekdays = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
 ---
 
@@ -43,13 +53,32 @@ const weekdays = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
   data-status-ready="Der Kalender ist geladen."
   data-status-failed="Der Kalender konnte nicht geladen werden. Sie können direkt bei cal.com, telefonisch oder per E-Mail einen Termin vereinbaren."
 >
+  <dl class="mb-6 grid grid-cols-2 gap-x-6 gap-y-4 border-y border-ink py-4 text-sm md:grid-cols-4">
+    {
+      glance.map((fact) => (
+        <div class="min-w-0">
+          <dt class="label text-[0.6875rem] text-graphite">{fact.term}</dt>
+          <dd class="mt-1 text-ink">{fact.value}</dd>
+        </div>
+      ))
+    }
+  </dl>
   {
     CAL_IS_DEMO && (
-      <p class="mb-5 border-l-2 border-oxblood bg-paper px-4 py-3 text-sm text-graphite md:px-5">
-        <span class="label mr-2 text-oxblood">Vorschau</span>
-        Dies ist ein Demo-Kalender für die Vorschau dieser Website. Der echte Kalender von {site.expert} folgt. Die Dauer
-        des Demo-Termins weicht von der bis zu 60 Minuten langen Erstberatung ab.
-      </p>
+      <div class="mb-6 border-l-2 border-oxblood bg-paper px-4 py-4 md:px-6 md:py-5">
+        <p class="text-graphite">
+          <span class="label mr-2 text-oxblood">Vorschau</span>
+          Der Kalender unten ist ein Demo-Kalender für die Vorschau dieser Website. Über ihn kommt kein Termin mit
+          {site.expert} zustande, und seine Termindauer weicht von der Erstberatung ab. Bis der echte Kalender
+          freigeschaltet ist, vereinbaren Sie die Erstberatung telefonisch oder per E-Mail.
+        </p>
+        <div class="mt-4 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <Button href={contact.phone.href} icon="phone">
+            <span class="sr-only">Anrufen: </span>{contact.phone.display}
+          </Button>
+          <Button href={contact.email.href} variant="text" icon="mail">E-Mail schreiben</Button>
+        </div>
+      </div>
     )
   }
   <div class="booking-frame relative overflow-hidden border border-ink bg-paper">
@@ -75,46 +104,68 @@ const weekdays = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
       </div>
     </div>
 
-    <!-- Without JavaScript, or when cal.com is blocked: the direct ways to a first consultation. -->
-    <div class="booking-fallback relative z-20 bg-paper p-6 md:p-10">
-      <div class="max-w-[30rem]">
-        <p class="font-serif text-h4">
-          <span class="booking-fallback-nojs">Der Buchungskalender braucht JavaScript.</span>
-          <span class="booking-fallback-failed">Der Buchungskalender konnte nicht geladen werden.</span>
-        </p>
-        <p class="mt-3 text-graphite">
-          Sie erreichen die Terminbuchung auch direkt, oder Sie vereinbaren die kostenlose Erstberatung telefonisch oder
-          per E-Mail.
-        </p>
-        <div class="mt-6">
-          <Button href={fallback.href} icon="calendar">{fallback.label}</Button>
-        </div>
+    <!-- Without JavaScript, or when cal.com is blocked: the direct ways to a first consultation,
+         in normal flow and only as tall as its content. -->
+    <div class="booking-fallback relative z-20 bg-paper p-6 md:p-8">
+      <p class="font-serif text-h4">
+        <span class="booking-fallback-nojs">Der Buchungskalender braucht JavaScript.</span>
+        <span class="booking-fallback-failed">Der Buchungskalender konnte nicht geladen werden.</span>
+      </p>
+      <p class="mt-3 max-w-[34rem] text-graphite">
+        Vereinbaren Sie die kostenlose Erstberatung telefonisch oder per E-Mail, oder buchen Sie direkt auf der
+        Buchungsseite von cal.com.
+      </p>
+      <div class="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3">
+        <Button href={contact.phone.href} icon="phone">
+          <span class="sr-only">Anrufen: </span>{contact.phone.display}
+        </Button>
+        <a class="link-ink inline-flex min-h-11 items-center gap-3 font-semibold" href={contact.email.href}>
+          <Icon name="mail" size={18} class="shrink-0 text-oxblood" />
+          <span class="break-all"><span class="sr-only">E-Mail an </span>{contact.email.display}</span>
+        </a>
       </div>
+      <p class="mt-4 flex flex-wrap gap-x-6 text-sm">
+        <a class="link-ink inline-flex min-h-11 items-center gap-2" href={CAL_PUBLIC_URL} {...external}>
+          <Icon name="calendar" size={16} class="shrink-0 text-oxblood" />
+          Buchungsseite bei cal.com<span class="sr-only"> (öffnet in einem neuen Fenster)</span>
+        </a>
+        {
+          compact && (
+            <a class="link-ink inline-flex min-h-11 items-center" href={url('/termin/#vorbereitung')}>
+              Was Sie zur Erstberatung bereitlegen
+            </a>
+          )
+        }
+      </p>
     </div>
   </div>
 
   <p class="sr-only" role="status" data-booking-status></p>
 
-  <div class="mt-5 grid gap-5 text-sm md:grid-cols-12 md:gap-x-8">
-    <p class="text-graphite md:col-span-7">
-      Die Terminbuchung läuft über den Dienst cal.com. Der Kalender lädt erst, wenn dieser Bereich sichtbar wird; dabei
-      überträgt Ihr Browser unter anderem Ihre IP-Adresse an cal.com. Was dabei verarbeitet wird, steht in der
-      <a class="link-ink" href={url('/datenschutz/')}>Datenschutzerklärung</a>.
-    </p>
-    <ul class="grid content-start md:col-span-5 md:justify-self-end">
-      <li>
-        <a class="link-ink inline-flex min-h-11 items-center gap-3" href={contact.phone.href}>
-          <Icon name="phone" size={18} class="shrink-0 text-oxblood" />
-          <span><span class="sr-only">Telefon </span>{contact.phone.display}</span>
-        </a>
-      </li>
-      <li>
-        <a class="link-ink inline-flex min-h-11 items-center gap-3" href={contact.email.href}>
-          <Icon name="mail" size={18} class="shrink-0 text-oxblood" />
-          <span class="break-all"><span class="sr-only">E-Mail </span>{contact.email.display}</span>
-        </a>
-      </li>
-    </ul>
+  <div class="mt-6 grid gap-8 text-sm md:grid-cols-12 md:gap-x-8">
+    <div class="grid content-start gap-4 md:col-span-7">
+      <p class="text-graphite">
+        Für die Buchung braucht cal.com nur Name und E-Mail-Adresse, Fotos und Unterlagen gehören nicht in den Kalender. Der
+        Kalender lädt erst, wenn dieser Bereich sichtbar wird; dabei überträgt Ihr Browser unter anderem Ihre IP-Adresse
+        an cal.com. Was dabei verarbeitet wird, steht in der
+        <a class="link-ink" href={url('/datenschutz/#terminbuchung')}>Datenschutzerklärung unter Terminbuchung</a>.
+      </p>
+      <ul class="grid content-start">
+        <li>
+          <a class="link-ink inline-flex min-h-11 items-center gap-3" href={contact.phone.href}>
+            <Icon name="phone" size={18} class="shrink-0 text-oxblood" />
+            <span><span class="sr-only">Telefon </span>{contact.phone.display}</span>
+          </a>
+        </li>
+        <li>
+          <a class="link-ink inline-flex min-h-11 items-center gap-3" href={contact.email.href}>
+            <Icon name="mail" size={18} class="shrink-0 text-oxblood" />
+            <span class="break-all"><span class="sr-only">E-Mail </span>{contact.email.display}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <EnquiryNote class="md:col-span-5" />
   </div>
 </div>
 

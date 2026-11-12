@@ -14,8 +14,9 @@ import Seal from '../components/ui/Seal.astro';
 import Icon from '../components/ui/Icon.astro';
 import ArtImage from '../components/ui/ArtImage.astro';
 import CtaBand from '../components/ui/CtaBand.astro';
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import { site, contact, credentials, contentUpdated, primaryCta } from '../config/site';
+import { practice } from '../config/practice';
 import { url } from '../lib/url';
 import { ids, ref } from '../lib/schema';
 
@@ -26,6 +27,10 @@ import closeUp from '../assets/images/patrick-wolf-nahaufnahme.jpg';
 import atWork from '../assets/images/patrick-wolf-beim-taetowieren.webp';
 import studio from '../assets/images/patrick-wolf-studio-weit.webp';
 import badge from '../assets/images/rw-gutachterabzeichen-dgusv-logo.png';
+import sealImage from '../assets/images/siegel-dgusv-2026.png';
+
+/** The seal at a size where its print (register number, year) is legible, opened from the evidence block. */
+const sealLarge = await getImage({ src: sealImage, width: 1200, format: 'png' });
 
 const updatedText = new Intl.DateTimeFormat('de-DE', { day: 'numeric', month: 'long', year: 'numeric' }).format(
   new Date(contentUpdated),
@@ -39,8 +44,8 @@ const qualifications: Fact[] = [
   },
   {
     term: 'Gerichtliche Bestellung',
-    value: `Sachverständiger am ${credentials.court}`,
-    note: 'Erstmals in einem Gerichtsverfahren als Sachverständiger bestellt. Das ist keine öffentliche Bestellung und Vereidigung.',
+    value: `Durch das ${credentials.court} in einem Gerichtsverfahren als Sachverständiger bestellt`,
+    note: 'Die gerichtliche Bestellung in einem einzelnen Verfahren ist keine öffentliche Bestellung und Vereidigung als Sachverständiger.',
   },
   {
     term: 'Mitgliedschaft',
@@ -76,7 +81,7 @@ const principles = [
   pageType="AboutPage"
   page={{ mainEntity: ref(ids(Astro.site).person) }}
   title={`Über mich: ${site.expert}, zertifizierter Tattoo Gutachter (${credentials.associationShort}) in ${contact.city}`}
-  description={`${site.expert}: geprüfter und zertifizierter Gutachter des ${credentials.associationShort}, Sachverständiger am ${credentials.court}, über ${credentials.yearsInTrade} Jahre in der Tattoo- und Piercingbranche.`}
+  description={`${site.expert}: geprüfter und zertifizierter Gutachter des ${credentials.associationShort}, in einem Gerichtsverfahren vom ${credentials.court} als Sachverständiger bestellt, über ${credentials.yearsInTrade} Jahre in der Tattoo- und Piercingbranche.`}
 >
   <section aria-labelledby="person-titel">
     <Container class="pt-10 pb-16 md:pt-14 md:pb-24">
@@ -130,8 +135,12 @@ const principles = [
   >
     <div class="grid gap-12 lg:grid-cols-12 lg:gap-x-8">
       <KeyFacts facts={qualifications} class="lg:col-span-8" />
-      <div class="flex items-center gap-6 self-start lg:col-span-4 lg:flex-col lg:items-start" data-reveal>
-        <Seal width={140} class="w-24 lg:w-[140px]" />
+      <div class="grid content-start gap-8 self-start lg:col-span-4" data-reveal>
+        <div class="flex items-center gap-6 lg:flex-col lg:items-start">
+        <a href={sealLarge.src} class="group/seal block shrink-0" target="_blank" rel="noopener">
+          <Seal width={140} class="w-24 transition-opacity group-hover/seal:opacity-85 lg:w-[140px]" />
+          <span class="sr-only">Siegel in voller Größe ansehen (öffnet in einem neuen Fenster)</span>
+        </a>
         <Image
           src={badge}
           alt={`Abzeichen geprüfter und zertifizierter Gutachter des ${credentials.associationShort}`}
@@ -139,6 +148,31 @@ const principles = [
           densities={[1, 2]}
           class="h-auto w-44 lg:w-60"
         />
+        </div>
+        <div class="border-t border-ink pt-5 text-sm">
+          <h3 class="label text-graphite">Nachweise prüfen</h3>
+          <ul class="mt-2 grid">
+            <li>
+              <a class="link-ink inline-flex min-h-11 items-center" href={sealLarge.src} target="_blank" rel="noopener">
+                Siegel {credentials.sealYear} in voller Größe<span class="sr-only"> (öffnet in einem neuen Fenster)</span>
+              </a>
+            </li>
+            <li>
+              <a class="link-ink inline-flex min-h-11 items-center" href={credentials.associationUrl} target="_blank" rel="noopener noreferrer">
+                Zertifizierender Verband: {credentials.associationShort}<span class="sr-only"> (öffnet in einem neuen Fenster)</span>
+              </a>
+            </li>
+            <li>
+              <a class="link-ink inline-flex min-h-11 items-center" href={credentials.membershipUrl} target="_blank" rel="noopener noreferrer">
+                {credentials.membership}<span class="sr-only"> (öffnet in einem neuen Fenster)</span>
+              </a>
+            </li>
+          </ul>
+          <p class="mt-3 text-graphite">
+            Die Registernummer <span class="numeral whitespace-nowrap text-ink">{credentials.registerNumber}</span> steht auf
+            dem Siegel.
+          </p>
+        </div>
       </div>
     </div>
   </Section>
@@ -215,17 +249,17 @@ const principles = [
             verlässlichen, unparteiischen Klärung des Sachverhalts.
           </p>
         </div>
-        <h3 class="mt-12 text-h3">Zwei Tätigkeitsbereiche, klar getrennt.</h3>
+        <h3 class="mt-12 text-h3">Tätowierer und Sachverständiger.</h3>
         <div class="mt-4 grid gap-4 text-graphite" data-reveal>
           <p>
-            Neben der Sachverständigentätigkeit arbeite ich weiterhin als Tätowierer. Damit beide Bereiche sauber getrennt
-            bleiben, habe ich mit {site.domain} einen eigenständigen Auftritt geschaffen, der sich ausschließlich der Arbeit
-            als Sachverständiger widmet.
+            Neben der Sachverständigentätigkeit arbeite ich weiterhin als Tätowierer. Die Praxiserfahrung bleibt die
+            Grundlage meiner Fachkompetenz, der Maßstab eines Gutachtens sind aber allein die feststellbaren Tatsachen.
           </p>
           <p>
-            Die Praxiserfahrung bleibt die Grundlage meiner Fachkompetenz. Die Begutachtung selbst erfolgt unabhängig und
-            unparteiisch.
+            Die Begutachtung erfolgt unabhängig und unparteiisch, gleich ob der Auftrag von einem Kunden, einem Studio, einem
+            Rechtsanwalt oder einem Gericht kommt.
           </p>
+          {practice.conflictHandling && <p>{practice.conflictHandling}</p>}
         </div>
       </div>
       <div class="grid content-start gap-8 md:col-span-5 md:col-start-8">

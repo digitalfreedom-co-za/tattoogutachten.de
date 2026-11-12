@@ -48,22 +48,12 @@ const page = {
 
   <TrustStrip />
 
-  <Section
-    id="uebersicht"
-    label="Übersicht"
-    title="Welche Gutachten gibt es?"
-    intro="Sechs Leistungen decken die typischen Fälle ab: drei nach dem Gegenstand der Prüfung, drei nach dem Anlass. Jede Leistung hat eine eigene Seite mit Prüfumfang, Ergebnis und typischen Fragen."
-  >
-    <p slot="note">Auftraggeber sind {clients.join(', ')}.</p>
-    <ServiceList services={services} />
-  </Section>
 
   <Section
     id="passende-leistung"
     label="Orientierung"
     title="Welche Leistung passt zu Ihrem Fall?"
-    intro="Beschreiben Sie Ihren Fall in einem Satz und suchen Sie die passende Zeile. Wenn Sie unsicher sind, klären wir es in der kostenlosen Erstberatung."
-    tone="deep"
+    intro="Suchen Sie die Zeile, die Ihrem Fall am nächsten kommt. Passen mehrere, ist das normal: Welche Fragen das Gutachten beantworten muss, klären wir in der kostenlosen Erstberatung."
   >
     <table class="w-full border-t border-ink text-left" data-reveal>
       <caption class="sr-only">Typische Situationen und die passende Leistung</caption>
@@ -88,6 +78,17 @@ const page = {
         }
       </tbody>
     </table>
+  </Section>
+
+  <Section
+    id="uebersicht"
+    label="Übersicht"
+    title="Welche Gutachten gibt es?"
+    intro="Die Leistungen beantworten zwei Fragen: was begutachtet wird und auf welchem Weg der Auftrag entsteht. Ein Fall berührt oft beide Seiten, beauftragt wird trotzdem ein einziges Gutachten."
+    tone="deep"
+  >
+    <p slot="note">Auftraggeber sind {clients.join(', ')}.</p>
+    <ServiceList services={services} grouped />
   </Section>
 
   <Section

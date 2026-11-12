@@ -35,7 +35,7 @@ Bewahren Sie alles auf, was den Auftrag und den Verlauf belegt. Hilfreich sind i
 - Fotos aus der Stech- und Heilungsphase
 - ärztliche Unterlagen, falls Sie in Behandlung waren
 
-Welche Unterlagen im Einzelfall tatsächlich gebraucht werden, klärt die [kostenlose Erstberatung](/ablauf-kosten/).
+Welche Unterlagen im Einzelfall tatsächlich gebraucht werden, klärt die [kostenlose Erstberatung](/termin/). Wie es danach weitergeht, steht unter [Ablauf und Kosten](/ablauf-kosten/).
 
 ## Was ist, wenn die Haut sich verändert oder schmerzt?
 

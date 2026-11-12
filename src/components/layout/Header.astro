@@ -5,11 +5,15 @@
 // menu button (aria-expanded, Escape closes, focus is trapped and returned). Without JS the panel
 // renders as a plain list under the header and the desktop row wraps instead of overflowing.
 // aria-current="page" marks only the exact page; the parent section is a visual state (data-active).
+// The audience pages form a "Für wen" group after the first nav item: a details disclosure in the
+// desktop row (works without JS; the script closes it on Escape, outside click and focus loss) and a
+// labelled group in the menu panel.
 import Logo from './Logo.astro';
 import Container from '../ui/Container.astro';
 import Icon from '../ui/Icon.astro';
 import Button from '../ui/Button.astro';
 import { mainNav, primaryCta, contact } from '../../config/site';
+import { audiences, audienceHref } from '../../data/audiences';
 import { bookingHref } from '../../config/booking';
 import { url, withoutBase } from '../../lib/url';
 
@@ -18,6 +22,9 @@ const currentPath = normalize(Astro.url.pathname);
 const isPage = (href: string) => currentPath === normalize(url(href));
 const isSection = (href: string) => currentPath.startsWith(normalize(url(href)));
 const ctaHref = bookingHref(withoutBase(currentPath));
+const audienceNav = audiences.map((audience) => ({ label: audience.navLabel, href: audienceHref(audience) }));
+const audienceActive = audienceNav.some((item) => isPage(item.href));
+const [firstNav, ...restNav] = mainNav;
 ---
 
 <header id="site-header" class="relative z-40 border-b border-ink/15 bg-paper">
@@ -27,19 +34,47 @@ const ctaHref = bookingHref(withoutBase(currentPath));
     <nav aria-label="Hauptnavigation" class="desktop-nav hidden lg:block">
       <ul class="flex flex-wrap items-center gap-x-4 xl:gap-x-9">
         {
-          mainNav.map((item) => (
-            <li>
-              <a
-                href={url(item.href)}
-                aria-current={isPage(item.href) ? 'page' : undefined}
-                data-active={isSection(item.href) ? '' : undefined}
-                data-nav-href={item.href}
-                class="nav-link relative whitespace-nowrap py-2 text-[0.875rem] font-medium xl:text-[0.9375rem] text-ink-soft transition-colors hover:text-ink data-active:text-oxblood"
-              >
-                {item.label}
-              </a>
-            </li>
-          ))
+          [firstNav, null, ...restNav].map((item) =>
+            item ? (
+              <li>
+                <a
+                  href={url(item.href)}
+                  aria-current={isPage(item.href) ? 'page' : undefined}
+                  data-active={isSection(item.href) ? '' : undefined}
+                  data-nav-href={item.href}
+                  class="nav-link relative whitespace-nowrap py-2 text-[0.875rem] font-medium xl:text-[0.9375rem] text-ink-soft transition-colors hover:text-ink data-active:text-oxblood"
+                >
+                  {item.label}
+                </a>
+              </li>
+            ) : (
+              <li class="relative">
+                <details class="nav-menu group/menu" data-nav-menu>
+                  <summary
+                    data-active={audienceActive ? '' : undefined}
+                    data-nav-href="/#zielgruppen"
+                    class="nav-link relative flex cursor-pointer list-none items-center gap-1.5 whitespace-nowrap py-2 text-[0.875rem] font-medium xl:text-[0.9375rem] text-ink-soft transition-colors hover:text-ink data-active:text-oxblood [&::-webkit-details-marker]:hidden"
+                  >
+                    Für wen
+                    <Icon name="chevron" size={14} class="rotate-90 transition-transform duration-200 group-open/menu:-rotate-90 motion-reduce:transition-none" />
+                  </summary>
+                  <ul class="absolute top-full left-0 z-50 mt-3 grid w-72 border border-ink bg-paper py-2 shadow-[0_18px_40px_-20px_rgb(23_20_15/0.45)]">
+                    {audienceNav.map((entry) => (
+                      <li>
+                        <a
+                          href={url(entry.href)}
+                          aria-current={isPage(entry.href) ? 'page' : undefined}
+                          class="flex min-h-11 items-center px-5 py-2 text-[0.9375rem] text-ink transition-colors hover:bg-paper-deep hover:text-oxblood aria-[current=page]:text-oxblood"
+                        >
+                          {entry.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              </li>
+            ),
+          )
         }
       </ul>
     </nav>
@@ -67,23 +102,42 @@ const ctaHref = bookingHref(withoutBase(currentPath));
       <nav aria-label="Hauptnavigation mobil">
         <ul class="border-t border-ink">
           {
-            mainNav.map((item, index) => (
-              <li class="mobile-nav-item border-b border-rule" style={`--i:${index}`}>
-                <a
-                  href={url(item.href)}
-                  aria-current={isPage(item.href) ? 'page' : undefined}
-                  data-active={isSection(item.href) ? '' : undefined}
-                  data-nav-href={item.href}
-                  class="flex items-baseline py-4 font-serif text-[1.75rem] leading-tight tracking-tightish text-ink transition-colors hover:text-oxblood data-active:text-oxblood"
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))
+            [firstNav, null, ...restNav].map((item, index) =>
+              item ? (
+                <li class="mobile-nav-item border-b border-rule" style={`--i:${index}`}>
+                  <a
+                    href={url(item.href)}
+                    aria-current={isPage(item.href) ? 'page' : undefined}
+                    data-active={isSection(item.href) ? '' : undefined}
+                    data-nav-href={item.href}
+                    class="flex items-baseline py-4 font-serif text-[1.75rem] leading-tight tracking-tightish text-ink transition-colors hover:text-oxblood data-active:text-oxblood"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ) : (
+                <li class="mobile-nav-item border-b border-rule py-4" style={`--i:${index}`}>
+                  <p id="mobile-nav-fuer-wen" class="label text-graphite">Für wen</p>
+                  <ul class="mt-1 grid" aria-labelledby="mobile-nav-fuer-wen">
+                    {audienceNav.map((entry) => (
+                      <li>
+                        <a
+                          href={url(entry.href)}
+                          aria-current={isPage(entry.href) ? 'page' : undefined}
+                          class="flex min-h-11 items-center font-serif text-[1.25rem] leading-tight text-ink transition-colors hover:text-oxblood aria-[current=page]:text-oxblood"
+                        >
+                          {entry.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ),
+            )
           }
         </ul>
       </nav>
-      <div class="mobile-nav-item mt-8 flex flex-col gap-6" style={`--i:${mainNav.length}`}>
+      <div class="mobile-nav-item mt-8 flex flex-col gap-6" style={`--i:${mainNav.length + 1}`}>
         <Button href={ctaHref} icon="calendar" class="self-start">{primaryCta.label}</Button>
         <ul class="grid text-sm text-graphite">
           <li>
@@ -339,6 +393,26 @@ const ctaHref = bookingHref(withoutBase(currentPath));
     }
     desktop.addEventListener('change', updateCompact);
     updateCompact();
+
+    // "Für wen" disclosure in the desktop row: one click or Enter opens it; Escape, a click elsewhere
+    // or focus moving out of it closes it again.
+    const menus = Array.from(header.querySelectorAll<HTMLDetailsElement>('[data-nav-menu]'));
+    document.addEventListener('click', (event) => {
+      menus.forEach((menu) => {
+        if (menu.open && !menu.contains(event.target as Node)) menu.open = false;
+      });
+    });
+    menus.forEach((menu) => {
+      menu.addEventListener('keydown', (event) => {
+        if (event.key !== 'Escape' || !menu.open) return;
+        menu.open = false;
+        menu.querySelector('summary')?.focus();
+      });
+      menu.addEventListener('focusout', (event) => {
+        const next = event.relatedTarget as Node | null;
+        if (next && !menu.contains(next)) menu.open = false;
+      });
+    });
 
     document.documentElement.classList.add('nav-ready');
   }

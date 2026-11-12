@@ -3,6 +3,7 @@
 
 import type { Step } from '../components/ui/Steps.astro';
 import type { Fact } from '../components/ui/KeyFacts.astro';
+import { practice } from '../config/practice';
 
 /** What a written report contains, depending on the commission. */
 export const reportContents: string[] = [
@@ -112,6 +113,19 @@ export const costFacts: Fact[] = [
     value: 'Vorab beim Versicherer fragen',
     note: 'Ob eine Rechtsschutzversicherung Gutachterkosten übernimmt, klären Sie am besten vor der Beauftragung direkt mit Ihrem Versicherer.',
   },
+  // Operator confirmed figures, shown only once src/config/practice.ts carries them.
+  ...(practice.rate ? [{ term: 'Honorar', value: practice.rate }] : []),
+  ...(practice.travelCosts ? [{ term: 'Fahrtkosten', value: practice.travelCosts }] : []),
+  ...(practice.vat ? [{ term: 'Umsatzsteuer', value: practice.vat }] : []),
+];
+
+/** What the written contract fixes before any paid work starts (source: Ablauf und Kosten). */
+export const contractTerms: string[] = [
+  'Art und Umfang des Auftrags',
+  'Die zu untersuchenden Fragestellungen',
+  'Vergütung und Abrechnung',
+  'Erforderliche Zusatzleistungen, etwa eine Ortsbesichtigung',
+  'Den voraussichtlichen Bearbeitungszeitraum',
 ];
 
 export const preparationChecklist: string[] = [

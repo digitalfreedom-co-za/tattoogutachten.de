@@ -37,7 +37,7 @@ export default defineConfig({
   // all over the copy. true keeps the Astro 6 HTML compression, verified against the Astro 6 build text.
   compressHTML: true,
   // The sitemap lists every page except the 404, in preview and launch mode alike (see indexable in src/config/site.ts).
-  integrations: [sitemap({ filter: (page) => !/\/404\/?$/.test(page) })],
+  integrations: [sitemap({ filter: (page) => !/\/(404|fuer-rechtsanwaelte-und-gerichte)\/?$/.test(page) })],
   // Ratgeber Markdown: internal links get the base path, table rows get row headers; SmartyPants stays off because the
   // copy rules forbid typographic quotes and dashes.
   markdown: {

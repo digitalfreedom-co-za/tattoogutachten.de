@@ -1,13 +1,14 @@
 ---
-// One page per audience (/fuer-privatpersonen/, /fuer-tattoo-studios/, /fuer-rechtsanwaelte-und-gerichte/),
-// generated from src/data/audiences.ts: situation, how the expert helps, fitting services,
-// what to prepare, typical questions, Ratgeber articles and the booking CTA.
+// One page per audience (/fuer-privatpersonen/, /fuer-tattoo-studios/, /fuer-rechtsanwaelte/, /fuer-gerichte/),
+// generated from src/data/audiences.ts: first steps where the audience needs them, situation, how the
+// expert helps, fitting services, what to prepare, typical questions, Ratgeber articles and the CTA.
+// Private clients and studios are led to the free first consultation; lawyers and courts (primaryAction
+// enquiry) to telephone and email, with the preparation block moved up next to the help block.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from '../components/ui/PageHeader.astro';
 import Section from '../components/ui/Section.astro';
 import Button from '../components/ui/Button.astro';
 import Icon from '../components/ui/Icon.astro';
-import Checklist from '../components/ui/Checklist.astro';
 import ExpertCard from '../components/ui/ExpertCard.astro';
 import ServiceList from '../components/ui/ServiceList.astro';
 import ArticleList from '../components/ui/ArticleList.astro';
@@ -16,7 +17,9 @@ import CompareTable from '../components/ui/CompareTable.astro';
 import Faq from '../components/ui/Faq.astro';
 import ArtImage from '../components/ui/ArtImage.astro';
 import CtaBand from '../components/ui/CtaBand.astro';
+import AudiencePrepare from '../components/audience/AudiencePrepare.astro';
 import { site, contact, contentUpdated, primaryCta } from '../config/site';
+import { url } from '../lib/url';
 import { audiences, audienceHref, type Audience, type AudienceSlug } from '../data/audiences';
 import { serviceBySlug, reportComparison } from '../data/services';
 import { faqForAudience } from '../data/faq';
@@ -51,12 +54,17 @@ const pictures: Record<AudienceSlug, { src: ImageMetadata; alt: string }> = {
     src: studio,
     alt: `${site.expert} sitzt lächelnd in seinem Studio in ${contact.city} zwischen den Behandlungsliegen.`,
   },
-  'fuer-rechtsanwaelte-und-gerichte': {
+  'fuer-rechtsanwaelte': {
+    src: portrait,
+    alt: `${site.expert}, Sachverständiger für Tätowierungen und Piercings, sitzt im Studio und hört aufmerksam zu.`,
+  },
+  'fuer-gerichte': {
     src: portrait,
     alt: `${site.expert}, Sachverständiger für Tätowierungen und Piercings, sitzt im Studio und hört aufmerksam zu.`,
   },
 };
 const picture = pictures[audience.slug];
+const enquiry = audience.primaryAction === 'enquiry';
 
 // Sections alternate between paper and deep paper in render order.
 let toneIndex = 0;
@@ -76,9 +84,48 @@ const page = {
     breadcrumbs={breadcrumbs}
     updated={contentUpdated}
   >
-    <Button href={primaryCta.href} icon="calendar">Kostenlose Erstberatung</Button>
-    <Button href="#leistungen" variant="text">Passende Leistungen</Button>
+    {
+      enquiry ? (
+        <>
+          <Button href={contact.phone.href} icon="phone">
+            <span class="sr-only">Anrufen: </span>{contact.phone.display}
+          </Button>
+          <a class="link-ink inline-flex min-h-11 items-center gap-3 font-semibold" href={contact.email.href}>
+            <Icon name="mail" size={18} class="shrink-0 text-oxblood" />
+            E-Mail schreiben
+          </a>
+          <Button href="#vorbereiten" variant="text">{audience.prepareTitle}</Button>
+        </>
+      ) : (
+        <>
+          <Button href={primaryCta.href} icon="calendar">Kostenlose Erstberatung</Button>
+          <Button href="#leistungen" variant="text">Passende Leistungen</Button>
+        </>
+      )
+    }
   </PageHeader>
+
+  {
+    audience.firstSteps && (
+      <Section id="erste-schritte" label="Erste Schritte" title={audience.firstStepsTitle} tone={nextTone()}>
+        <ul class="grid gap-x-8 border-t border-ink md:grid-cols-2" data-reveal-group>
+          {audience.firstSteps.map((step) => (
+            <li class="grid content-start gap-3 border-b border-rule py-6" data-reveal>
+              <h3 class="text-h4">{step.title}</h3>
+              <p class="max-w-[34rem] text-graphite">{step.text}</p>
+              {step.link && (
+                <p>
+                  <a class="link-ink inline-flex min-h-11 items-center font-semibold" href={step.link.href.startsWith('#') ? step.link.href : url(step.link.href)}>
+                    {step.link.label}
+                  </a>
+                </p>
+              )}
+            </li>
+          ))}
+        </ul>
+      </Section>
+    )
+  }
 
   <Section id="ausgangslage" label="Ausgangslage" title={audience.situationTitle} tone={nextTone()}>
     <div class="grid gap-12 md:grid-cols-12 md:gap-x-8">
@@ -131,17 +178,25 @@ const page = {
     </div>
   </Section>
 
+  {enquiry && <AudiencePrepare audience={audience} tone={nextTone()} />}
+
   {
-    audience.showCourt && (
+    audience.court && (
       <Section
-        id="privat-oder-gericht"
-        label="Vergleich"
-        title="Privatgutachten oder Gerichtsgutachten?"
-        intro="Den Unterschied macht der Auftraggeber: Ein Privatgutachten beauftragen Sie oder Ihr Mandant, ein Gerichtsgutachten holt das Gericht ein."
+        id={audience.court === 'comparison' ? 'privat-oder-gericht' : 'bestellung'}
+        label={audience.court === 'comparison' ? 'Vergleich' : 'Justiz'}
+        title={audience.court === 'comparison' ? 'Privatgutachten oder Gerichtsgutachten?' : undefined}
+        intro={
+          audience.court === 'comparison'
+            ? 'Den Unterschied macht der Auftraggeber: Ein Privatgutachten beauftragen Sie oder Ihr Mandant, ein Gerichtsgutachten holt das Gericht ein.'
+            : undefined
+        }
         tone={nextTone()}
       >
-        <CourtReference class="mb-16" />
-        <CompareTable caption="Privatgutachten und Gerichtsgutachten im Vergleich" {...reportComparison} />
+        <CourtReference class:list={[audience.court === 'comparison' && 'mb-16']} />
+        {audience.court === 'comparison' && (
+          <CompareTable caption="Privatgutachten und Gerichtsgutachten im Vergleich" {...reportComparison} />
+        )}
       </Section>
     )
   }
@@ -150,7 +205,11 @@ const page = {
     id="leistungen"
     label="Leistungen"
     title="Welche Leistungen passen?"
-    intro="Jede Leistung hat eine eigene Seite mit Prüfumfang, Ergebnis und typischen Fragen. Wenn Sie unsicher sind, klären wir es in der kostenlosen Erstberatung."
+    intro={
+      enquiry
+        ? 'Was geprüft wird und was das Gutachten enthält, steht bei der jeweiligen Leistung.'
+        : 'Ihr Fall passt nicht eindeutig zu einer Leistung? Dann klären wir es in der kostenlosen Erstberatung, ohne dass Sie sich vorher festlegen.'
+    }
     tone={nextTone()}
   >
     <ServiceList services={services} />
@@ -159,21 +218,7 @@ const page = {
     </p>
   </Section>
 
-  <Section id="vorbereiten" label="Vorbereitung" title={audience.prepareTitle} tone={nextTone()}>
-    <div class="grid gap-12 lg:grid-cols-12 lg:gap-x-8">
-      <Checklist items={audience.prepare} title="Hilfreiche Unterlagen" class="self-start lg:col-span-7" />
-      <div class="grid content-start gap-6 lg:col-span-5" data-reveal>
-        <p class="text-lead text-ink">{audience.prepareNote}</p>
-        <p class="text-graphite">
-          Am Anfang steht eine kostenlose Erstberatung von bis zu 60 Minuten. Kostenpflichtig wird es erst nach einer
-          schriftlichen Beauftragung.
-        </p>
-        <p>
-          <Button href="/ablauf-kosten/" variant="text">Ablauf und Kosten im Detail</Button>
-        </p>
-      </div>
-    </div>
-  </Section>
+  {!enquiry && <AudiencePrepare audience={audience} tone={nextTone()} />}
 
   {
     questions.length > 0 && (
@@ -200,5 +245,17 @@ const page = {
     )
   }
 
-  <CtaBand title={audience.ctaTitle} text={audience.ctaText} />
+  {
+    enquiry ? (
+      <CtaBand
+        title={audience.ctaTitle}
+        text={audience.ctaText}
+        action="contact"
+        ctaLabel={`E-Mail an ${contact.email.display}`}
+        ctaHref={contact.email.href}
+      />
+    ) : (
+      <CtaBand title={audience.ctaTitle} text={audience.ctaText} />
+    )
+  }
 </BaseLayout>
