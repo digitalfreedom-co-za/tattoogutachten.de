@@ -33,6 +33,9 @@ export default defineConfig({
   site: SITE.url,
   base: SITE.base,
   trailingSlash: 'always',
+  // Astro 7 defaults to 'jsx', which drops the whitespace between inline elements (link text, labels, footer lines)
+  // all over the copy. true keeps the Astro 6 HTML compression, verified against the Astro 6 build text.
+  compressHTML: true,
   // The sitemap lists every page except the 404, in preview and launch mode alike (see indexable in src/config/site.ts).
   integrations: [sitemap({ filter: (page) => !/\/404\/?$/.test(page) })],
   // Ratgeber Markdown: internal links get the base path, table rows get row headers; SmartyPants stays off because the
