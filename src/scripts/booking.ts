@@ -262,9 +262,12 @@ function init(): void {
         const target = root.dataset.target ? document.getElementById(root.dataset.target) : null;
         target?.replaceChildren();
         // embed.js may still be downloading: drop queued render commands, so it cannot draw the
-        // calendar after the withdrawal. Event handlers ('on') stay for a renewed consent.
-        const api = root.dataset.namespace ? window.Cal?.ns?.[root.dataset.namespace] : undefined;
-        if (api?.q) api.q = api.q.filter((args) => !['inline', 'ui'].includes(String((args as ArrayLike<unknown>)[0])));
+        // calendar after the withdrawal. Event handlers ('on') stay for a renewed consent. In place,
+        // because once loaded, embed.js empties the same array and replaces its push.
+        const queue = root.dataset.namespace ? window.Cal?.ns?.[root.dataset.namespace]?.q : undefined;
+        for (let i = (queue?.length ?? 0) - 1; i >= 0; i--) {
+          if (['inline', 'ui'].includes(String((queue![i] as ArrayLike<unknown>)[0]))) queue!.splice(i, 1);
+        }
         mounted.delete(root);
       }
       block(root);
