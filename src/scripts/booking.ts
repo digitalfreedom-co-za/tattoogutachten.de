@@ -1,7 +1,12 @@
-// Lazy cal.com inline embed. Nothing from cal.com loads until the calendar frame (.booking-frame)
-// of a [data-booking] block is in the viewport, not the notice or text around it; then the official embed snippet is installed and the calendar rendered into the
-// reserved frame. The skeleton fades out once cal.com reports the booking page as ready.
+// Lazy cal.com inline embed behind consent. Without consent for the booking category
+// (src/scripts/consent.ts) nothing from cal.com loads: the block stays blocked and shows its
+// click-to-load placeholder. With consent, the embed loads once the calendar frame (.booking-frame) of a
+// [data-booking] block is in the viewport, not the notice or text around it; then the official embed
+// snippet is installed and the calendar rendered into the reserved frame. The skeleton fades out once
+// cal.com reports the booking page as ready. Withdrawing consent after cal.com has loaded reloads the
+// page, so embed.js and the iframe are gone; before that, the block simply returns to blocked.
 import { CAL_THEME_VARS } from '../config/booking';
+import { CONSENT_CHANGE_EVENT, hasConsent, readConsent, saveConsent } from './consent';
 
 type CalFn = ((...args: unknown[]) => void) & {
   q?: unknown[];
@@ -57,12 +62,12 @@ function installCalSnippet(src: string): void {
 }
 /* eslint-enable */
 
-function setState(root: HTMLElement, state: 'pending' | 'loading' | 'ready' | 'failed'): void {
+function setState(root: HTMLElement, state: 'blocked' | 'pending' | 'loading' | 'ready' | 'failed'): void {
   root.dataset.state = state;
   // A half loaded iframe under the fallback must not stay in the focus order.
   const target = root.dataset.target ? document.getElementById(root.dataset.target) : null;
   if (target) target.inert = state === 'failed';
-  if (state === 'pending') return;
+  if (state === 'pending' || state === 'blocked') return;
   const status = root.querySelector<HTMLElement>('[data-booking-status]');
   if (status) status.textContent = root.dataset[`status${state[0].toUpperCase()}${state.slice(1)}`] ?? '';
 }
@@ -180,29 +185,86 @@ function render(root: HTMLElement): void {
 function init(): void {
   const roots = Array.from(document.querySelectorAll<HTMLElement>('[data-booking]'));
   if (roots.length === 0) return;
-  roots.forEach((root) => {
+  const mounted = new Set<HTMLElement>();
+  const installed = new Set<HTMLElement>();
+  const frameOf = (root: HTMLElement) => root.querySelector<HTMLElement>('.booking-frame') ?? root;
+
+  const load = (root: HTMLElement) => {
+    // Checked again here: an intersection entry queued before a withdrawal must not load cal.com.
+    if (mounted.has(root) || !hasConsent('booking')) return;
+    mounted.add(root);
+    // After an in-place withdrawal the snippet and its event handlers already exist: render only.
+    if (installed.has(root)) render(root);
+    else {
+      installed.add(root);
+      mount(root);
+    }
+  };
+
+  const observer =
+    'IntersectionObserver' in window
+      ? new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              observer!.unobserve(entry.target);
+              const root = entry.target.closest<HTMLElement>('[data-booking]');
+              if (root) load(root);
+            }
+          },
+          // Load only once the frame is in view; the skeleton holds the height until then, so no layout shift.
+          { rootMargin: '0px' },
+        )
+      : null;
+
+  const arm = (root: HTMLElement) => {
+    if (mounted.has(root)) return;
     setState(root, 'pending');
+    if (observer) observer.observe(frameOf(root));
+    else load(root);
+  };
+
+  const block = (root: HTMLElement) => {
+    observer?.unobserve(frameOf(root));
+    setState(root, 'blocked');
+  };
+
+  // The inline script in BookingEmbed already painted the right state; this confirms it.
+  roots.forEach((root) => {
     setupTimezone(root);
+    if (hasConsent('booking')) arm(root);
+    else block(root);
+
+    // Consent inline, from the placeholder. The frame is in view, so the calendar loads at once; focus
+    // moves to the frame, since the button it was on disappears.
+    root.querySelector<HTMLElement>('[data-booking-consent]')?.addEventListener('click', () => {
+      saveConsent({ booking: true });
+      frameOf(root).focus({ preventScroll: true });
+    });
   });
 
-  if (!('IntersectionObserver' in window)) {
-    roots.forEach(mount);
-    return;
-  }
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        observer.unobserve(entry.target);
-        const root = entry.target.closest<HTMLElement>('[data-booking]');
-        if (root) mount(root);
+  window.addEventListener(CONSENT_CHANGE_EVENT, () => {
+    if (hasConsent('booking')) {
+      roots.forEach(arm);
+      return;
+    }
+    // Withdrawn: a loaded embed (script, iframe, cal.com state in memory) only goes away fully with a
+    // reload. If the withdrawal could not be stored, a reload would bring the old acceptance back, so
+    // the iframe is removed in place instead.
+    if (mounted.size > 0 && readConsent()?.categories.booking !== true) {
+      window.location.reload();
+      return;
+    }
+    roots.forEach((root) => {
+      if (mounted.has(root)) {
+        window.clearTimeout(Number(root.dataset.timeout));
+        const target = root.dataset.target ? document.getElementById(root.dataset.target) : null;
+        target?.replaceChildren();
+        mounted.delete(root);
       }
-    },
-    // Load only once the frame is in view; the skeleton holds the height until then, so no layout shift.
-    { rootMargin: '0px' },
-  );
-  roots.forEach((root) => observer.observe(root.querySelector('.booking-frame') ?? root));
+      block(root);
+    });
+  });
 }
 
 init();

@@ -94,6 +94,33 @@ flowchart TD
   BaseLayout --> motion[scripts/motion.ts]
 ```
 
+## Einwilligung (Cookie-Einstellungen)
+
+Selbst gebaut, ohne CMP. Einzige optionale Kategorie ist die Terminbuchung über cal.com; Statistik gibt es nicht, also wird sie nicht angeboten.
+
+| Teil | Datei |
+|---|---|
+| Schlüssel, Fassung, Kategorien | `src/config/consent.ts` (`tg-consent` im localStorage: Fassung, Zeitpunkt, Auswahl) |
+| Zustand und Ereignisse | `src/scripts/consent.ts` |
+| Hinweis und Einstellungen | `src/components/layout/ConsentDialog.astro`, modaler `dialog` als Bottom Sheet, Fokus gefangen, Escape schließt ohne Entscheidung |
+| Platzhalter im Kalenderrahmen | `src/components/booking/BookingEmbed.astro` (Zustand `blocked`, Schaltfläche Kalender laden und zustimmen) |
+| Laden nach Einwilligung, Neuladen nach Widerruf | `src/scripts/booking.ts` |
+| Link Cookie-Einstellungen | Footer jeder Seite, ohne JS Sprung zu `/datenschutz/#einwilligung` |
+
+```mermaid
+stateDiagram-v2
+  [*] --> blocked: keine Einwilligung
+  [*] --> pending: Einwilligung gespeichert
+  blocked --> pending: Akzeptieren oder Kalender laden und zustimmen
+  pending --> loading: Rahmen sichtbar
+  loading --> ready: cal.com linkReady
+  loading --> failed: Zeitüberschreitung oder blockiert
+  pending --> blocked: Widerruf vor dem Laden
+  ready --> [*]: Widerruf, Seite lädt neu
+```
+
+Der Hinweis öffnet sich automatisch, solange keine Wahl der aktuellen `CONSENT_VERSION` gespeichert ist, außer auf Datenschutz und Impressum. Bei inhaltlicher Änderung von Zweck, Empfänger oder Text `CONSENT_VERSION` erhöhen und die Datenschutzerklärung anpassen. Den Status von Cal.com, Inc. im EU-U.S. Data Privacy Framework vor jeder Änderung prüfen (dataprivacyframework.gov, Teilnehmer 2960).
+
 ## Offene Punkte vor dem Livegang
 
 Diese Angaben fehlen, weil nur Patrick Wolf sie liefern kann. Nichts davon wird geraten; die Struktur steht, der Wert kommt in `src/config/practice.ts` oder in die genannte Datei.

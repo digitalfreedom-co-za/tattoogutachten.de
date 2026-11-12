@@ -1,6 +1,9 @@
 ---
 // Booking calendar (cal.com inline embed) in a reserved frame. Nothing from cal.com loads with the
-// page: src/scripts/booking.ts injects the official embed once the frame scrolls into view.
+// page, and nothing at all without consent (src/config/consent.ts): until the visitor consents, the
+// frame holds a click-to-load placeholder that explains cal.com, offers consent inline (Kalender laden
+// und zustimmen) and the direct alternatives. With consent, src/scripts/booking.ts injects the
+// official embed once the frame scrolls into view.
 // Above the frame: the consultation at a glance (identical on both pages) and, while the demo
 // calendar is configured (CAL_IS_DEMO), a notice that makes telephone and email the real way to book.
 // While it loads, a calendar sheet skeleton holds the height of the month view, so nothing shifts;
@@ -17,6 +20,7 @@ import { CAL_LINK, CAL_ORIGIN, CAL_EMBED_SCRIPT, CAL_PUBLIC_URL, CAL_IS_DEMO } f
 import { contact, site } from '../../config/site';
 import { practice } from '../../config/practice';
 import { url } from '../../lib/url';
+import { CONSENT_STORAGE_KEY, CONSENT_VERSION } from '../../config/consent';
 
 interface Props {
   variant?: 'compact' | 'full';
@@ -38,10 +42,12 @@ const glance = [
 ];
 const weekdays = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
 const timezoneId = `zeitzone-${variant}`;
+const rootId = `buchung-${variant}`;
 ---
 
 <div
   class:list={['booking', className]}
+  id={rootId}
   data-booking
   data-cal-link={CAL_LINK}
   data-cal-origin={CAL_ORIGIN}
@@ -98,7 +104,47 @@ const timezoneId = `zeitzone-${variant}`;
       </div>
     )
   }
-  <div class="booking-frame relative overflow-hidden border border-ink bg-paper">
+  <div
+    class="booking-frame relative overflow-hidden border border-ink bg-paper"
+    role="region"
+    aria-label="Buchungskalender"
+    tabindex="-1"
+  >
+    <!-- No consent yet: click-to-load placeholder, in normal flow and only as tall as its content. -->
+    <div class="booking-consent relative z-20 grid gap-6 bg-paper p-6 md:grid-cols-12 md:gap-x-8 md:p-8">
+      <div class="md:col-span-7">
+        <p class="font-serif text-h4">Der Kalender kommt von cal.com.</p>
+        <p class="mt-3 max-w-[36rem] text-graphite">
+          Damit Sie hier direkt einen Termin wählen können, binden wir den Buchungskalender der Cal.com, Inc. (USA) ein.
+          Er lädt erst, wenn Sie zustimmen. Dabei überträgt Ihr Browser unter anderem Ihre IP-Adresse an cal.com in den
+          USA, und cal.com setzt ein Cookie zur Abwehr automatisierter Zugriffe. Ihre Einwilligung können Sie jederzeit
+          unter Cookie-Einstellungen am Ende der Seite widerrufen. Einzelheiten in der
+          <a class="link-ink" href={url('/datenschutz/#terminbuchung')}>Datenschutzerklärung</a>.
+        </p>
+        <div class="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <Button icon="calendar" data-booking-consent>Kalender laden und zustimmen</Button>
+        </div>
+      </div>
+      <div class="border-t border-rule pt-5 text-sm md:col-span-5 md:border-t-0 md:border-l md:pt-0 md:pl-8">
+        <p class="label text-[0.6875rem] text-graphite">Ohne cal.com</p>
+        <p class="mt-2 text-graphite">Vereinbaren Sie die Erstberatung telefonisch oder per E-Mail.</p>
+        <ul class="mt-2 grid">
+          <li>
+            <a class="link-ink inline-flex min-h-11 items-center gap-3 font-semibold" href={contact.phone.href}>
+              <Icon name="phone" size={18} class="shrink-0 text-oxblood" />
+              <span><span class="sr-only">Anrufen: </span>{contact.phone.display}</span>
+            </a>
+          </li>
+          <li>
+            <a class="link-ink inline-flex min-h-11 items-center gap-3 font-semibold" href={contact.email.href}>
+              <Icon name="mail" size={18} class="shrink-0 text-oxblood" />
+              <span class="break-all"><span class="sr-only">E-Mail an </span>{contact.email.display}</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
     <div id={targetId} class="booking-target relative z-10"></div>
 
     <!-- Calendar sheet placeholder, same footprint as the loaded month view. -->
@@ -157,15 +203,31 @@ const timezoneId = `zeitzone-${variant}`;
     </div>
   </div>
 
+  <!-- Sets the state before first paint (placeholder without consent, reserved calendar height with it),
+       so the frame does not change size once the module script runs. Mirrors readConsent() in
+       src/scripts/consent.ts. -->
+  <script is:inline define:vars={{ key: CONSENT_STORAGE_KEY, version: CONSENT_VERSION, id: rootId }}>
+    (function (root) {
+      if (!root) return;
+      var granted = false;
+      try {
+        var record = JSON.parse(localStorage.getItem(key) || 'null');
+        granted = !!record && record.version === version && typeof record.timestamp === 'string' &&
+          !isNaN(Date.parse(record.timestamp)) && record.categories && record.categories.booking === true;
+      } catch (e) {}
+      root.dataset.state = granted ? 'pending' : 'blocked';
+    })(document.getElementById(id));
+  </script>
+
   <p class="sr-only" role="status" data-booking-status></p>
 
   <div class="mt-6 grid gap-8 text-sm md:grid-cols-12 md:gap-x-8">
     <div class="grid content-start gap-4 md:col-span-7">
       <p class="text-graphite">
         Für die Buchung braucht cal.com nur Name und E-Mail-Adresse, Fotos und Unterlagen gehören nicht in den Kalender. Der
-        Kalender lädt erst, wenn dieser Bereich sichtbar wird; dabei überträgt Ihr Browser unter anderem Ihre IP-Adresse
-        an cal.com. Was dabei verarbeitet wird, steht in der
-        <a class="link-ink" href={url('/datenschutz/#terminbuchung')}>Datenschutzerklärung unter Terminbuchung</a>.
+        Kalender lädt nur mit Ihrer Einwilligung, und erst wenn dieser Bereich sichtbar wird. Was dabei verarbeitet wird,
+        steht in der <a class="link-ink" href={url('/datenschutz/#terminbuchung')}>Datenschutzerklärung unter
+        Terminbuchung</a>.
       </p>
       <ul class="grid content-start">
         <li>
@@ -244,12 +306,25 @@ const timezoneId = `zeitzone-${variant}`;
   }
 
   /* State machine from src/scripts/booking.ts. Without JS the state stays idle and only the
-     fallback shows. The script sets pending at once, so the skeleton holds the place until cal.com
-     is ready; on failure the fallback returns with the failure wording. */
+     fallback shows. Without consent the script sets blocked (placeholder above); with consent it sets
+     pending, so the skeleton holds the place until cal.com is ready; on failure the fallback returns
+     with the failure wording. */
   .booking-skeleton,
+  .booking-consent,
   .booking-fallback-failed {
     display: none;
   }
+
+  /* Blocked: no consent yet. Only the click-to-load placeholder shows, nothing is reserved. */
+  .booking[data-state='blocked'] .booking-consent {
+    display: grid;
+  }
+
+  .booking[data-state='blocked'] .booking-skeleton,
+  .booking[data-state='blocked'] .booking-fallback {
+    display: none !important;
+  }
+
 
   .booking:not([data-state='idle']) .booking-skeleton {
     display: block;

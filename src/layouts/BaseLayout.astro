@@ -6,6 +6,7 @@ import { Font } from 'astro:assets';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import StickyCta from '../components/layout/StickyCta.astro';
+import ConsentDialog from '../components/layout/ConsentDialog.astro';
 import SeoHead, { type SeoProps } from '../components/seo/SeoHead.astro';
 import { url } from '../lib/url';
 
@@ -47,6 +48,7 @@ type Props = SeoProps;
     </main>
     <Footer />
     <StickyCta />
+    <ConsentDialog />
     <script>
       import '../scripts/motion';
     </script>

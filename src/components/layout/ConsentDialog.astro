@@ -1,0 +1,330 @@
+---
+// Consent dialog for the only optional third party content of the site, the cal.com booking calendar.
+// Self hosted, no CMP. A modal <dialog> shown as a bottom sheet in the top layer, so it never moves
+// the page (no layout shift). Two views in one dialog:
+// - notice: first visit. Ablehnen and Akzeptieren are the same button, same size and order weight;
+//   Einstellungen opens the settings view.
+// - settings: Notwendig (always on) and Terminbuchung (cal.com, off unless consented), save, reject,
+//   accept. Opened from the footer link Cookie-Einstellungen on every page, via CONSENT_OPEN_EVENT.
+// Shown automatically while there is no stored choice of the current CONSENT_VERSION, except on the
+// Datenschutzerklärung and the Impressum, which must stay readable before a decision (they load no
+// third party content). Focus moves to the title, Tab is held inside the dialog, Escape closes it
+// without a decision: nothing is stored or loaded, and the notice returns on the next page. Closing
+// returns focus to the control that opened it. Without JS the dialog never opens and nothing loads;
+// the footer link then leads to the consent section of the Datenschutzerklärung.
+import Button from '../ui/Button.astro';
+import Container from '../ui/Container.astro';
+import Icon from '../ui/Icon.astro';
+import { url } from '../../lib/url';
+import { CONSENT_ANCHOR } from '../../config/consent';
+
+const legalPage = ['/datenschutz/', '/impressum/'].some((path) => Astro.url.pathname.endsWith(path));
+const privacy = url('/datenschutz/#terminbuchung');
+---
+
+<dialog
+  id="consent-dialog"
+  class="consent"
+  aria-labelledby="consent-notice-title"
+  aria-describedby="consent-notice-text"
+  data-consent-dialog
+  data-auto-open={legalPage ? undefined : ''}
+>
+  <Container class="py-6 md:py-8">
+    <!-- First layer -->
+    <section data-consent-view="notice" class="grid gap-5 lg:grid-cols-12 lg:gap-x-8">
+      <div class="lg:col-span-8">
+        <p class="label flex items-center gap-3 text-graphite">
+          <span class="h-px w-6 bg-oxblood" aria-hidden="true"></span>Datenschutz
+        </p>
+        <h2 id="consent-notice-title" class="mt-3 font-serif text-h4 text-ink focus:outline-none" tabindex="-1">
+          Darf der Buchungskalender von cal.com laden?
+        </h2>
+        <div id="consent-notice-text" class="mt-3 grid gap-2 text-sm text-graphite">
+          <p>
+            Diese Website setzt keine Cookies zur Analyse oder Werbung. Für die Online-Terminbuchung binden wir den Kalender
+            von cal.com ein (Cal.com, Inc., USA). Lädt er, überträgt Ihr Browser unter anderem Ihre IP-Adresse an cal.com in
+            den USA, und cal.com setzt ein Cookie zur Abwehr automatisierter Zugriffe. Das geschieht nur mit Ihrer
+            Einwilligung.
+          </p>
+          <p>
+            Ohne Einwilligung funktioniert die Website vollständig, den Termin vereinbaren Sie dann telefonisch oder per
+            E-Mail. Ihre Wahl ändern oder widerrufen Sie jederzeit unter Cookie-Einstellungen am Ende jeder Seite.
+            <a class="link-ink" href={privacy}>Mehr in der Datenschutzerklärung</a>.
+          </p>
+        </div>
+      </div>
+      <div class="flex flex-wrap items-center gap-x-6 gap-y-3 lg:col-span-4 lg:flex-col lg:items-stretch lg:justify-end">
+        <div class="grid w-full grid-cols-2 gap-3 sm:max-w-md lg:max-w-none">
+          <Button class="consent-choice justify-center" icon="close" data-consent-action="reject">Ablehnen</Button>
+          <Button class="consent-choice justify-center" icon="check" data-consent-action="accept">Akzeptieren</Button>
+        </div>
+        <Button variant="text" icon="chevron" class="self-start" data-consent-action="settings">Einstellungen</Button>
+      </div>
+    </section>
+
+    <!-- Settings -->
+    <section data-consent-view="settings" hidden>
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <p class="label flex items-center gap-3 text-graphite">
+            <span class="h-px w-6 bg-oxblood" aria-hidden="true"></span>Datenschutz
+          </p>
+          <h2 id="consent-settings-title" class="mt-3 font-serif text-h4 text-ink focus:outline-none" tabindex="-1">Cookie-Einstellungen</h2>
+        </div>
+        <button
+          type="button"
+          class="inline-flex size-11 shrink-0 items-center justify-center text-ink transition-colors hover:text-oxblood"
+          aria-label="Schließen ohne Änderung"
+          title="Schließen ohne Änderung"
+          data-consent-action="close"
+        >
+          <Icon name="close" size={20} />
+        </button>
+      </div>
+
+      <div id="consent-settings-text" class="consent-scroll mt-4 grid gap-0 border-t border-ink text-sm">
+        <div class="grid grid-cols-[1fr_auto] items-start gap-x-6 gap-y-2 border-b border-rule py-4 sm:gap-x-8">
+          <h3 class="font-semibold text-ink">Notwendig</h3>
+          <p class="label pt-0.5 text-[0.6875rem] text-graphite sm:row-span-2">Immer aktiv</p>
+          <p class="col-span-2 text-graphite sm:col-span-1">
+            Speichert Ihre Auswahl in diesem Browser (localStorage, Eintrag tg-consent mit Fassung des Hinweises, Zeitpunkt
+            und Auswahl), damit wir nicht erneut fragen. Ohne Kennung, nur von dieser Website gelesen. Keine Einwilligung
+            nötig, § 25 Abs. 2 Nr. 2 TDDDG.
+          </p>
+        </div>
+        <div class="grid grid-cols-[1fr_auto] items-start gap-x-6 gap-y-2 border-b border-rule py-4 sm:gap-x-8">
+          <h3 class="font-semibold text-ink">
+            <label for="consent-booking">Externe Medien: Terminbuchung über cal.com</label>
+          </h3>
+          <span class="consent-switch -my-2 sm:row-span-2">
+            <input
+              id="consent-booking"
+              type="checkbox"
+              role="switch"
+              aria-describedby="consent-booking-text"
+              data-consent-category="booking"
+            />
+            <span aria-hidden="true"></span>
+          </span>
+          <p id="consent-booking-text" class="col-span-2 text-graphite sm:col-span-1">
+            Lädt den Buchungskalender der Cal.com, Inc., San Francisco, USA, auf der Startseite und der Seite Termin buchen,
+            sobald er sichtbar wird. Dabei erhält cal.com Ihre IP-Adresse, Angaben zu Browser und Gerät und die Adresse der
+            Seite. Der Dienstleister Cloudflare setzt das Cookie __cf_bm gegen automatisierte Zugriffe (30 Minuten),
+            technische Fehlerberichte gehen an Sentry. Übermittlung in die USA auf Grundlage des EU-U.S. Data Privacy
+            Framework. Rechtsgrundlage ist Ihre Einwilligung (Art. 6 Abs. 1 lit. a DSGVO, § 25 Abs. 1 TDDDG), die Sie
+            jederzeit hier widerrufen können. Ohne sie bleibt der Kalender aus, Termine gibt es telefonisch oder per E-Mail.
+          </p>
+        </div>
+        <p class="pt-4 text-graphite">
+          Einzelheiten in der <a class="link-ink" href={url(`/datenschutz/#${CONSENT_ANCHOR}`)}>Datenschutzerklärung</a>.
+        </p>
+      </div>
+
+      <div class="mt-5 grid gap-3 sm:flex sm:flex-wrap sm:items-center">
+        <div class="grid grid-cols-2 gap-3 sm:contents">
+          <Button class="consent-choice justify-center" icon="close" data-consent-action="reject">Ablehnen</Button>
+          <Button class="consent-choice justify-center" icon="check" data-consent-action="accept">Akzeptieren</Button>
+        </div>
+        <Button variant="secondary" icon="check" class="justify-center" data-consent-action="save">Auswahl speichern</Button>
+      </div>
+    </section>
+  </Container>
+</dialog>
+
+<style>
+  /* Bottom sheet in the top layer: out of the document flow, so the page never moves. */
+  .consent {
+    position: fixed;
+    inset: auto 0 0 0;
+    width: 100%;
+    max-width: none;
+    max-height: min(100dvh, 100%);
+    margin: 0;
+    padding: 0 0 env(safe-area-inset-bottom);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border: 0;
+    border-top: 2px solid var(--color-ink);
+    background: var(--color-paper);
+    color: var(--color-ink);
+    box-shadow: 0 -18px 40px -24px rgb(23 20 15 / 0.55);
+  }
+
+  .consent::backdrop {
+    background: rgb(23 20 15 / 0.35);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .consent[open] {
+      animation: consent-in 320ms var(--ease-out-quint, ease-out);
+    }
+
+    .consent[open]::backdrop {
+      animation: consent-fade 320ms ease-out;
+    }
+  }
+
+  @keyframes consent-in {
+    from {
+      transform: translateY(100%);
+    }
+  }
+
+  @keyframes consent-fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  /* Accessible switch on a native checkbox: the input stays the control (focus, state, name), the
+     span draws the track. */
+  .consent-switch {
+    position: relative;
+    display: inline-flex;
+    width: 3.25rem;
+    height: 2.75rem;
+    align-items: center;
+  }
+
+  .consent-switch input {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .consent-switch span {
+    position: relative;
+    width: 3.25rem;
+    height: 1.75rem;
+    border: 1px solid var(--color-ink);
+    border-radius: 999px;
+    background: var(--color-paper);
+    transition: background-color 200ms ease;
+  }
+
+  .consent-switch span::after {
+    content: '';
+    position: absolute;
+    top: 0.1875rem;
+    left: 0.1875rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 999px;
+    background: var(--color-ink);
+    transition: transform 200ms ease;
+  }
+
+  .consent-switch input:checked + span {
+    background: var(--color-ink);
+  }
+
+  .consent-switch input:checked + span::after {
+    transform: translateX(1.5rem);
+    background: var(--color-paper);
+  }
+
+  .consent-switch input:focus-visible + span {
+    outline: 2px solid var(--color-signal);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .consent-switch span,
+    .consent-switch span::after {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  import {
+    CONSENT_OPEN_EVENT,
+    currentConsent,
+    readConsent,
+    saveConsent,
+  } from '../../scripts/consent';
+
+  const dialog = document.querySelector<HTMLDialogElement>('[data-consent-dialog]');
+
+  if (dialog && typeof dialog.showModal === 'function') {
+    const views = {
+      notice: dialog.querySelector<HTMLElement>('[data-consent-view="notice"]')!,
+      settings: dialog.querySelector<HTMLElement>('[data-consent-view="settings"]')!,
+    };
+    const bookingSwitch = dialog.querySelector<HTMLInputElement>('[data-consent-category="booking"]')!;
+    let opener: HTMLElement | null = null;
+
+    const show = (view: keyof typeof views) => {
+      views.notice.hidden = view !== 'notice';
+      views.settings.hidden = view !== 'settings';
+      dialog.setAttribute('aria-labelledby', `consent-${view}-title`);
+      dialog.setAttribute('aria-describedby', `consent-${view}-text`);
+      bookingSwitch.checked = currentConsent()?.categories.booking === true;
+      if (!dialog.open) dialog.showModal();
+      dialog.querySelector<HTMLElement>(`#consent-${view}-title`)?.focus();
+    };
+
+    const close = () => {
+      dialog.close();
+    };
+
+    dialog.addEventListener('close', () => {
+      const target = opener;
+      opener = null;
+      if (target?.isConnected) target.focus();
+    });
+
+    dialog.addEventListener('click', (event) => {
+      const action = (event.target as HTMLElement).closest<HTMLElement>('[data-consent-action]')?.dataset.consentAction;
+      if (!action) return;
+      if (action === 'settings') show('settings');
+      else if (action === 'close') close();
+      else {
+        const booking = action === 'accept' ? true : action === 'reject' ? false : bookingSwitch.checked;
+        close();
+        saveConsent({ booking });
+      }
+    });
+
+    // Tab stays inside the dialog (the browser already makes the page behind it inert).
+    dialog.addEventListener('keydown', (event) => {
+      if (event.key !== 'Tab') return;
+      const focusable = Array.from(
+        dialog.querySelectorAll<HTMLElement>('a[href], button, input, [tabindex]:not([tabindex="-1"])'),
+      ).filter((el) => !el.closest('[hidden]') && !(el as HTMLButtonElement).disabled);
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement;
+      if (event.shiftKey && (active === first || !dialog.contains(active) || active?.tagName === 'H2')) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && active === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+
+    window.addEventListener(CONSENT_OPEN_EVENT, () => {
+      opener = document.activeElement instanceof HTMLElement && !dialog.contains(document.activeElement)
+        ? document.activeElement
+        : null;
+      show('settings');
+    });
+
+    // Footer link: opens the settings instead of navigating to the Datenschutzerklärung.
+    document.querySelectorAll<HTMLElement>('[data-consent-open]').forEach((link) => {
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        opener = link;
+        show('settings');
+      });
+    });
+
+    if (dialog.hasAttribute('data-auto-open') && !readConsent()) show('notice');
+  }
+</script>

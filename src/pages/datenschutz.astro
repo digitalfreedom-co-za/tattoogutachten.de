@@ -1,23 +1,28 @@
 ---
 // Datenschutzerklärung. Describes only what the site really loads (checked in the browser,
-// November 2026): GitHub Pages hosting, self hosted fonts, no cookies or tracking of its own,
-// the lazy cal.com embed on / and /termin/ (incl. Cloudflare __cf_bm cookie and Sentry), plain
-// external links. Update this page whenever a third party service is added or removed.
+// November 2026): GitHub Pages hosting, self hosted fonts, no cookies or tracking of its own, the
+// consent record in localStorage (src/config/consent.ts), the cal.com embed on / and /termin/ only
+// after consent (incl. Cloudflare __cf_bm cookie and Sentry), plain external links. Update this page
+// whenever a third party service or a storage key is added or removed, and raise CONSENT_VERSION when
+// the consent text changes in substance. DPF status of Cal.com, Inc. checked on
+// dataprivacyframework.gov on 2026-11-12 (participant 2960, active, next certification 2027-10-02).
 // While the demo calendar is configured (CAL_IS_DEMO in src/config/booking.ts), the booking section
 // names the holder of the demo account as recipient; with the real link it switches to the operator.
 import ArticleLayout from '../layouts/ArticleLayout.astro';
 import { site, company, contact, contentUpdated, type NavItem } from '../config/site';
 import { BOOKING_ANCHOR, CAL_IS_DEMO, CAL_DEMO_ACCOUNT_HOLDER } from '../config/booking';
 import { url } from '../lib/url';
+import { CONSENT_ANCHOR, CONSENT_STORAGE_KEY } from '../config/consent';
 
 const title = `Datenschutzerklärung | ${site.name}`;
-const description = `Datenschutzerklärung von ${site.domain}: Hosting bei GitHub Pages, Terminbuchung über cal.com, Kontakt, Ihre Rechte. Keine eigenen Cookies, kein Tracking.`;
+const description = `Datenschutzerklärung von ${site.domain}: Hosting bei GitHub Pages, Terminbuchung über cal.com, Einwilligung, Kontakt, Ihre Rechte. Keine eigenen Cookies, kein Tracking.`;
 const breadcrumbs: NavItem[] = [{ label: 'Datenschutz', href: '/datenschutz/' }];
 
 const toc: NavItem[] = [
   { label: 'Verantwortlicher', href: '#verantwortlicher' },
   { label: 'Hosting bei GitHub Pages', href: '#hosting' },
   { label: 'Schriften, Cookies und Tracking', href: '#cookies' },
+  { label: 'Einwilligung und Cookie-Einstellungen', href: `#${CONSENT_ANCHOR}` },
   { label: 'Terminbuchung über cal.com', href: '#terminbuchung' },
   { label: 'Kontakt per E-Mail und Telefon', href: '#kontakt' },
   { label: 'Links zu anderen Diensten', href: '#links' },
@@ -33,7 +38,7 @@ const external = { target: '_blank', rel: 'noopener noreferrer' };
   title={title}
   description={description}
   heading="Datenschutzerklärung"
-  lead="Diese Seiten kommen ohne eigene Cookies, ohne Analyse und ohne Werbedienste aus. Neben dem Hosting bei GitHub Pages kommt ein weiterer Dienst nur dann ins Spiel, wenn der Bereich der Online-Terminbuchung sichtbar wird."
+  lead="Diese Seiten kommen ohne eigene Cookies, ohne Analyse und ohne Werbedienste aus. Neben dem Hosting bei GitHub Pages kommt ein weiterer Dienst nur mit Ihrer Einwilligung ins Spiel: der Kalender der Online-Terminbuchung."
   label="Rechtliches"
   breadcrumbs={breadcrumbs}
   updated={contentUpdated}
@@ -89,9 +94,58 @@ const external = { target: '_blank', rel: 'noopener noreferrer' };
     Schriftanbieter wie Google Fonts übertragen.
   </p>
   <p>
-    Unsere eigenen Seiten setzen keine Cookies und legen keine Daten im Speicher Ihres Browsers ab. Wir verwenden
-    keine Analyse- oder Reichweitenmessung, keine Werbedienste und keine Social-Media-Plugins. Eine Ausnahme bildet
-    allein der Kalender von cal.com, wie im nächsten Abschnitt beschrieben.
+    Unsere eigenen Seiten setzen keine Cookies. Im Speicher Ihres Browsers legen sie nur einen Eintrag ab: Ihre Antwort
+    auf die Frage nach der Einwilligung, wie im nächsten Abschnitt beschrieben. Wir verwenden keine Analyse- oder
+    Reichweitenmessung, keine Werbedienste und keine Social-Media-Plugins. Ein Dienst eines Dritten, der Kalender von
+    cal.com, lädt nur mit Ihrer Einwilligung.
+  </p>
+
+  <h2 id={CONSENT_ANCHOR}>Einwilligung und Cookie-Einstellungen</h2>
+  <p>
+    Beim ersten Besuch fragen wir, ob der Buchungskalender von cal.com laden darf. Ablehnen ist so einfach wie
+    Zustimmen, und ohne Einwilligung funktioniert die Website vollständig. Vor Ihrer Einwilligung wird nichts von
+    cal.com geladen und keine Verbindung zu cal.com aufgebaut. Statt des Kalenders sehen Sie einen Platzhalter, über den
+    Sie den Kalender mit Ihrer Zustimmung laden oder den Termin telefonisch oder per E-Mail vereinbaren können.
+  </p>
+  <p>Ihre Antwort speichern wir in Ihrem Browser, damit wir nicht auf jeder Seite erneut fragen:</p>
+  <div class="overflow-x-auto">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Eintrag</th>
+          <th scope="col">Ort</th>
+          <th scope="col">Geschrieben</th>
+          <th scope="col">Zweck</th>
+          <th scope="col">Speicherdauer</th>
+          <th scope="col">Einwilligung</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">{CONSENT_STORAGE_KEY}</th>
+          <td>localStorage dieser Website</td>
+          <td>wenn Sie im Hinweis oder in den Cookie-Einstellungen eine Wahl treffen</td>
+          <td>
+            Ihre Wahl speichern: Fassung des Hinweises, Zeitpunkt und ob der Kalender laden darf. Keine Kennung, nur von
+            dieser Website gelesen.
+          </td>
+          <td>bis Sie die Wahl ändern oder den Speicher Ihres Browsers löschen</td>
+          <td>nicht nötig, unbedingt erforderlich (§ 25 Abs. 2 Nr. 2 TDDDG)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    Rechtsgrundlage für die Verarbeitung dieses Eintrags ist Art. 6 Abs. 1 lit. f DSGVO. Unser berechtigtes Interesse
+    liegt darin, Ihre Entscheidung zu beachten und nachweisen zu können (Art. 7 Abs. 1 DSGVO). Der Eintrag verlässt
+    Ihren Browser nicht. Ändert sich der Hinweis inhaltlich, fragen wir erneut.
+  </p>
+  <p>
+    Ihre Einwilligung können Sie jederzeit mit Wirkung für die Zukunft widerrufen oder ändern, über den Link
+    Cookie-Einstellungen am Ende jeder Seite oder
+    <a href={url(`/datenschutz/#${CONSENT_ANCHOR}`)} data-consent-open aria-haspopup="dialog">direkt hier</a>. Ist der
+    Kalender bereits geladen, lädt die Seite nach dem Widerruf neu, damit er entfernt ist. Die Rechtmäßigkeit der
+    Verarbeitung bis zum Widerruf bleibt davon unberührt.
   </p>
 
   <h2 id="terminbuchung">Online-Terminbuchung über cal.com</h2>
@@ -102,9 +156,10 @@ const external = { target: '_blank', rel: 'noopener noreferrer' };
   <h3>Wann der Kalender lädt</h3>
   <p>
     Der Kalender steht auf der <a href={url(`/#${BOOKING_ANCHOR}`)}>Startseite</a> und auf der Seite
-    <a href={url('/termin/')}>Termin buchen</a>. Er wird nicht mit der Seite geladen, sondern erst automatisch, wenn
-    der Buchungsbereich beim Scrollen sichtbar wird. Ab diesem Moment ruft Ihr Browser Inhalte von Servern
-    von cal.com ab. Auf allen anderen Seiten wird nichts von cal.com geladen.
+    <a href={url('/termin/')}>Termin buchen</a>. Er lädt nur, wenn Sie eingewilligt haben, im Hinweis zum Datenschutz,
+    in den Cookie-Einstellungen oder mit der Schaltfläche Kalender laden und zustimmen im Buchungsbereich. Auch dann
+    wird er nicht mit der Seite geladen, sondern erst, wenn der Buchungsbereich sichtbar wird. Ab diesem Moment ruft
+    Ihr Browser Inhalte von Servern von cal.com ab. Auf allen anderen Seiten wird nichts von cal.com geladen.
   </p>
   <h3>Welche Daten verarbeitet werden</h3>
   <p>
@@ -134,14 +189,21 @@ const external = { target: '_blank', rel: 'noopener noreferrer' };
   }
   <h3>Rechtsgrundlage</h3>
   <p>
-    Das Laden des Kalenders beruht auf Art. 6 Abs. 1 lit. f DSGVO. Unser berechtigtes Interesse besteht darin, Ihnen
-    eine einfache Online-Terminbuchung ohne Umweg anzubieten. Das Cookie __cf_bm ist für den Betrieb des Kalenders
-    unbedingt erforderlich (§ 25 Abs. 2 Nr. 2 TDDDG). Die Verarbeitung Ihrer Angaben bei einer Buchung dient der
-    Durchführung vorvertraglicher Maßnahmen auf Ihre Anfrage (Art. 6 Abs. 1 lit. b DSGVO).
+    Das Laden des Kalenders und die damit verbundene Übertragung an cal.com beruhen auf Ihrer Einwilligung (Art. 6 Abs.
+    1 lit. a DSGVO). Soweit dabei Informationen auf Ihrem Gerät gespeichert oder ausgelesen werden, etwa das Cookie
+    __cf_bm, ist Rechtsgrundlage ebenfalls Ihre Einwilligung (§ 25 Abs. 1 TDDDG). Die Verarbeitung Ihrer Angaben bei
+    einer Buchung dient der Durchführung vorvertraglicher Maßnahmen auf Ihre Anfrage (Art. 6 Abs. 1 lit. b DSGVO).
+  </p>
+  <p>
+    Sie können die Einwilligung jederzeit mit Wirkung für die Zukunft widerrufen, über
+    <a href={url(`/datenschutz/#${CONSENT_ANCHOR}`)} data-consent-open aria-haspopup="dialog">Cookie-Einstellungen</a>.
+    Danach lädt der Kalender nicht mehr. Cookies, die cal.com auf seiner eigenen Domain gesetzt hat, laufen ab (__cf_bm
+    nach 30 Minuten ohne Aktivität) oder lassen sich in Ihrem Browser löschen.
   </p>
   <h3>Übermittlung in die USA</h3>
   <p>
-    Cal.com verarbeitet die Daten in den USA. Cal.com, Inc. ist nach dem EU-U.S. Data Privacy Framework zertifiziert;
+    Cal.com verarbeitet die Daten in den USA. Cal.com, Inc. ist nach dem EU-U.S. Data Privacy Framework zertifiziert
+    (Stand der Prüfung: 12. November 2026);
     die Übermittlung erfolgt damit auf Grundlage des Angemessenheitsbeschlusses der Europäischen Kommission nach Art.
     45 DSGVO. Für Übermittlungen außerhalb dieses Rahmens nutzt cal.com die Standardvertragsklauseln der Europäischen
     Kommission. Einzelheiten stehen in der
@@ -164,7 +226,7 @@ const external = { target: '_blank', rel: 'noopener noreferrer' };
         </>
       )
     }{' '}
-    Wenn Sie cal.com nicht nutzen möchten, vereinbaren Sie Ihren Termin einfach telefonisch unter{' '}
+    Wenn Sie nicht einwilligen oder cal.com nicht nutzen möchten, vereinbaren Sie Ihren Termin einfach telefonisch unter{' '}
     <a href={contact.phone.href}>{contact.phone.display}</a> oder per E-Mail.
   </p>
 
@@ -199,7 +261,8 @@ const external = { target: '_blank', rel: 'noopener noreferrer' };
     <li>Berichtigung unrichtiger Daten (Art. 16 DSGVO),</li>
     <li>Löschung Ihrer Daten (Art. 17 DSGVO),</li>
     <li>Einschränkung der Verarbeitung (Art. 18 DSGVO),</li>
-    <li>Datenübertragbarkeit (Art. 20 DSGVO).</li>
+    <li>Datenübertragbarkeit (Art. 20 DSGVO),</li>
+    <li>Widerruf einer erteilten Einwilligung mit Wirkung für die Zukunft (Art. 7 Abs. 3 DSGVO).</li>
   </ul>
   <p>
     Für Anfragen genügt eine E-Mail an <a class="break-all" href={contact.email.href}>{contact.email.display}</a>.
