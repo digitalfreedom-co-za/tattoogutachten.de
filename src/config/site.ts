@@ -15,10 +15,14 @@ export const site = {
 } as const;
 
 export const contact = {
-  street: 'Benekestr. 9',
+  /** Written out in full everywhere (Impressum, footer, JSON-LD, llms.txt), so the address data stays identical. */
+  street: 'Benekestraße 9',
   postalCode: '61231',
   city: 'Bad Nauheim',
   country: 'Deutschland',
+  countryCode: 'DE',
+  /** Building coordinates of the office from OpenStreetMap (Nominatim, way 50656186), checked 2026-11-12. */
+  geo: { latitude: 50.3707, longitude: 8.746 },
   phone: {
     display: '+49 173 1605162',
     href: 'tel:+491731605162',
@@ -28,13 +32,13 @@ export const contact = {
     href: 'mailto:Kurstadttattoo@web.de',
   },
   /** Plain Google Maps search link (no embedded map, so nothing loads from Google on our pages). */
-  mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Benekestr.%209%2C%2061231%20Bad%20Nauheim',
+  mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Benekestra%C3%9Fe%209%2C%2061231%20Bad%20Nauheim',
 } as const;
 
 /** Legal entity behind the site (Impressum, controller in the Datenschutzerklärung). */
 export const company = {
   name: 'RuW Lifestyle GmbH',
-  street: 'Benekestraße 9',
+  street: contact.street,
   managingDirector: 'Patrick Wolf',
   registerCourt: 'Amtsgericht Friedberg (Hessen)',
   registerNumber: 'HRB 8945',
@@ -49,6 +53,8 @@ export const credentials = {
   registerNumber: 'DE-8#17024/70-03',
   court: 'Landgericht Frankfurt am Main',
   membership: 'Bundesverband Tattoo',
+  associationUrl: 'https://www.dgusv.de',
+  membershipUrl: 'https://bundesverband-tattoo.de',
   yearsInTrade: 22,
   areaServed: 'bundes- und europaweit',
 } as const;
@@ -80,3 +86,19 @@ export const legalNav: NavItem[] = [
   { label: 'Impressum', href: '/impressum/' },
   { label: 'Datenschutz', href: '/datenschutz/' },
 ];
+
+/**
+ * Search engine switch. Off (default) on the github.io preview: every page carries noindex, robots.txt
+ * still allows crawling so the noindex is seen. At launch on the real domain, build with
+ * PUBLIC_INDEXABLE=true: all pages (incl. /termin/) become indexable. Sitemap and robots.txt list the
+ * same pages in both modes; only the 404 page is never indexed.
+ */
+export const indexable = import.meta.env.PUBLIC_INDEXABLE === 'true';
+
+/** Shared social preview image in public/ (1200 x 630), source in scripts/og-image/. */
+export const ogImage = {
+  path: '/og/tattoogutachten-og.png',
+  width: 1200,
+  height: 630,
+  alt: `${site.office}: ${site.expert}, ${site.role}, ${credentials.associationShort} zertifiziert, Gutachten ${credentials.areaServed}.`,
+} as const;

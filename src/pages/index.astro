@@ -29,6 +29,7 @@ import { steps, costFacts, preparationChecklist } from '../data/process';
 import { featuredFaq } from '../data/faq';
 import { url } from '../lib/url';
 import { getArticles } from '../lib/ratgeber';
+import { ids, ref } from '../lib/schema';
 
 import portrait from '../assets/images/patrick-wolf-portrait-studio-sitzend.jpg';
 import atWork from '../assets/images/patrick-wolf-beim-taetowieren.webp';
@@ -38,8 +39,9 @@ const featuredArticles = (await getArticles()).slice(0, 3);
 ---
 
 <BaseLayout
+  page={{ mainEntity: ref(ids(Astro.site).office) }}
   title="Tattoo Gutachter Patrick Wolf | Tattoogutachten bundesweit, DGuSV zertifiziert"
-  description={`Unabhängige Tattoogutachten und Piercing-Gutachten von Patrick Wolf, zertifiziert durch den DGuSV, über ${credentials.yearsInTrade} Jahre Branchenerfahrung. Für Privatpersonen, Studios, Anwälte und Gerichte, bundesweit. Erstberatung kostenlos.`}
+  description={`Tattoo Gutachter ${site.expert}: unabhängige Tattoo- und Piercing-Gutachten, ${credentials.associationShort} zertifiziert, über ${credentials.yearsInTrade} Jahre Erfahrung. Bundesweit, Erstberatung kostenlos.`}
 >
   <!-- Opening: report title block left, portrait with the seal pinned to it right -->
   <section class="relative overflow-hidden" aria-labelledby="start-titel">

@@ -10,6 +10,9 @@ import Faq from '../components/ui/Faq.astro';
 import CtaBand from '../components/ui/CtaBand.astro';
 import { contentUpdated, primaryCta, type NavItem } from '../config/site';
 import { faq, faqTopics, faqByTopic, type FaqTopic } from '../data/faq';
+import { faqQuestions } from '../lib/schema';
+
+const breadcrumbs: NavItem[] = [{ label: 'Häufige Fragen', href: '/haeufige-fragen/' }];
 
 /** Where each topic continues in depth. */
 const topicLinks: Record<FaqTopic, NavItem> = {
@@ -22,14 +25,17 @@ const topicLinks: Record<FaqTopic, NavItem> = {
 ---
 
 <BaseLayout
+  breadcrumbs={breadcrumbs}
+  pageType="FAQPage"
+  page={{ mainEntity: faqQuestions(faq) }}
   title="Häufige Fragen zum Tattoo-Gutachten: Kosten, Ablauf, Gericht | Tattoogutachten"
-  description="Tattoo schlecht gestochen? Antworten auf die häufigsten Fragen zum Tattoo-Gutachten: Mangel oder Geschmack, Fotos, Piercings, Privat- und Gerichtsgutachten, Kosten, kostenlose Erstberatung."
+  description="Antworten zum Tattoo-Gutachten: Mangel oder Geschmack, Fotos, Piercings, Privat- und Gerichtsgutachten, Kosten und die kostenlose Erstberatung."
 >
   <PageHeader
     label="Häufige Fragen"
     heading="Häufige Fragen zum Tattoo-Gutachten."
     lead={`Hier finden Sie ${faq.length} Antworten zur Beauftragung eines Tattoo-Sachverständigen, zum Ablauf einer Begutachtung und zu den Kosten, nach Themen geordnet. Jede Antwort beginnt mit dem Wesentlichen.`}
-    breadcrumbs={[{ label: 'Häufige Fragen', href: '/haeufige-fragen/' }]}
+    breadcrumbs={breadcrumbs}
     updated={contentUpdated}
   />
 

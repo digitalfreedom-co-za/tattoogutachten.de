@@ -1,0 +1,143 @@
+<!doctype html>
+<!-- Source of public/og/tattoogutachten-og.png (1200 x 630). Rendered with scripts/og-image/render.sh,
+     uses the site fonts and photos, colours from the design tokens in src/styles/global.css. -->
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      @font-face {
+        font-family: 'Newsreader';
+        src: url('../../node_modules/@fontsource-variable/newsreader/files/newsreader-latin-wght-normal.woff2') format('woff2');
+        font-weight: 200 800;
+      }
+      @font-face {
+        font-family: 'Newsreader';
+        src: url('../../node_modules/@fontsource-variable/newsreader/files/newsreader-latin-wght-italic.woff2') format('woff2');
+        font-weight: 200 800;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: 'Schibsted Grotesk';
+        src: url('../../node_modules/@fontsource-variable/schibsted-grotesk/files/schibsted-grotesk-latin-wght-normal.woff2') format('woff2');
+        font-weight: 400 900;
+      }
+      :root {
+        --paper: #f4efe6;
+        --paper-deep: #ebe3d5;
+        --ink: #17140f;
+        --graphite: #57504a;
+        --rule: #cfc3ae;
+        --oxblood: #8c1d1b;
+        --brass: #a8843f;
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { width: 1200px; height: 630px; overflow: hidden; }
+      body {
+        background: var(--paper);
+        color: var(--ink);
+        font-family: 'Schibsted Grotesk', Arial, sans-serif;
+        display: grid;
+        grid-template-columns: 1fr 430px;
+      }
+      .sheet {
+        padding: 52px 56px 48px 64px;
+        display: flex;
+        flex-direction: column;
+      }
+      .label {
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+      .masthead {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 2px solid var(--ink);
+        border-bottom: 1px solid var(--ink);
+        padding: 12px 0;
+      }
+      .masthead .place { color: var(--graphite); }
+      .kicker {
+        margin-top: 50px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        color: var(--graphite);
+      }
+      .kicker::before { content: ''; width: 34px; height: 2px; background: var(--oxblood); }
+      h1 {
+        margin-top: 18px;
+        font-family: 'Newsreader', Georgia, serif;
+        font-weight: 400;
+        font-size: 68px;
+        line-height: 1.02;
+        letter-spacing: -0.02em;
+      }
+      h1 em { font-style: italic; color: var(--oxblood); }
+      .lead {
+        margin-top: 24px;
+        max-width: 600px;
+        font-size: 23px;
+        line-height: 1.4;
+        color: var(--graphite);
+      }
+      .foot {
+        margin-top: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        border-top: 1px solid var(--rule);
+        padding-top: 16px;
+      }
+      .domain { font-family: 'Newsreader', Georgia, serif; font-size: 30px; letter-spacing: -0.01em; }
+      .offer { color: var(--oxblood); }
+      .photo { position: relative; border-left: 2px solid var(--ink); }
+      .photo img.portrait {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: 62% 38%;
+        display: block;
+        filter: saturate(0.85) contrast(1.02);
+      }
+      .seal {
+        position: absolute;
+        left: -58px;
+        bottom: 100px;
+        width: 116px;
+        box-shadow: 0 12px 28px rgba(23, 20, 15, 0.28);
+      }
+      .caption {
+        position: absolute;
+        right: 0;
+        top: 0;
+        background: var(--ink);
+        color: var(--paper);
+        padding: 10px 16px;
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="sheet">
+      <div class="masthead label">
+        <span>Sachverständigenbüro Wolf</span>
+        <span class="place">Bad Nauheim, bundesweit</span>
+      </div>
+      <p class="kicker label">Patrick Wolf, DGuSV zertifiziert</p>
+      <h1>Gutachten zu Tätowierungen <em>und Piercings.</em></h1>
+      <p class="lead">Unabhängig und nachvollziehbar, für Privatpersonen, Studios, Rechtsanwälte und Gerichte. Über 22 Jahre Erfahrung im Handwerk.</p>
+      <div class="foot">
+        <span class="domain">tattoogutachten.de</span>
+        <span class="label offer">Erstberatung kostenlos</span>
+      </div>
+    </main>
+    <aside class="photo">
+      <img class="portrait" src="../../src/assets/images/patrick-wolf-portrait-studio-sitzend.jpg" alt="" />
+      <span class="caption label">Patrick Wolf</span>
+      <img class="seal" src="../../src/assets/images/siegel-dgusv-2026.png" alt="" />
+    </aside>
+  </body>
+</html>

@@ -7,6 +7,7 @@ import BaseLayout from './BaseLayout.astro';
 import Container from '../components/ui/Container.astro';
 import PageHeader from '../components/ui/PageHeader.astro';
 import type { NavItem } from '../config/site';
+import type { SeoProps } from '../components/seo/SeoHead.astro';
 import { url } from '../lib/url';
 
 export interface Byline {
@@ -17,9 +18,7 @@ export interface Byline {
   readingMinutes: number;
 }
 
-interface Props {
-  title: string;
-  description: string;
+interface Props extends Omit<SeoProps, 'breadcrumbs'> {
   heading: string;
   lead?: string;
   label?: string;
@@ -29,13 +28,12 @@ interface Props {
   byline?: Byline;
 }
 
-const { title, description, heading, lead, label = 'Ratgeber', breadcrumbs, updated, byline } = Astro.props;
+const { heading, lead, label = 'Ratgeber', breadcrumbs, updated, byline, ...seo } = Astro.props;
 const formatDate = (iso: string) =>
   new Intl.DateTimeFormat('de-DE', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(iso));
 ---
 
-<BaseLayout title={title} description={description}>
-  <slot name="head" slot="head" />
+<BaseLayout {...seo} breadcrumbs={breadcrumbs}>
   <article>
     <PageHeader heading={heading} lead={lead} label={label} breadcrumbs={breadcrumbs} updated={updated}>
       {

@@ -1,8 +1,8 @@
 ---
 title: Tattoo misslungen, was jetzt?
 kicker: Erste Schritte
-metaTitle: Tattoo misslungen, was tun? Erste Schritte und wann ein Gutachten hilft | Ratgeber
-metaDescription: 'Tattoo schlecht gestochen? Was Sie jetzt tun sollten, bevor nachgestochen oder überdeckt wird: Zustand dokumentieren, Unterlagen sichern, fachlich prüfen lassen. Ratgeber vom Tattoo Gutachter.'
+metaTitle: 'Tattoo misslungen, was tun? Erste Schritte und Gutachten | Ratgeber'
+metaDescription: 'Tattoo schlecht gestochen? Was Sie tun sollten, bevor nachgestochen oder überdeckt wird: Zustand dokumentieren, Unterlagen sichern, fachlich prüfen lassen.'
 lead: Wenn ein Tattoo misslungen wirkt, sollten Sie zuerst den Zustand festhalten und Ihre Unterlagen sichern, bevor etwas nachgestochen, überdeckt oder entfernt wird. Ob tatsächlich ein handwerklicher Mangel vorliegt, klärt eine fachliche Begutachtung.
 published: 2026-11-12
 services: [tattoo-gutachten, privatgutachten, streitfaelle]

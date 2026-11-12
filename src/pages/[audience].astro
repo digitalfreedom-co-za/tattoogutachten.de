@@ -16,13 +16,12 @@ import CompareTable from '../components/ui/CompareTable.astro';
 import Faq from '../components/ui/Faq.astro';
 import ArtImage from '../components/ui/ArtImage.astro';
 import CtaBand from '../components/ui/CtaBand.astro';
-import JsonLd from '../components/seo/JsonLd.astro';
 import { site, contact, contentUpdated, primaryCta } from '../config/site';
 import { audiences, audienceHref, type Audience, type AudienceSlug } from '../data/audiences';
-import { serviceBySlug, serviceHref, reportComparison } from '../data/services';
+import { serviceBySlug, reportComparison } from '../data/services';
 import { faqForAudience } from '../data/faq';
 import { getArticles, articlesForAudience } from '../lib/ratgeber';
-import { absoluteUrl, breadcrumbList, organizationRef } from '../lib/schema';
+import { ref, serviceId } from '../lib/schema';
 import type { ImageMetadata } from 'astro';
 
 import atWork from '../assets/images/patrick-wolf-beim-taetowieren.webp';
@@ -63,30 +62,13 @@ const picture = pictures[audience.slug];
 let toneIndex = 0;
 const nextTone = () => (toneIndex++ % 2 === 0 ? 'paper' : 'deep');
 
-const schema = {
-  '@graph': [
-    {
-      '@type': 'WebPage',
-      name: audience.heading,
-      description: audience.metaDescription,
-      inLanguage: 'de-DE',
-      url: absoluteUrl(audienceHref(audience), Astro.site),
-      audience: { '@type': 'Audience', audienceType: audience.label },
-      publisher: organizationRef(Astro.site),
-      about: services.map((service) => ({
-        '@type': 'Service',
-        name: service.name,
-        url: absoluteUrl(serviceHref(service), Astro.site),
-      })),
-    },
-    breadcrumbList(breadcrumbs, Astro.site),
-  ],
+const page = {
+  audience: { '@type': 'Audience', audienceType: audience.label },
+  mentions: services.map((service) => ref(serviceId(service, Astro.site))),
 };
 ---
 
-<BaseLayout title={audience.metaTitle} description={audience.metaDescription}>
-  <JsonLd slot="head" data={schema} />
-
+<BaseLayout title={audience.metaTitle} description={audience.metaDescription} breadcrumbs={breadcrumbs} page={page}>
   <PageHeader
     label={`Für ${audience.label}`}
     heading={audience.heading}

@@ -17,6 +17,7 @@ import { contentUpdated, primaryCta } from '../../config/site';
 import { services, serviceHref, serviceBySlug, serviceScopeNote, reportComparison, type Service } from '../../data/services';
 import { faqForService } from '../../data/faq';
 import { url } from '../../lib/url';
+import { ref, serviceId, serviceNode } from '../../lib/schema';
 
 export function getStaticPaths() {
   return services.map((service) => ({ params: { slug: service.slug }, props: { service } }));
@@ -30,21 +31,28 @@ const { service } = Astro.props;
 const [answer, ...moreIntro] = service.intro;
 const questions = faqForService(service.slug);
 const related = service.related.map(serviceBySlug);
+const breadcrumbs = [
+  { label: 'Leistungen', href: '/leistungen/' },
+  { label: service.name, href: serviceHref(service) },
+];
 
 // Sections alternate between paper and deep paper in render order, whatever blocks a service has.
 let toneIndex = 0;
 const nextTone = () => (toneIndex++ % 2 === 0 ? 'deep' : 'paper');
 ---
 
-<BaseLayout title={service.metaTitle} description={service.metaDescription}>
+<BaseLayout
+  title={service.metaTitle}
+  description={service.metaDescription}
+  breadcrumbs={breadcrumbs}
+  page={{ mainEntity: ref(serviceId(service, Astro.site)) }}
+  schema={[serviceNode(service, Astro.site)]}
+>
   <PageHeader
     label={service.kicker}
     heading={service.title}
     lead={service.summary}
-    breadcrumbs={[
-      { label: 'Leistungen', href: '/leistungen/' },
-      { label: service.name, href: serviceHref(service) },
-    ]}
+    breadcrumbs={breadcrumbs}
     updated={contentUpdated}
   >
     <Button href={primaryCta.href} icon="calendar">Kostenlose Erstberatung</Button>

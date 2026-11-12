@@ -1,8 +1,8 @@
 ---
 title: Privatgutachten oder Gerichtsgutachten?
 kicker: Gutachtenarten
-metaTitle: Privatgutachten oder Gerichtsgutachten? Unterschiede bei Tattoo-Streitfällen | Ratgeber
-metaDescription: 'Privatgutachten und Gerichtsgutachten im Vergleich: wer beauftragt, wer bezahlt, welches Gewicht das Gutachten im Verfahren hat. Allgemein erklärt vom Tattoo Sachverständigen, keine Rechtsberatung.'
+metaTitle: 'Privatgutachten oder Gerichtsgutachten bei Tattoo-Streit? | Ratgeber'
+metaDescription: 'Privatgutachten oder Gerichtsgutachten? Wer beauftragt, wer bezahlt und welches Gewicht das Gutachten im Verfahren hat. Allgemein erklärt, keine Rechtsberatung.'
 lead: Den Unterschied macht der Auftraggeber. Ein Privatgutachten geben Sie selbst, Ihr Studio oder Ihr Rechtsanwalt in Auftrag, ein Gerichtsgutachten holt das Gericht in einem laufenden Verfahren ein. Daraus folgen Unterschiede bei Fragestellung, Vergütung und Gewicht im Verfahren.
 published: 2026-11-12
 services: [privatgutachten, gerichtsgutachten, streitfaelle]

@@ -1,8 +1,8 @@
 ---
 title: 'Hygiene im Tattoostudio: worauf es ankommt'
 kicker: Hygiene
-metaTitle: 'Hygiene im Tattoostudio: worauf es ankommt und was ein Gutachten prüft | Ratgeber'
-metaDescription: Hygiene spielt beim Tätowieren und Piercen eine entscheidende Rolle. Welche Bereiche ein Sachverständiger im Studio prüft, von Arbeitsplatz und Instrumenten bis zu Hygieneunterlagen.
+metaTitle: 'Hygiene im Tattoostudio: was ein Gutachten prüft | Ratgeber'
+metaDescription: 'Hygiene beim Tätowieren und Piercen: Welche Bereiche ein Sachverständiger im Studio prüft, von Arbeitsplatz und Instrumenten bis zu den Hygieneunterlagen.'
 lead: Im Tattoostudio kommt es bei der Hygiene auf den ganzen Ablauf an, von der Vorbereitung des Arbeitsplatzes über den Umgang mit Instrumenten und die Desinfektion der Haut bis zur Wundversorgung und zu dokumentierten Arbeitsanweisungen. Genau diese Bereiche prüft ein Hygiene-Gutachten.
 published: 2026-11-12
 services: [hygiene-gutachten, piercing-gutachten, streitfaelle]

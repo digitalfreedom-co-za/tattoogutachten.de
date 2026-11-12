@@ -1,22 +1,15 @@
 ---
 // HTML frame for every page: lang de, fonts, skip link, header, main, footer, motion script.
-// SEO tags go into the "head" slot (SeoHead follows with the SEO ticket).
+// SEO tags come from SeoHead (props pass through), extra head tags go into the "head" slot.
 import '../styles/global.css';
 import { Font } from 'astro:assets';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import StickyCta from '../components/layout/StickyCta.astro';
+import SeoHead, { type SeoProps } from '../components/seo/SeoHead.astro';
 import { url } from '../lib/url';
 
-interface Props {
-  title: string;
-  description: string;
-  /** Keep pages out of the index until launch. */
-  noindex?: boolean;
-}
-
-const { title, description, noindex = true } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site);
+type Props = SeoProps;
 ---
 
 <!doctype html>
@@ -34,12 +27,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         }, 3000);
       })(document.documentElement);
     </script>
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    <SeoHead {...Astro.props} />
     <link rel="icon" type="image/svg+xml" href={url('/favicon.svg')} />
     <meta name="theme-color" content="#f4efe6" />
-    {noindex && <meta name="robots" content="noindex" />}
     <Font cssVariable="--font-schibsted" preload={[{ style: 'normal' }]} />
     <Font cssVariable="--font-newsreader" preload={[{ style: 'normal' }]} />
     <slot name="head" />

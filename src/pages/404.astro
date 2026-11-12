@@ -1,0 +1,60 @@
+---
+// Not found page (GitHub Pages serves dist/404.html for every unknown path). Never indexed, no
+// canonical and no JSON-LD; it points to the main areas and the service index instead.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/ui/Container.astro';
+import Eyebrow from '../components/ui/Eyebrow.astro';
+import Button from '../components/ui/Button.astro';
+import ServiceList from '../components/ui/ServiceList.astro';
+import { site, contact, mainNav, primaryCta } from '../config/site';
+import { services } from '../data/services';
+import { url } from '../lib/url';
+---
+
+<BaseLayout
+  title={`Seite nicht gefunden | ${site.name}`}
+  description={`Diese Seite gibt es nicht oder nicht mehr. Von hier geht es zu den Leistungen, zum Ablauf und zum Kontakt des ${site.office}.`}
+  noindex
+>
+  <section aria-labelledby="fehler-titel">
+    <Container class="grid gap-12 pt-12 pb-section md:grid-cols-12 md:gap-x-8 md:pt-20">
+      <div class="md:col-span-3">
+        <div class="hairline mb-4" aria-hidden="true"></div>
+        <Eyebrow>Seite nicht gefunden</Eyebrow>
+      </div>
+      <div class="md:col-span-9 lg:col-span-8">
+        <h1 id="fehler-titel" class="text-h1 tracking-display">Diese Seite gibt es hier nicht.</h1>
+        <p class="mt-6 max-w-[38rem] text-lead text-graphite">
+          Der Link ist veraltet oder die Adresse wurde falsch eingegeben. Alle Inhalte zu Gutachten über Tätowierungen
+          und Piercings finden Sie über die Startseite oder direkt in den Bereichen unten.
+        </p>
+        <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-5">
+          <Button href="/">Zur Startseite</Button>
+          <Button href={primaryCta.href} variant="secondary" icon="calendar">{primaryCta.label}</Button>
+        </div>
+
+        <nav aria-label="Bereiche der Website" class="mt-16 border-t border-ink pt-5">
+          <p class="label text-ink">Bereiche</p>
+          <ul class="mt-4 grid gap-x-8 gap-y-3 sm:grid-cols-2">
+            {
+              mainNav.map((item) => (
+                <li>
+                  <a class="link-ink font-semibold" href={url(item.href)}>{item.label}</a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+
+        <h2 class="mt-16 text-h3">Gutachten im Überblick</h2>
+        <ServiceList services={services} class="mt-6" />
+
+        <p class="mt-12 text-graphite">
+          Lieber direkt fragen? {site.expert} erreichen Sie unter
+          <a class="link-ink font-semibold" href={contact.phone.href}>{contact.phone.display}</a>
+          oder per E-Mail an <a class="link-ink font-semibold" href={contact.email.href}>{contact.email.display}</a>.
+        </p>
+      </div>
+    </Container>
+  </section>
+</BaseLayout>

@@ -13,17 +13,33 @@ import { site, credentials, contentUpdated, primaryCta } from '../../config/site
 import { services, serviceHref, serviceExclusions, clients } from '../../data/services';
 import { reportContents } from '../../data/process';
 import { url } from '../../lib/url';
+import { absoluteUrl, ref, serviceId } from '../../lib/schema';
+
+const breadcrumbs = [{ label: 'Leistungen', href: '/leistungen/' }];
+const page = {
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: services.map((service, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      item: { ...ref(serviceId(service, Astro.site)), name: service.name, url: absoluteUrl(serviceHref(service), Astro.site) },
+    })),
+  },
+};
 ---
 
 <BaseLayout
-  title="Leistungen: Tattoo-Gutachten, Piercing, Hygiene, Privat- und Gerichtsgutachten | Patrick Wolf"
-  description={`Alle Leistungen von Tattoo Gutachter ${site.expert}: Tattoo-Gutachten, Hygiene- und Piercing-Gutachten, Privatgutachten, Gerichtsgutachten und Unterstützung bei Streitfällen. ${credentials.associationShort} zertifiziert, bundesweit.`}
+  breadcrumbs={breadcrumbs}
+  pageType="CollectionPage"
+  page={page}
+  title="Leistungen: Tattoo-, Piercing- und Gerichtsgutachten | Patrick Wolf"
+  description={`Alle Leistungen von Tattoo Gutachter ${site.expert}: Tattoo-, Piercing- und Hygiene-Gutachten, Privat- und Gerichtsgutachten, Streitfälle. ${credentials.associationShort} zertifiziert.`}
 >
   <PageHeader
     label="Leistungen"
     heading="Gutachten zu Tätowierungen, Piercings und Studiohygiene."
     lead={`${site.expert} untersucht und bewertet Tätowierungen, Piercings und die Arbeitsabläufe in Studios, als geprüfter und zertifizierter Gutachter des ${credentials.associationShort}. Jeder Fall wird nach seinen konkreten Umständen, der vorhandenen Dokumentation und den fachlichen Anforderungen beurteilt.`}
-    breadcrumbs={[{ label: 'Leistungen', href: '/leistungen/' }]}
+    breadcrumbs={breadcrumbs}
     updated={contentUpdated}
   >
     <Button href={primaryCta.href} icon="calendar">Kostenlose Erstberatung</Button>

@@ -11,16 +11,15 @@ import Steps from '../components/ui/Steps.astro';
 import Faq from '../components/ui/Faq.astro';
 import CtaBand from '../components/ui/CtaBand.astro';
 import Icon from '../components/ui/Icon.astro';
-import JsonLd from '../components/seo/JsonLd.astro';
 import BookingEmbed from '../components/booking/BookingEmbed.astro';
 import { contact, contentUpdated, credentials, site, type NavItem } from '../config/site';
 import { steps, preparationChecklist, afterBookingSteps } from '../data/process';
 import { bookingFaq } from '../data/faq';
-import { absoluteUrl, breadcrumbList, organizationRef } from '../lib/schema';
+import { absoluteUrl, ids, ref } from '../lib/schema';
 import { url } from '../lib/url';
 
 const title = 'Termin buchen: kostenlose Erstberatung zum Tattoo-Gutachten | Patrick Wolf';
-const description = `Buchen Sie online Ihre kostenlose Erstberatung bei Tattoo Gutachter ${site.expert}: bis zu 60 Minuten, unverbindlich, bundesweit. Mit Checkliste, was Sie vorbereiten sollten, und was nach der Buchung passiert.`;
+const description = `Online buchen: kostenlose Erstberatung bei Tattoo Gutachter ${site.expert}, bis zu 60 Minuten, unverbindlich, bundesweit. Mit Checkliste zur Vorbereitung.`;
 const breadcrumbs: NavItem[] = [{ label: 'Termin buchen', href: '/termin/' }];
 
 const consultationFacts: Fact[] = [
@@ -33,29 +32,23 @@ const consultationFacts: Fact[] = [
 
 const discussed = steps[0].detail?.items ?? [];
 
-const schema = {
-  '@graph': [
-    {
-      '@type': 'WebPage',
-      name: 'Kostenlose Erstberatung online buchen',
-      description,
-      inLanguage: 'de-DE',
+const page = {
+  mainEntity: ref(ids(Astro.site).office),
+  potentialAction: {
+    '@type': 'ReserveAction',
+    name: 'Kostenlose Erstberatung buchen',
+    target: absoluteUrl('/termin/#termin', Astro.site),
+    object: {
+      '@type': 'Service',
+      name: 'Kostenlose Erstberatung zum Tattoo-Gutachten',
       url: absoluteUrl('/termin/', Astro.site),
-      publisher: organizationRef(Astro.site),
-      potentialAction: {
-        '@type': 'ReserveAction',
-        name: 'Kostenlose Erstberatung buchen',
-        target: absoluteUrl('/termin/#termin', Astro.site),
-      },
+      provider: ref(ids(Astro.site).office),
     },
-    breadcrumbList(breadcrumbs, Astro.site),
-  ],
+  },
 };
 ---
 
-<BaseLayout title={title} description={description}>
-  <JsonLd slot="head" data={schema} />
-
+<BaseLayout title={title} description={description} breadcrumbs={breadcrumbs} page={page}>
   <PageHeader
     label="Termin buchen"
     heading="Kostenlose Erstberatung online buchen."

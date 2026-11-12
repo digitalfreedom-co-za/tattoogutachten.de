@@ -4,14 +4,12 @@
 // the lazy cal.com embed on / and /termin/ (incl. Cloudflare __cf_bm cookie and Sentry), plain
 // external links. Update this page whenever a third party service is added or removed.
 import ArticleLayout from '../layouts/ArticleLayout.astro';
-import JsonLd from '../components/seo/JsonLd.astro';
 import { site, company, contact, contentUpdated, type NavItem } from '../config/site';
 import { BOOKING_ANCHOR } from '../config/booking';
-import { absoluteUrl, breadcrumbList } from '../lib/schema';
 import { url } from '../lib/url';
 
 const title = `Datenschutzerklärung | ${site.name}`;
-const description = `Datenschutzerklärung von ${site.domain}: Hosting bei GitHub Pages, Terminbuchung über cal.com, Kontakt per E-Mail und Telefon, Ihre Rechte. Keine Cookies und kein Tracking auf unseren eigenen Seiten.`;
+const description = `Datenschutzerklärung von ${site.domain}: Hosting bei GitHub Pages, Terminbuchung über cal.com, Kontakt, Ihre Rechte. Keine eigenen Cookies, kein Tracking.`;
 const breadcrumbs: NavItem[] = [{ label: 'Datenschutz', href: '/datenschutz/' }];
 
 const toc: NavItem[] = [
@@ -25,18 +23,6 @@ const toc: NavItem[] = [
   { label: 'Beschwerde bei der Aufsichtsbehörde', href: '#beschwerde' },
 ];
 
-const schema = {
-  '@graph': [
-    {
-      '@type': 'WebPage',
-      name: 'Datenschutzerklärung',
-      description,
-      inLanguage: 'de-DE',
-      url: absoluteUrl('/datenschutz/', Astro.site),
-    },
-    breadcrumbList(breadcrumbs, Astro.site),
-  ],
-};
 
 const external = { target: '_blank', rel: 'noopener noreferrer' };
 ---
@@ -50,8 +36,6 @@ const external = { target: '_blank', rel: 'noopener noreferrer' };
   breadcrumbs={breadcrumbs}
   updated={contentUpdated}
 >
-  <JsonLd slot="head" data={schema} />
-
   <h2 id="verantwortlicher">Verantwortlicher</h2>
   <p>Verantwortlich für die Verarbeitung personenbezogener Daten auf dieser Internetseite ist:</p>
   <p>

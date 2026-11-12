@@ -49,7 +49,7 @@ export const audiences: Audience[] = [
     lead: 'Wenn Sie mit Ihrer Tätowierung oder Ihrem Piercing unzufrieden sind, klärt ein Gutachten, ob ein handwerklicher Mangel vorliegt oder ob das Ergebnis nur nicht Ihrem Geschmack entspricht. Die erste Beratung dauert bis zu 60 Minuten und ist kostenlos.',
     metaTitle: 'Tattoo misslungen? Gutachten für Privatpersonen | Tattoo Gutachter Patrick Wolf',
     metaDescription:
-      'Tattoo schlecht gestochen oder Piercing schief? Ein unabhängiges Gutachten trennt Geschmack von feststellbaren Mängeln und hält den Zustand fest. DGuSV zertifiziert, bundesweit, Erstberatung kostenlos.',
+      'Tattoo schlecht gestochen oder Piercing schief? Ein unabhängiges Gutachten trennt Geschmack von Mängeln und sichert den Zustand. Erstberatung kostenlos.',
     situationTitle: 'Wann wenden sich Privatpersonen an einen Tattoo Gutachter?',
     situations: [
       'Linien und Konturen sind unsauber, Schattierungen oder Farbflächen ungleichmäßig.',
@@ -96,7 +96,7 @@ export const audiences: Audience[] = [
     lead: 'Wirft ein Kunde Ihrem Studio handwerkliche Fehler oder Mängel bei der Hygiene vor, kann eine unabhängige Begutachtung den Sachverhalt fachlich klären. Auch Studios können ein Gutachten beauftragen, die Bewertung hängt nicht davon ab, wer den Auftrag erteilt.',
     metaTitle: 'Gutachten für Tattoo- und Piercingstudios bei Vorwürfen | Patrick Wolf, DGuSV',
     metaDescription:
-      'Kunde wirft Ihrem Studio Fehler vor? Unabhängige Begutachtung von Tätowierung, Piercing, Hygiene und Arbeitsabläufen, bei Bedarf mit Besichtigung. DGuSV zertifiziert, bundesweit, Erstberatung kostenlos.',
+      'Kunde wirft Ihrem Studio Fehler vor? Unabhängige Begutachtung von Tätowierung, Piercing und Hygiene, bei Bedarf vor Ort. DGuSV zertifiziert, bundesweit.',
     situationTitle: 'Wann beauftragen Studios ein Gutachten?',
     situations: [
       'Ein Kunde wirft Ihnen einen handwerklichen Fehler an einer Tätowierung vor.',
@@ -141,7 +141,7 @@ export const audiences: Audience[] = [
     lead: 'Für Rechtsanwälte erstellt Patrick Wolf Privatgutachten und schriftliche Fachstellungnahmen zu Tätowierungen und Piercings, für Gerichte beantwortet er Beweisfragen als bestellter Sachverständiger. Die rechtliche Würdigung bleibt bei Anwalt und Gericht.',
     metaTitle: 'Tattoo Sachverständiger für Rechtsanwälte und Gerichte | Patrick Wolf, DGuSV',
     metaDescription:
-      'Privatgutachten und Fachstellungnahmen für Rechtsanwälte, Gerichtsgutachten zu Tätowierungen und Piercings. Bestellt durch das Landgericht Frankfurt am Main, DGuSV zertifiziert, Vergütung im Gerichtsauftrag nach JVEG.',
+      'Privatgutachten für Rechtsanwälte, Gerichtsgutachten zu Tattoos und Piercings. Bestellt durch das Landgericht Frankfurt am Main, DGuSV zertifiziert.',
     situationTitle: 'Wann wird ein Tattoo Sachverständiger hinzugezogen?',
     situations: [
       'Ein Mandant streitet mit einem Tattoo- oder Piercingstudio über einen möglichen Mangel.',

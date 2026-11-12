@@ -6,43 +6,36 @@ import Section from '../../components/ui/Section.astro';
 import Card from '../../components/ui/Card.astro';
 import ArticleList from '../../components/ui/ArticleList.astro';
 import CtaBand from '../../components/ui/CtaBand.astro';
-import JsonLd from '../../components/seo/JsonLd.astro';
 import { site, credentials, contentUpdated } from '../../config/site';
 import { audiences, audienceHref } from '../../data/audiences';
 import { getArticles, articleHref } from '../../lib/ratgeber';
-import { absoluteUrl, breadcrumbList, organizationRef, personRef } from '../../lib/schema';
+import { absoluteUrl, ids, ref } from '../../lib/schema';
 
 const articles = await getArticles();
 const breadcrumbs = [{ label: 'Ratgeber', href: '/ratgeber/' }];
-const description = `Ratgeber zum Tattoo-Gutachten von Tattoo Gutachter ${site.expert}: Tattoo misslungen, Mangel oder Geschmackssache, Privat- oder Gerichtsgutachten, Fotos für die Begutachtung, Hygiene im Studio, Piercing Probleme.`;
+const description = `Ratgeber von Tattoo Gutachter ${site.expert}: Tattoo misslungen, Mangel oder Geschmack, Privat- oder Gerichtsgutachten, Fotos, Hygiene, Piercing Probleme.`;
 
-const schema = {
-  '@graph': [
-    {
-      '@type': 'CollectionPage',
-      name: 'Ratgeber zum Tattoo-Gutachten',
-      description,
-      inLanguage: 'de-DE',
-      url: absoluteUrl('/ratgeber/', Astro.site),
-      author: personRef(Astro.site),
-      publisher: organizationRef(Astro.site),
-      mainEntity: {
-        '@type': 'ItemList',
-        itemListElement: articles.map((article, index) => ({
-          '@type': 'ListItem',
-          position: index + 1,
-          name: article.data.title,
-          url: absoluteUrl(articleHref(article), Astro.site),
-        })),
-      },
-    },
-    breadcrumbList(breadcrumbs, Astro.site),
-  ],
+const page = {
+  author: ref(ids(Astro.site).person),
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: articles.map((article, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: article.data.title,
+      url: absoluteUrl(articleHref(article), Astro.site),
+    })),
+  },
 };
 ---
 
-<BaseLayout title="Ratgeber Tattoo-Gutachten: Mangel, Fotos, Hygiene, Privat- und Gerichtsgutachten | Tattoogutachten" description={description}>
-  <JsonLd slot="head" data={schema} />
+<BaseLayout
+  title="Ratgeber zum Tattoo-Gutachten: Mängel, Fotos, Hygiene, Gericht"
+  description={description}
+  breadcrumbs={breadcrumbs}
+  pageType="CollectionPage"
+  page={page}
+>
 
   <PageHeader
     label="Ratgeber"

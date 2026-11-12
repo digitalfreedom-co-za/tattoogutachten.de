@@ -6,12 +6,11 @@ import ArticleLayout from '../../layouts/ArticleLayout.astro';
 import Section from '../../components/ui/Section.astro';
 import Card from '../../components/ui/Card.astro';
 import CtaBand from '../../components/ui/CtaBand.astro';
-import JsonLd from '../../components/seo/JsonLd.astro';
-import { site, credentials } from '../../config/site';
+import { site, credentials, ogImage } from '../../config/site';
 import { serviceBySlug, serviceHref, serviceScopeNote } from '../../data/services';
 import { getArticles, articleHref, relatedArticles, isoDate, type Article } from '../../lib/ratgeber';
 import { readingMinutes } from '../../lib/reading-time';
-import { absoluteUrl, breadcrumbList, organizationRef, personRef } from '../../lib/schema';
+import { absoluteUrl, ids, ref, serviceId, webPageId } from '../../lib/schema';
 import { url } from '../../lib/url';
 import { getImage } from 'astro:assets';
 import articleImage from '../../assets/images/patrick-wolf-beim-taetowieren.webp';
@@ -42,29 +41,27 @@ const breadcrumbs = [
 ];
 
 const image = await getImage({ src: articleImage, width: 1200, format: 'jpeg' });
-const schema = {
-  '@graph': [
-    {
-      '@type': 'Article',
-      headline: data.title,
-      description: data.metaDescription,
-      inLanguage: 'de-DE',
-      datePublished: published,
-      dateModified: updated ?? published,
-      author: personRef(Astro.site),
-      publisher: organizationRef(Astro.site),
-      mainEntityOfPage: absoluteUrl(articleHref(article), Astro.site),
-      image: new URL(image.src, Astro.site).href,
-      timeRequired: `PT${minutes}M`,
-      about: services.map((service) => ({
-        '@type': 'Service',
-        name: service.name,
-        url: absoluteUrl(serviceHref(service), Astro.site),
-      })),
-    },
-    breadcrumbList(breadcrumbs, Astro.site),
-  ],
-};
+const id = ids(Astro.site);
+const path = articleHref(article);
+const schema = [
+  {
+    '@type': 'Article',
+    '@id': `${absoluteUrl(path, Astro.site)}#article`,
+    headline: data.title,
+    description: data.metaDescription,
+    inLanguage: 'de-DE',
+    datePublished: published,
+    dateModified: updated ?? published,
+    author: ref(id.person),
+    publisher: ref(id.company),
+    isPartOf: ref(id.website),
+    mainEntityOfPage: ref(webPageId(path, Astro.site)),
+    image: [new URL(image.src, Astro.site).href, absoluteUrl(ogImage.path, Astro.site)],
+    timeRequired: `PT${minutes}M`,
+    wordCount: (article.body ?? '').split(/\s+/).filter(Boolean).length,
+    about: services.map((service) => ref(serviceId(service, Astro.site))),
+  },
+];
 ---
 
 <ArticleLayout
@@ -76,9 +73,11 @@ const schema = {
   breadcrumbs={breadcrumbs}
   updated={updated}
   byline={{ author: data.author, authorHref: '/ueber-mich/', published, readingMinutes: minutes }}
+  ogType="article"
+  published={published}
+  modified={updated ?? published}
+  schema={schema}
 >
-  <JsonLd slot="head" data={schema} />
-
   <Content />
 
   <div slot="aside" class="grid gap-8">

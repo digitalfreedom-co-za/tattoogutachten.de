@@ -2,27 +2,14 @@
 // Impressum (§ 5 DDG) of RuW Lifestyle GmbH, incl. the professional details of the expert.
 // Legal facts come from src/config/site.ts; the wording follows the imprint of the old site.
 import ArticleLayout from '../layouts/ArticleLayout.astro';
-import JsonLd from '../components/seo/JsonLd.astro';
 import { site, company, contact, credentials, contentUpdated, type NavItem } from '../config/site';
-import { absoluteUrl, breadcrumbList } from '../lib/schema';
+import { ids, ref } from '../lib/schema';
 import { url } from '../lib/url';
 
 const title = `Impressum | ${site.name}`;
 const description = `Impressum von ${site.domain}: ${company.name}, ${company.street}, ${contact.postalCode} ${contact.city}, vertreten durch ${company.managingDirector}.`;
 const breadcrumbs: NavItem[] = [{ label: 'Impressum', href: '/impressum/' }];
 
-const schema = {
-  '@graph': [
-    {
-      '@type': 'WebPage',
-      name: 'Impressum',
-      description,
-      inLanguage: 'de-DE',
-      url: absoluteUrl('/impressum/', Astro.site),
-    },
-    breadcrumbList(breadcrumbs, Astro.site),
-  ],
-};
 ---
 
 <ArticleLayout
@@ -33,9 +20,8 @@ const schema = {
   label="Rechtliches"
   breadcrumbs={breadcrumbs}
   updated={contentUpdated}
+  page={{ about: ref(ids(Astro.site).company) }}
 >
-  <JsonLd slot="head" data={schema} />
-
   <h2>Angaben gemäß § 5 Digitale-Dienste-Gesetz (DDG)</h2>
   <p>
     {company.name}<br />

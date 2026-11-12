@@ -20,6 +20,7 @@ Website des Sachverständigenbüros Wolf (Patrick Wolf, Bad Nauheim), Gutachten 
 | `npm run check` | Typprüfung (`astro check`) |
 | `npm run build` | Produktionsbuild nach `dist/` |
 | `npm run preview` | Build lokal ansehen |
+| `npm run validate:jsonld` | JSON-LD in `dist/` prüfen (nach dem Build, läuft auch im Deploy) |
 
 ## Struktur
 
@@ -35,12 +36,17 @@ Website des Sachverständigenbüros Wolf (Patrick Wolf, Bad Nauheim), Gutachten 
 | `src/scripts/motion.ts` | Scroll Reveal und Parallaxe |
 | `src/styles/global.css` | Design Tokens (`@theme`), Basisstile, Bewegung |
 | `src/assets/images/` | Fotos, Siegel, Abzeichen für `astro:assets` (nie das KI-Banner aus `docs/`) |
-| `src/pages/` | Seiten |
+| `src/components/seo/SeoHead.astro` | Title, Description, Canonical, Robots, Open Graph, Twitter, JSON-LD Graph |
+| `src/lib/schema.ts` | JSON-LD Entitäten und Bausteine, verknüpft über `@id` |
+| `src/lib/llms.ts` | Inhalt von `llms.txt` und `llms-full.txt` |
+| `src/pages/` | Seiten, dazu `robots.txt.ts`, `llms.txt.ts`, `llms-full.txt.ts`, `404.astro` |
+| `scripts/validate-jsonld.mjs` | Prüft das JSON-LD im Build |
+| `scripts/og-image/` | Vorlage und Renderskript des Vorschaubilds `public/og/tattoogutachten-og.png` |
 | `docs/source-content/` | Inhalte und Bilder der alten Seite, nur als Quelle |
 
 ## Designsystem
 
-Leitidee: ein sachverständiges Gutachten auf warmem Papier, gesetzt in tiefem Schwarz, mit einem Akzent aus dem Rot des DGuSV-Siegels und einem Hauch Messing aus dem RW-Abzeichen. Haarlinien, Berichtsnummerierung (01, 02, Abb. 01), Randnotizen, asymmetrisches Raster.
+Leitidee: ein sachverständiges Gutachten auf warmem Papier, gesetzt in tiefem Schwarz, mit einem Akzent aus dem Rot des DGuSV-Siegels und einem Hauch Messing aus dem RW-Abzeichen. Haarlinien, Randnotizen, asymmetrisches Raster. Keine dekorativen Nummern (kein 01, 02 vor Karten, Leistungen oder Abschnitten); Nummern gibt es nur bei echten Abläufen (`Steps`).
 
 | Token | Wert | Einsatz |
 |---|---|---|
@@ -57,8 +63,8 @@ Bausteine in `src/components/ui/`:
 
 | Komponente | Zweck |
 |---|---|
-| `Container`, `Section` | Raster; `Section` mit Nummer, Label, Randnotiz (Slot `note`), Titel, Intro, Ton `paper`, `deep`, `ink` |
-| `Eyebrow` | Label im Berichtsstil, optional mit Nummer |
+| `Container`, `Section` | Raster; `Section` mit Label, Randnotiz (Slot `note`), Titel, Intro, Ton `paper`, `deep`, `ink` |
+| `Eyebrow` | Label im Berichtsstil mit kurzer Akzentlinie |
 | `Button` | Link oder Button, Varianten `primary`, `secondary`, `inverse`, `text`, SVG-Icon statt Pfeilzeichen |
 | `Card` | Zielgruppen und Leistungen, ganze Karte klickbar |
 | `Quote`, `Steps`, `Faq`, `Checklist`, `KeyFacts` | Zitat, Ablauf mit Vorbereitungshinweis, FAQ auf `details`/`summary`, Checkliste, Kostenerklärung |
@@ -94,14 +100,48 @@ import { url } from '../lib/url';
 
 Bilder aus `src/assets/` über `astro:assets` bekommen den Basispfad automatisch.
 
+## SEO und GEO
+
+Jede Seite bekommt ihre Tags aus `SeoHead` (über `BaseLayout`): eindeutiger Title und Description, Canonical, Robots, Open Graph und Twitter mit dem Vorschaubild (1200 x 630) sowie genau einen JSON-LD Block. Alle absoluten Adressen entstehen aus `Astro.site` plus Basispfad, also aus `SITE` in `astro.config.mjs`.
+
+```mermaid
+flowchart LR
+  config[SITE in astro.config.mjs] --> SeoHead & robots[robots.txt] & llms[llms.txt / llms-full.txt] & sitemap[sitemap-index.xml]
+  data[src/config + src/data + Ratgeber] --> schema[src/lib/schema.ts] --> SeoHead
+  data --> llms
+  SeoHead --> dist[dist/**.html] --> validate[scripts/validate-jsonld.mjs]
+```
+
+Der JSON-LD Graph jeder Seite: `WebSite`, das Büro als `LocalBusiness` (Anschrift, Geo, Einsatzgebiet Deutschland und EU, Leistungskatalog), die betreibende `Organization` (RuW Lifestyle GmbH), `Person` Patrick Wolf (`memberOf` DGuSV und Bundesverband Tattoo, `hasCredential` mit Registernummer), das Vorschaubild, dazu `WebPage` und `BreadcrumbList` der Seite. Seitenbezogen kommen `Service` (Leistungsseiten), `FAQPage` (Häufige Fragen, aus `src/data/faq.ts`), `Article` (Ratgeber), `AboutPage`, `ContactPage`, `CollectionPage` und die Buchungsaktion auf `/termin/` hinzu. Neue Seiten geben `breadcrumbs`, optional `pageType`, `page` und `schema` an `BaseLayout`, nie ein eigenes JSON-LD.
+
+Name, Anschrift und Telefon stehen nur in `src/config/site.ts` und werden überall daraus gelesen, damit sie identisch bleiben.
+
+### Indexierung: ein Schalter
+
+Die Vorschau auf github.io bleibt `noindex`, damit vor dem Umzug kein doppelter Inhalt entsteht. Gesteuert wird das über eine Variable:
+
+| `PUBLIC_INDEXABLE` | Wirkung |
+|---|---|
+| nicht gesetzt oder `false` (Standard, Vorschau) | Jede Seite trägt `noindex`. `robots.txt` erlaubt das Crawlen trotzdem, damit Suchmaschinen das `noindex` sehen. Sitemap wird erzeugt. |
+| `true` (Start auf der eigenen Domain) | Alle Seiten einschließlich `/termin/` sind indexierbar (`index, follow`). |
+
+Gesetzt wird sie in `.github/workflows/deploy.yml` (`env.PUBLIC_INDEXABLE`), lokal per `PUBLIC_INDEXABLE=true npm run build`. Sitemap und `robots.txt` listen in beiden Modi dieselben Seiten, nur die 404-Seite ist nie indexierbar und fehlt in der Sitemap.
+
+Hinweis: Auf github.io liegt `robots.txt` unter dem Basispfad, Crawler lesen sie dort nicht aus. Wirksam wird sie mit der eigenen Domain im Wurzelverzeichnis.
+
+### Vorschaubild
+
+`public/og/tattoogutachten-og.png` ist eingecheckt. Nach Änderungen an Gestaltung oder Fakten neu erzeugen: `scripts/og-image/render.sh` (headless Chrome, nutzt die Schriften aus `node_modules` und die Fotos aus `src/assets/images`).
+
 ## Deploy
 
-`.github/workflows/deploy.yml` läuft bei jedem Push auf `main` (und manuell über `workflow_dispatch`): `npm ci`, `astro check`, `astro build`, danach `upload-pages-artifact` und `deploy-pages`. GitHub Pages steht im Repository auf Quelle GitHub Actions.
+`.github/workflows/deploy.yml` läuft bei jedem Push auf `main` (und manuell über `workflow_dispatch`): `npm ci`, `astro check`, `astro build`, `npm run validate:jsonld`, danach `upload-pages-artifact` und `deploy-pages`. GitHub Pages steht im Repository auf Quelle GitHub Actions.
 
 ## Umzug auf die eigene Domain
 
 1. In `astro.config.mjs` die Konstante `SITE` auf `{ url: 'https://www.tattoogutachten.de', base: '/' }` setzen.
 2. `public/CNAME` mit der Zeile `www.tattoogutachten.de` anlegen.
 3. DNS bei INWX auf GitHub Pages zeigen lassen und in den Pages-Einstellungen HTTPS erzwingen.
+4. In `.github/workflows/deploy.yml` `PUBLIC_INDEXABLE: 'true'` setzen, danach Sitemap in der Search Console und bei Bing einreichen.
 
 Weil alle Pfade über `url()` laufen, sind sonst keine Änderungen nötig.

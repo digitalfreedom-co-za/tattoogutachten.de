@@ -17,6 +17,9 @@ import CtaBand from '../components/ui/CtaBand.astro';
 import { Image } from 'astro:assets';
 import { site, contact, credentials, contentUpdated, primaryCta } from '../config/site';
 import { url } from '../lib/url';
+import { ids, ref } from '../lib/schema';
+
+const breadcrumbs = [{ label: 'Über mich', href: '/ueber-mich/' }];
 
 import portrait from '../assets/images/patrick-wolf-portrait-studio-sitzend.jpg';
 import closeUp from '../assets/images/patrick-wolf-nahaufnahme.jpg';
@@ -69,12 +72,15 @@ const principles = [
 ---
 
 <BaseLayout
+  breadcrumbs={breadcrumbs}
+  pageType="AboutPage"
+  page={{ mainEntity: ref(ids(Astro.site).person) }}
   title={`Über mich: ${site.expert}, zertifizierter Tattoo Gutachter (${credentials.associationShort}) in ${contact.city}`}
-  description={`${site.expert} ist geprüfter und zertifizierter Gutachter des ${credentials.associationShort}, Sachverständiger am ${credentials.court} und seit über ${credentials.yearsInTrade} Jahren in der Tattoo- und Piercingbranche. Qualifikation, Unabhängigkeit, Arbeitsweise.`}
+  description={`${site.expert}: geprüfter und zertifizierter Gutachter des ${credentials.associationShort}, Sachverständiger am ${credentials.court}, über ${credentials.yearsInTrade} Jahre in der Tattoo- und Piercingbranche.`}
 >
   <section aria-labelledby="person-titel">
     <Container class="pt-10 pb-16 md:pt-14 md:pb-24">
-      <Breadcrumbs items={[{ label: 'Über mich', href: '/ueber-mich/' }]} />
+      <Breadcrumbs items={breadcrumbs} />
       <div class="mt-12 grid gap-12 md:mt-16 md:grid-cols-12 md:gap-x-8">
         <div class="md:col-span-7">
           <div class="hairline mb-4" data-reveal="rule" aria-hidden="true"></div>

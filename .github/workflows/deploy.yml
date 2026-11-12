@@ -11,6 +11,9 @@ permissions:
 # Opt into Node.js 24 for all JS-based actions ahead of the Node 20 deprecation.
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  # Search engine switch (src/config/site.ts): 'false' keeps the github.io preview on noindex.
+  # Set to 'true' at launch on the real domain to make every page indexable.
+  PUBLIC_INDEXABLE: 'false'
 
 concurrency:
   group: pages
@@ -40,6 +43,10 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      # Parses every JSON-LD block in dist, checks required fields, @id references and URLs.
+      - name: Validate JSON-LD
+        run: npm run validate:jsonld
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

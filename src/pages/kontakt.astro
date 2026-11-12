@@ -8,14 +8,13 @@ import Button from '../components/ui/Button.astro';
 import Icon, { type IconName } from '../components/ui/Icon.astro';
 import Seal from '../components/ui/Seal.astro';
 import CtaBand from '../components/ui/CtaBand.astro';
-import JsonLd from '../components/seo/JsonLd.astro';
 import { site, contact, credentials, contentUpdated, primaryCta, type NavItem } from '../config/site';
 import { audiences, audienceHref } from '../data/audiences';
-import { absoluteUrl, breadcrumbList, organizationRef } from '../lib/schema';
+import { ids, ref } from '../lib/schema';
 import { url } from '../lib/url';
 
-const title = `Kontakt: ${site.office}, Tattoo Gutachter in ${contact.city} | Tattoogutachten`;
-const description = `Kontakt zu Tattoo Gutachter ${site.expert}: ${site.office}, ${contact.street}, ${contact.postalCode} ${contact.city}. Telefon ${contact.phone.display}, E-Mail oder Online-Terminbuchung. Gutachten ${credentials.areaServed}.`;
+const title = `Kontakt: ${site.office}, Tattoo Gutachter in ${contact.city}`;
+const description = `Tattoo Gutachter ${site.expert}: ${site.office}, ${contact.street}, ${contact.postalCode} ${contact.city}. Telefon ${contact.phone.display}, E-Mail oder Online-Termin.`;
 const breadcrumbs: NavItem[] = [{ label: 'Kontakt', href: '/kontakt/' }];
 
 interface Channel {
@@ -52,35 +51,15 @@ const channels: Channel[] = [
   },
 ];
 
-const schema = {
-  '@graph': [
-    {
-      '@type': 'ContactPage',
-      name: `Kontakt ${site.office}`,
-      description,
-      inLanguage: 'de-DE',
-      url: absoluteUrl('/kontakt/', Astro.site),
-      about: {
-        ...organizationRef(Astro.site),
-        telephone: contact.phone.href.replace('tel:', ''),
-        email: contact.email.display,
-        address: {
-          '@type': 'PostalAddress',
-          streetAddress: contact.street,
-          postalCode: contact.postalCode,
-          addressLocality: contact.city,
-          addressCountry: 'DE',
-        },
-      },
-    },
-    breadcrumbList(breadcrumbs, Astro.site),
-  ],
-};
 ---
 
-<BaseLayout title={title} description={description}>
-  <JsonLd slot="head" data={schema} />
-
+<BaseLayout
+  title={title}
+  description={description}
+  breadcrumbs={breadcrumbs}
+  pageType="ContactPage"
+  page={{ mainEntity: ref(ids(Astro.site).office) }}
+>
   <PageHeader
     label="Kontakt"
     heading={`Kontakt zu Tattoo Gutachter ${site.expert}.`}

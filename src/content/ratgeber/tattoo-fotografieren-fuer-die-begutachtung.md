@@ -1,8 +1,8 @@
 ---
 title: Tattoo richtig fotografieren für die Begutachtung
 kicker: Dokumentation
-metaTitle: 'Tattoo fotografieren für ein Gutachten: So gelingen aussagekräftige Fotos | Ratgeber'
-metaDescription: 'Fotos sind oft die Grundlage einer ersten Einschätzung. So fotografieren Sie Ihr Tattoo für die Begutachtung: Licht, Übersicht und Detail, unbearbeitete Originale, Bilder aus der Heilungsphase.'
+metaTitle: 'Tattoo fotografieren für die Begutachtung | Ratgeber'
+metaDescription: 'So fotografieren Sie Ihr Tattoo für die Begutachtung: Licht, Übersicht und Detail, unbearbeitete Originale und Bilder aus der Heilungsphase.'
 lead: Aussagekräftige Fotos zeigen die Tätowierung scharf, bei gleichmäßigem Licht, unbearbeitet, als Übersicht und im Detail. Mit solchen Bildern ist eine erste fachliche Einschätzung oft möglich, eine persönliche Untersuchung ersetzen sie aber nicht in jedem Fall.
 published: 2026-11-12
 services: [tattoo-gutachten, piercing-gutachten, privatgutachten]

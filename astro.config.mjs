@@ -33,7 +33,8 @@ export default defineConfig({
   site: SITE.url,
   base: SITE.base,
   trailingSlash: 'always',
-  integrations: [sitemap()],
+  // The sitemap lists every page except the 404, in preview and launch mode alike (see indexable in src/config/site.ts).
+  integrations: [sitemap({ filter: (page) => !/\/404\/?$/.test(page) })],
   // Ratgeber Markdown: internal links get the base path, table rows get row headers; SmartyPants stays off because the
   // copy rules forbid typographic quotes and dashes.
   markdown: {

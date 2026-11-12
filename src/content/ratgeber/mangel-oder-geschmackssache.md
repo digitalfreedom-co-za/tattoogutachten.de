@@ -2,7 +2,7 @@
 title: Mangel oder Geschmackssache?
 kicker: Bewertung
 metaTitle: Tattoo gefällt nicht, ist es mangelhaft? Mangel oder Geschmackssache | Ratgeber
-metaDescription: Nicht jedes Tattoo, das nicht gefällt, ist mangelhaft. Woran ein Sachverständiger handwerkliche Ausführungsmängel von Geschmacksfragen unterscheidet und welche Merkmale geprüft werden.
+metaDescription: 'Nicht jedes Tattoo, das nicht gefällt, ist mangelhaft. Woran ein Sachverständiger Ausführungsmängel von Geschmacksfragen unterscheidet und was er prüft.'
 lead: Ein Tattoo, das Ihnen nicht gefällt, ist nicht automatisch mangelhaft. Ein Sachverständiger unterscheidet zwischen persönlichem Geschmack und objektiv feststellbaren Ausführungsmängeln, entscheidend sind die konkreten Umstände und die tatsächliche handwerkliche Ausführung.
 published: 2026-11-12
 services: [tattoo-gutachten, streitfaelle, privatgutachten]

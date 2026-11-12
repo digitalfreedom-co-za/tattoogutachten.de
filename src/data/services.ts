@@ -77,7 +77,7 @@ export const services: Service[] = [
     situation: 'Die Linien sind unsauber, die Farbe ist fleckig, es haben sich Narben gebildet oder das Motiv weicht von der Vorlage ab.',
     metaTitle: 'Tattoo-Gutachten bei handwerklichen Mängeln | Tattoo Gutachter Patrick Wolf',
     metaDescription:
-      'Tattoo schlecht gestochen? Ein Tattoo-Gutachten trennt Geschmack von feststellbaren Ausführungsfehlern: Linien, Schattierung, Farbe, Narben, Abweichung von der Vorlage. DGuSV zertifiziert, Erstberatung kostenlos.',
+      'Tattoo schlecht gestochen? Das Tattoo-Gutachten trennt Geschmack von Ausführungsfehlern: Linien, Schattierung, Farbe, Narben, Vorlage. DGuSV zertifiziert.',
     definitionTitle: 'Was ist ein Tattoo-Gutachten?',
     intro: [
       'Ein Tattoo-Gutachten ist die fachliche Bewertung einer Tätowierung durch einen Sachverständigen. Es klärt, ob ein handwerklicher Fehler vorliegt oder ob das Ergebnis nur nicht dem eigenen Geschmack entspricht.',
@@ -113,7 +113,7 @@ export const services: Service[] = [
     situation: 'Es gibt Zweifel an der Hygiene im Studio, oder einem Studio werden Mängel bei Hygiene und Arbeitsabläufen vorgeworfen.',
     metaTitle: 'Hygiene-Gutachten für Tattoo- und Piercingstudios | Patrick Wolf, DGuSV',
     metaDescription:
-      'Hygiene-Gutachten im Tattoo- und Piercingstudio: Arbeitsplatz, Instrumente, Desinfektion, Wundversorgung und Hygieneunterlagen, bei Bedarf mit Besichtigung. Unabhängig, bundesweit, Erstberatung kostenlos.',
+      'Hygiene-Gutachten für Tattoo- und Piercingstudios: Arbeitsplatz, Instrumente, Desinfektion, Wundversorgung, Hygieneunterlagen. Unabhängig und bundesweit.',
     definitionTitle: 'Was prüft ein Hygiene-Gutachten?',
     intro: [
       'Ein Hygiene-Gutachten prüft, ob Arbeitsplatz, Instrumente, Hautvorbereitung und Nachbehandlung in einem Tattoo- oder Piercingstudio den fachlichen Hygienestandards entsprechen.',
@@ -162,7 +162,7 @@ export const services: Service[] = [
     situation: 'Es gibt Fragen zur Durchführung, Platzierung, Materialwahl oder Nachbehandlung eines Piercings.',
     metaTitle: 'Piercing-Gutachten vom Sachverständigen | Patrick Wolf, DGuSV zertifiziert',
     metaDescription:
-      'Piercing-Gutachten: Durchführung, Platzierung, Material und Nachbehandlung nach fachlichen Standards bewertet. Unabhängiger Sachverständiger für Tattoo und Piercing, bundesweit, Erstberatung kostenlos.',
+      'Piercing-Gutachten: Durchführung, Platzierung, Material und Nachbehandlung fachlich bewertet. Unabhängiger Sachverständiger, bundesweit, Erstberatung kostenlos.',
     definitionTitle: 'Was ist ein Piercing-Gutachten?',
     intro: [
       'Ein Piercing-Gutachten bewertet, ob ein Piercing fachgerecht durchgeführt, richtig platziert, mit passendem Material versorgt und korrekt nachbehandelt wurde.',
@@ -193,7 +193,7 @@ export const services: Service[] = [
     situation: 'Ein Sachverhalt soll fachlich geklärt oder der Zustand festgehalten werden, bevor es zu einem Gerichtsverfahren kommt.',
     metaTitle: 'Privatgutachten Tattoo und Beweissicherung | Sachverständiger Patrick Wolf',
     metaDescription:
-      'Privatgutachten und schriftliche Fachstellungnahmen zu Tattoos und Piercings: Sachverhalt klären, Zustand sichern, Grundlage für eine Einigung schaffen. Unabhängig vom Wunschergebnis, Erstberatung kostenlos.',
+      'Privatgutachten und Beweissicherung bei Tattoos und Piercings: Sachverhalt klären, Zustand sichern, Grundlage für eine Einigung schaffen. Erstberatung kostenlos.',
     definitionTitle: 'Was ist ein Privatgutachten?',
     intro: [
       'Ein Privatgutachten ist ein Gutachten, das Sie selbst beauftragen, ohne dass ein Gericht beteiligt ist. Es kann helfen, einen Sachverhalt fachlich einzuordnen, Unklarheiten zu beseitigen und eine sachliche Grundlage für eine außergerichtliche Einigung zu schaffen.',
@@ -227,7 +227,7 @@ export const services: Service[] = [
     situation: 'Ein Gericht braucht in einem laufenden Verfahren Antworten auf Beweisfragen zu einer Tätowierung oder einem Piercing.',
     metaTitle: 'Gerichtsgutachten Tattoo | Sachverständiger für Gerichte, Patrick Wolf',
     metaDescription:
-      'Gerichtsgutachten zu Tätowierungen und Piercings: Beweisfragen präzise beantwortet, Feststellungen verständlich dokumentiert. Bestellt durch das Landgericht Frankfurt am Main, Vergütung nach JVEG.',
+      'Gerichtsgutachten zu Tätowierungen und Piercings: Beweisfragen präzise beantwortet, verständlich dokumentiert. Bestellt durch das LG Frankfurt am Main, JVEG.',
     definitionTitle: 'Was ist ein Gerichtsgutachten?',
     intro: [
       'Ein Gerichtsgutachten beantwortet die Beweisfragen, die ein Gericht in einem Verfahren formuliert hat. Grundlage sind die zur Verfügung stehenden Unterlagen und, wenn nötig, eigene Untersuchungen.',
@@ -282,7 +282,7 @@ export const services: Service[] = [
     situation: 'Kunde und Tattoo- oder Piercingstudio sind uneins, ob ein Mangel vorliegt, woher er kommt und ob sich nachbessern lässt.',
     metaTitle: 'Streit mit dem Tattoo-Studio? Sachverständige Einschätzung | Patrick Wolf',
     metaDescription:
-      'Streit zwischen Kunde und Tattoo- oder Piercingstudio: Ein unabhängiger Sachverständiger klärt, ob ein Mangel vorliegt, woher er kommt und ob eine Nachbesserung möglich ist. Für beide Seiten, Erstberatung kostenlos.',
+      'Streit mit dem Tattoo- oder Piercingstudio? Ein unabhängiger Sachverständiger klärt Mangel, Ursache und Nachbesserung. Für beide Seiten, Erstberatung kostenlos.',
     definitionTitle: 'Wie hilft ein Gutachten im Streit mit dem Studio?',
     intro: [
       'Ein Gutachten beantwortet im Streit zwischen Kunde und Tattoo- oder Piercingstudio die fachlichen Fragen objektiv: Liegt ein Mangel vor, was ist die Ursache, ist eine Nachbesserung möglich?',

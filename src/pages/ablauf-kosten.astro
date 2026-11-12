@@ -18,17 +18,19 @@ import { faqByTopic } from '../data/faq';
 import { url } from '../lib/url';
 
 const costQuestions = faqByTopic('kosten');
+const breadcrumbs = [{ label: 'Ablauf und Kosten', href: '/ablauf-kosten/' }];
 ---
 
 <BaseLayout
+  breadcrumbs={breadcrumbs}
   title="Tattoo-Gutachten: Ablauf und Kosten | Erstberatung 60 Minuten kostenlos"
-  description="So läuft ein Tattoo-Gutachten ab: kostenlose Erstberatung bis 60 Minuten, Kosten nach Aufwand und vorher schriftlich vereinbart, Gerichtsgutachten nach JVEG. Fünf Schritte, transparent erklärt."
+  description="So läuft ein Tattoo-Gutachten ab: kostenlose Erstberatung bis 60 Minuten, Kosten nach Aufwand und vorher schriftlich vereinbart, im Gerichtsauftrag nach JVEG."
 >
   <PageHeader
     label="Ablauf und Kosten"
     heading="Ablauf und Kosten eines Tattoo-Gutachtens."
     lead="Ein Gutachten beginnt mit einer kostenlosen Erstberatung von bis zu 60 Minuten. Kosten entstehen erst, wenn Sie schriftlich beauftragen, und der voraussichtliche Rahmen steht vorher fest."
-    breadcrumbs={[{ label: 'Ablauf und Kosten', href: '/ablauf-kosten/' }]}
+    breadcrumbs={breadcrumbs}
     updated={contentUpdated}
   >
     <Button href={primaryCta.href} icon="calendar">Kostenlose Erstberatung</Button>
