@@ -1,5 +1,5 @@
-// Lazy cal.com inline embed. Nothing from cal.com loads until a [data-booking] block comes near
-// the viewport; then the official embed snippet is installed and the calendar rendered into the
+// Lazy cal.com inline embed. Nothing from cal.com loads until the calendar frame (.booking-frame)
+// of a [data-booking] block is in the viewport, not the notice or text around it; then the official embed snippet is installed and the calendar rendered into the
 // reserved frame. The skeleton fades out once cal.com reports the booking page as ready.
 import { CAL_THEME_VARS } from '../config/booking';
 
@@ -120,13 +120,14 @@ function init(): void {
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
         observer.unobserve(entry.target);
-        mount(entry.target as HTMLElement);
+        const root = entry.target.closest<HTMLElement>('[data-booking]');
+        if (root) mount(root);
       }
     },
     // Load only once the frame is in view; the skeleton holds the height until then, so no layout shift.
     { rootMargin: '0px' },
   );
-  roots.forEach((root) => observer.observe(root));
+  roots.forEach((root) => observer.observe(root.querySelector('.booking-frame') ?? root));
 }
 
 init();
