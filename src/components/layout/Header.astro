@@ -42,7 +42,7 @@ const [firstNav, ...restNav] = mainNav;
                   aria-current={isPage(item.href) ? 'page' : undefined}
                   data-active={isSection(item.href) ? '' : undefined}
                   data-nav-href={item.href}
-                  class="nav-link relative whitespace-nowrap py-2 text-[0.875rem] font-medium xl:text-[0.9375rem] text-ink-soft transition-colors hover:text-ink data-active:text-oxblood"
+                  class="nav-link relative inline-flex min-h-11 min-w-11 items-center justify-center whitespace-nowrap py-2 text-[0.875rem] font-medium xl:text-[0.9375rem] text-ink-soft transition-colors hover:text-ink data-active:text-oxblood"
                 >
                   {item.label}
                 </a>
@@ -53,7 +53,7 @@ const [firstNav, ...restNav] = mainNav;
                   <summary
                     data-active={audienceActive ? '' : undefined}
                     data-nav-href="/#zielgruppen"
-                    class="nav-link relative flex cursor-pointer list-none items-center gap-1.5 whitespace-nowrap py-2 text-[0.875rem] font-medium xl:text-[0.9375rem] text-ink-soft transition-colors hover:text-ink data-active:text-oxblood [&::-webkit-details-marker]:hidden"
+                    class="nav-link relative flex min-h-11 min-w-11 cursor-pointer list-none items-center gap-1.5 whitespace-nowrap py-2 text-[0.875rem] font-medium xl:text-[0.9375rem] text-ink-soft transition-colors hover:text-ink data-active:text-oxblood [&::-webkit-details-marker]:hidden"
                   >
                     Für wen
                     <Icon name="chevron" size={14} class="rotate-90 transition-transform duration-200 group-open/menu:-rotate-90 motion-reduce:transition-none" />
@@ -165,7 +165,7 @@ const [firstNav, ...restNav] = mainNav;
     position: absolute;
     left: 0;
     right: 0;
-    bottom: 0.2rem;
+    bottom: 0.5rem;
     height: 1px;
     background: currentColor;
     transform: scaleX(0);
