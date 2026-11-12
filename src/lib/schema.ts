@@ -85,12 +85,6 @@ export function serviceNode(service: Service, base: URL | undefined): JsonLdNode
 export function siteGraph(base: URL | undefined, portraitUrl: string): JsonLdNode[] {
   const id = ids(base);
   const root = absoluteUrl('/', base);
-  const imageRights = {
-    creator: ref(id.company),
-    copyrightHolder: ref(id.company),
-    copyrightNotice: `© ${company.name}`,
-    creditText: company.name,
-  };
 
   return [
     {
@@ -119,7 +113,6 @@ export function siteGraph(base: URL | undefined, portraitUrl: string): JsonLdNod
       areaServed,
       knowsLanguage: 'de',
       image: ref(id.ogImage),
-      founder: ref(id.person),
       employee: ref(id.person),
       parentOrganization: ref(id.company),
       knowsAbout,
@@ -152,7 +145,6 @@ export function siteGraph(base: URL | undefined, portraitUrl: string): JsonLdNod
         propertyID: 'Handelsregister',
         value: `${company.registerCourt}, ${company.registerNumber}`,
       },
-      founder: ref(id.person),
       subOrganization: ref(id.office),
     },
     {
@@ -162,7 +154,7 @@ export function siteGraph(base: URL | undefined, portraitUrl: string): JsonLdNod
       jobTitle: site.role,
       description: `${site.expert} ist geprüfter und zertifizierter Gutachter des ${credentials.associationShort}, wurde durch das ${credentials.court} in einem Gerichtsverfahren als Sachverständiger bestellt und arbeitet seit über ${credentials.yearsInTrade} Jahren im Tattoo- und Piercingbereich.`,
       url: absoluteUrl('/ueber-mich/', base),
-      image: { '@type': 'ImageObject', url: portraitUrl, caption: `${site.expert}, ${site.role}`, ...imageRights },
+      image: { '@type': 'ImageObject', url: portraitUrl, caption: `${site.expert}, ${site.role}` },
       worksFor: ref(id.office),
       telephone,
       email: contact.email.display,
@@ -201,7 +193,6 @@ export function siteGraph(base: URL | undefined, portraitUrl: string): JsonLdNod
       width: ogImage.width,
       height: ogImage.height,
       caption: ogImage.alt,
-      ...imageRights,
     },
   ];
 }
