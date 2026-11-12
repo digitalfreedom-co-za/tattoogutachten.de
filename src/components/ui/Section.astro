@@ -1,12 +1,11 @@
 ---
-// Page section in report layout: a narrow margin column (number, label, margin note)
+// Page section in report layout: a narrow margin column (label, margin note)
 // next to a wide content column. On small screens the margin column stacks on top.
 import Container from './Container.astro';
 import Eyebrow from './Eyebrow.astro';
 
 interface Props {
   id?: string;
-  number?: string;
   label?: string;
   title?: string;
   intro?: string;
@@ -14,7 +13,7 @@ interface Props {
   class?: string;
 }
 
-const { id, number, label, title, intro, tone = 'paper', class: className } = Astro.props;
+const { id, label, title, intro, tone = 'paper', class: className } = Astro.props;
 const headingId = id && title ? `${id}-titel` : undefined;
 const hasHeader = Boolean(label || title || intro || Astro.slots.has('note'));
 
@@ -37,7 +36,7 @@ const toneClass = {
               aria-hidden="true"
             />
             {label && (
-              <Eyebrow number={number} tone={tone === 'ink' ? 'paper' : 'ink'}>
+              <Eyebrow tone={tone === 'ink' ? 'paper' : 'ink'}>
                 {label}
               </Eyebrow>
             )}

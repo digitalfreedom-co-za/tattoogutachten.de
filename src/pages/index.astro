@@ -134,7 +134,7 @@ const faq: FaqEntry[] = [
           <p class="label whitespace-nowrap text-ink">{site.office}</p>
           <p class="label hidden whitespace-nowrap text-graphite min-[420px]:block">Bad Nauheim</p>
         </div>
-        <Eyebrow number="01" class="mt-10 md:mt-14">Gutachten zu Tätowierungen und Piercings</Eyebrow>
+        <Eyebrow class="mt-10 md:mt-14">Gutachten zu Tätowierungen und Piercings</Eyebrow>
         <h1 id="start-titel" class="mt-6 text-h1 tracking-display" data-reveal>
           Ein klarer Befund, wenn ein Tattoo <em class="text-oxblood">Fragen</em> aufwirft.
         </h1>
@@ -164,10 +164,7 @@ const faq: FaqEntry[] = [
           parallax
           class="relative z-10"
         />
-        <figcaption class="mt-3 flex items-baseline justify-between gap-4 text-sm text-graphite">
-          <span class="font-serif italic">{site.expert} im Gespräch</span>
-          <span class="label numeral">Abb. 01</span>
-        </figcaption>
+        <figcaption class="mt-3 font-serif text-sm italic text-graphite">{site.expert} im Gespräch</figcaption>
       </figure>
     </Container>
   </section>
@@ -176,7 +173,6 @@ const faq: FaqEntry[] = [
 
   <Section
     id="zielgruppen"
-    number="02"
     label="Für wen"
     title="Unabhängig, egal wer den Auftrag erteilt."
     intro="Eine Bewertung orientiert sich ausschließlich an feststellbaren Tatsachen. Sie bevorzugt weder Auftraggeber noch ein bestimmtes Ergebnis."
@@ -184,8 +180,8 @@ const faq: FaqEntry[] = [
     <p slot="note">Randnotiz: Tätowieren und Begutachten sind bewusst getrennt, mit eigenem Büro und eigener Website.</p>
     <div class="grid gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-4" data-reveal-group>
       {
-        audiences.map((item, index) => (
-          <Card number={String(index + 1).padStart(2, '0')} kicker={item.kicker} title={item.title} href="/leistungen/">
+        audiences.map((item) => (
+          <Card kicker={item.kicker} title={item.title} href="/leistungen/">
             <p>{item.text}</p>
           </Card>
         ))
@@ -218,7 +214,6 @@ const faq: FaqEntry[] = [
 
   <Section
     id="ablauf"
-    number="03"
     label="Ablauf"
     title="Fünf Schritte, jeder davon nachvollziehbar."
     intro="Am Anfang steht ein Gespräch, kein Vertrag. Kostenpflichtig wird es erst nach einer schriftlichen Beauftragung."
@@ -228,7 +223,6 @@ const faq: FaqEntry[] = [
 
   <Section
     id="kosten"
-    number="04"
     label="Kosten"
     title="Was ein Gutachten kostet, klären wir vorher."
     tone="deep"
@@ -240,18 +234,18 @@ const faq: FaqEntry[] = [
     </div>
   </Section>
 
-  <Section id="gericht" number="05" label="Justiz">
+  <Section id="gericht" label="Justiz">
     <CourtReference />
     <div class="mt-12">
       <MeasureRule class="w-full text-ink/40" />
     </div>
   </Section>
 
-  <Section id="fragen" number="06" label="Häufige Fragen" title="Antworten, bevor Sie fragen müssen." tone="paper">
+  <Section id="fragen" label="Häufige Fragen" title="Antworten, bevor Sie fragen müssen." tone="paper">
     <Faq items={faq} name="faq-start" />
   </Section>
 
-  <Section id="ratgeber" number="07" label="Ratgeber" title="Vorschau: Artikelseiten" tone="deep">
+  <Section id="ratgeber" label="Ratgeber" title="Vorschau: Artikelseiten" tone="deep">
     <div class="grid gap-10 md:grid-cols-12 md:gap-x-8">
       <div class="md:col-span-5">
         <ArtImage

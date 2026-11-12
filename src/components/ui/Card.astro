@@ -1,11 +1,10 @@
 ---
-// Audience or service card: hairline frame, report number, serif title.
+// Audience or service card: hairline frame, kicker label, serif title.
 // The whole card is clickable when href is set; the title link carries the accessible name.
 import Icon from './Icon.astro';
 import { url } from '../../lib/url';
 
 interface Props {
-  number?: string;
   kicker?: string;
   title: string;
   href?: string;
@@ -13,7 +12,7 @@ interface Props {
   class?: string;
 }
 
-const { number, kicker, title, href, linkLabel = 'Mehr erfahren', class: className } = Astro.props;
+const { kicker, title, href, linkLabel = 'Mehr erfahren', class: className } = Astro.props;
 const resolvedHref = href?.startsWith('/') ? url(href) : href;
 ---
 
@@ -25,10 +24,7 @@ const resolvedHref = href?.startsWith('/') ? url(href) : href;
   ]}
   data-reveal
 >
-  <div class="label flex items-baseline justify-between gap-4 text-graphite">
-    {kicker && <span>{kicker}</span>}
-    {number && <span class="numeral text-sm tracking-normal text-oxblood">{number}</span>}
-  </div>
+  {kicker && <p class="label text-graphite">{kicker}</p>}
   <h3 class="mt-8 text-h3">
     {
       resolvedHref ? (

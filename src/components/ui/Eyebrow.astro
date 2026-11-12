@@ -1,12 +1,11 @@
 ---
-// Report style label, e.g. "01  Leistungen" or "Az.  Randnotiz".
+// Small uppercase label above a heading, e.g. "Leistungen", led by a short accent rule.
 interface Props {
-  number?: string;
   tone?: 'ink' | 'paper';
   class?: string;
 }
 
-const { number, tone = 'ink', class: className } = Astro.props;
+const { tone = 'ink', class: className } = Astro.props;
 ---
 
 <p
@@ -16,13 +15,6 @@ const { number, tone = 'ink', class: className } = Astro.props;
     className,
   ]}
 >
-  {
-    number && (
-      <span class:list={['numeral text-sm tracking-normal', tone === 'ink' ? 'text-oxblood' : 'text-brass-light']}>
-        {number}
-      </span>
-    )
-  }
-  {number && <span class="h-px w-6 bg-current opacity-40" aria-hidden="true" />}
+  <span class:list={['h-px w-6', tone === 'ink' ? 'bg-oxblood' : 'bg-brass-light']} aria-hidden="true" />
   <span><slot /></span>
 </p>

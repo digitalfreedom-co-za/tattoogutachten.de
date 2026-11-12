@@ -66,22 +66,21 @@ const isCurrent = (href: string) => currentPath.startsWith(url(href));
   <div id="mobile-nav" class="mobile-nav border-t border-ink/15 bg-paper lg:hidden">
     <Container class="flex min-h-full flex-col py-8">
       <nav aria-label="Hauptnavigation mobil">
-        <ol class="border-t border-ink">
+        <ul class="border-t border-ink">
           {
             mainNav.map((item, index) => (
               <li class="mobile-nav-item border-b border-rule" style={`--i:${index}`}>
                 <a
                   href={url(item.href)}
                   aria-current={isCurrent(item.href) ? 'page' : undefined}
-                  class="flex items-baseline gap-5 py-4 font-serif text-[1.75rem] leading-tight tracking-tightish text-ink transition-colors hover:text-oxblood aria-[current=page]:text-oxblood"
+                  class="flex items-baseline py-4 font-serif text-[1.75rem] leading-tight tracking-tightish text-ink transition-colors hover:text-oxblood aria-[current=page]:text-oxblood"
                 >
-                  <span class="numeral w-6 text-sm text-oxblood" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
                   {item.label}
                 </a>
               </li>
             ))
           }
-        </ol>
+        </ul>
       </nav>
       <div class="mobile-nav-item mt-8 flex flex-col gap-6" style={`--i:${mainNav.length}`}>
         <Button href={primaryCta.href} icon="calendar" class="self-start">{primaryCta.label}</Button>
