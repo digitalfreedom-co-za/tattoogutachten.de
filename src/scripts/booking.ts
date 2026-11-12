@@ -261,6 +261,10 @@ function init(): void {
         window.clearTimeout(Number(root.dataset.timeout));
         const target = root.dataset.target ? document.getElementById(root.dataset.target) : null;
         target?.replaceChildren();
+        // embed.js may still be downloading: drop queued render commands, so it cannot draw the
+        // calendar after the withdrawal. Event handlers ('on') stay for a renewed consent.
+        const api = root.dataset.namespace ? window.Cal?.ns?.[root.dataset.namespace] : undefined;
+        if (api?.q) api.q = api.q.filter((args) => !['inline', 'ui'].includes(String((args as ArrayLike<unknown>)[0])));
         mounted.delete(root);
       }
       block(root);
