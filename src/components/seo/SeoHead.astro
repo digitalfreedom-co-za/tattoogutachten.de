@@ -61,7 +61,7 @@ const graph = noindex
 <meta property="og:locale" content="de_DE" />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:url" content={canonical} />
+{!noindex && <meta property="og:url" content={canonical} />}
 <meta property="og:image" content={image} />
 <meta property="og:image:type" content="image/png" />
 <meta property="og:image:width" content={String(ogImage.width)} />

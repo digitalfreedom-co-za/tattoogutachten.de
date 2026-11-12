@@ -12,7 +12,7 @@ import { url, withoutBase } from '../../lib/url';
 const href = url(bookingHref(withoutBase(Astro.url.pathname)));
 ---
 
-<div class="sticky-cta md:hidden" data-sticky-cta hidden>
+<aside class="sticky-cta md:hidden" aria-label="Erstberatung buchen" data-sticky-cta hidden>
   <Container class="flex items-center justify-between gap-4 py-3">
     <p class="text-sm leading-snug text-paper/75">
       Erstberatung kostenlos,<br />bis zu 60 Minuten
@@ -25,7 +25,7 @@ const href = url(bookingHref(withoutBase(Astro.url.pathname)));
       <Icon name="calendar" size={18} class="shrink-0" />
     </a>
   </Container>
-</div>
+</aside>
 
 <style>
   .sticky-cta {

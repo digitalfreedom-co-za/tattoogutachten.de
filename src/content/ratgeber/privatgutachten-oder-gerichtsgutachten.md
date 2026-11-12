@@ -22,7 +22,7 @@ Ein Gerichtsgutachten beantwortet die Beweisfragen, die ein Gericht in einem Ver
 
 ## Wie unterscheiden sich die beiden?
 
-| | Privatgutachten | Gerichtsgutachten |
+| Merkmal | Privatgutachten | Gerichtsgutachten |
 | --- | --- | --- |
 | Auftraggeber | Sie selbst, Ihr Studio oder Ihr Rechtsanwalt | Das zuständige Gericht |
 | Fragestellung | Im Sachverständigenvertrag vereinbart | Beweisfragen des Gerichts |
