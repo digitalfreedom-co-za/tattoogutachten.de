@@ -155,7 +155,9 @@ function mount(root: HTMLElement): void {
 
 /** Renders (or renders again, after a timezone change) the inline calendar into the reserved frame. */
 function render(root: HTMLElement): void {
-  const { calLink, namespace, target } = root.dataset;
+  // Not data-cal-link on the block: embed.js opens a cal.com modal for clicks inside any element with
+  // that attribute.
+  const { bookingLink: calLink, namespace, target } = root.dataset;
   const api = namespace ? window.Cal?.ns?.[namespace] : undefined;
   const container = target ? document.getElementById(target) : null;
   if (!calLink || !api || !container) return;
