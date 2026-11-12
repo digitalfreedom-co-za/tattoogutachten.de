@@ -48,13 +48,15 @@ const featuredArticles = (await getArticles()).slice(0, 3);
        Section tones follow the purpose: reference and working material (services, process, court,
        booking, reading list) on deep paper, narrative on paper. -->
   <section class="relative overflow-hidden" aria-labelledby="start-titel">
-    <Container class="grid gap-12 pt-8 pb-16 md:grid-cols-12 md:gap-x-8 md:pt-12 md:pb-24">
-      <div class="relative z-10 flex flex-col md:col-span-7 md:pt-4">
+    <!-- Top spacing kept tight so the primary action and its reassurance line sit above the fold at
+         1280 x 850 (bottom of the line at about 755px). -->
+    <Container class="grid gap-12 pt-8 pb-16 md:grid-cols-12 md:gap-x-8 md:pb-24">
+      <div class="relative z-10 flex flex-col md:col-span-7">
         <div class="border-y border-ink py-3">
           <p class="label text-ink">{site.office}</p>
           <p class="mt-1 text-sm text-graphite">{site.role}, {contact.city}, bundesweit tätig</p>
         </div>
-        <h1 id="start-titel" class="mt-6 text-h1 tracking-display md:mt-8">
+        <h1 id="start-titel" class="mt-6 text-h1 tracking-display">
           Klarheit über Ihr Tattoo oder Piercing, <em class="text-oxblood">unabhängig</em> festgestellt.
         </h1>
         <p class="mt-5 max-w-[34rem] text-lead text-graphite">

@@ -1,5 +1,6 @@
 ---
-// Site header: logo, main navigation, booking CTA as a visible text button on every breakpoint
+// Site header: logo, main navigation, the page CTA (src/lib/primary-cta.ts: booking, or an enquiry
+// on pages for lawyers and courts) as a visible text button on every breakpoint
 // (compact below sm and between lg and xl, where the nav tightens too). Below lg, and whenever the
 // desktop row does not fit (enlarged text), the navigation moves into a full screen panel behind a
 // menu button (aria-expanded, Escape closes, focus is trapped and returned). Without JS the panel
@@ -12,16 +13,16 @@ import Logo from './Logo.astro';
 import Container from '../ui/Container.astro';
 import Icon from '../ui/Icon.astro';
 import Button from '../ui/Button.astro';
-import { mainNav, primaryCta, contact } from '../../config/site';
+import { mainNav, contact } from '../../config/site';
 import { audiences, audienceHref } from '../../data/audiences';
-import { bookingHref } from '../../config/booking';
+import { pageCta } from '../../lib/primary-cta';
 import { url, withoutBase } from '../../lib/url';
 
 const normalize = (path: string) => (path.endsWith('/') ? path : `${path}/`);
 const currentPath = normalize(Astro.url.pathname);
 const isPage = (href: string) => currentPath === normalize(url(href));
 const isSection = (href: string) => currentPath.startsWith(normalize(url(href)));
-const ctaHref = bookingHref(withoutBase(currentPath));
+const cta = pageCta(withoutBase(currentPath));
 const audienceNav = audiences.map((audience) => ({ label: audience.navLabel, href: audienceHref(audience) }));
 const audienceActive = audienceNav.some((item) => isPage(item.href));
 const [firstNav, ...restNav] = mainNav;
@@ -80,7 +81,7 @@ const [firstNav, ...restNav] = mainNav;
     </nav>
 
     <div class="flex items-center gap-1.5 min-[360px]:gap-2">
-      <Button href={ctaHref} icon="calendar" class="header-cta whitespace-nowrap">{primaryCta.label}</Button>
+      <Button href={cta.href} icon={cta.icon} class="header-cta whitespace-nowrap">{cta.label}</Button>
       <button
         type="button"
         class="menu-toggle hidden size-11 items-center justify-center bg-ink text-paper transition-colors hover:bg-oxblood"
@@ -138,7 +139,7 @@ const [firstNav, ...restNav] = mainNav;
         </ul>
       </nav>
       <div class="mobile-nav-item mt-8 flex flex-col gap-6" style={`--i:${mainNav.length + 1}`}>
-        <Button href={ctaHref} icon="calendar" class="self-start">{primaryCta.label}</Button>
+        <Button href={cta.href} icon={cta.icon} class="self-start">{cta.label}</Button>
         <ul class="grid text-sm text-graphite">
           <li>
             <a class="link-ink inline-flex min-h-11 items-center gap-3" href={contact.phone.href}>

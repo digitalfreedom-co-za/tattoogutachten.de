@@ -171,7 +171,7 @@ export const faq: FaqItem[] = [
     featured: true,
     services: ['tattoo-gutachten', 'piercing-gutachten', 'hygiene-gutachten', 'privatgutachten', 'streitfaelle'],
     audiences: ['fuer-privatpersonen', 'fuer-tattoo-studios', 'fuer-rechtsanwaelte'],
-    question: 'Was kostet ein Tattoo-Gutachten?',
+    question: 'Was kostet ein Gutachten?',
     answer:
       'Die Kosten richten sich nach dem Aufwand und der Art des Gutachtens. Vor einer privaten Beauftragung werden Vergütung und voraussichtlicher Kostenrahmen besprochen und schriftlich festgehalten. Bei einer Bestellung durch das Gericht gilt das Justizvergütungs- und Entschädigungsgesetz (JVEG).',
   },

@@ -67,51 +67,123 @@ function setState(root: HTMLElement, state: 'pending' | 'loading' | 'ready' | 'f
   if (status) status.textContent = root.dataset[`status${state[0].toUpperCase()}${state.slice(1)}`] ?? '';
 }
 
-function mount(root: HTMLElement): void {
-  const { calLink, calOrigin, calScript, namespace, target } = root.dataset;
-  if (!calLink || !calOrigin || !calScript || !namespace || !target) return;
+/** German names of the IANA regions, for the timezone select. */
+const REGIONS: Record<string, string> = {
+  Africa: 'Afrika',
+  America: 'Amerika',
+  Antarctica: 'Antarktis',
+  Arctic: 'Arktis',
+  Asia: 'Asien',
+  Atlantic: 'Atlantik',
+  Australia: 'Australien',
+  Europe: 'Europa',
+  Indian: 'Indischer Ozean',
+  Pacific: 'Pazifik',
+};
 
-  setState(root, 'loading');
+/** Selected timezone per booking block; the device timezone until the visitor picks another. */
+const timezones = new WeakMap<HTMLElement, string>();
+const deviceTimezone = (): string => Intl.DateTimeFormat().resolvedOptions().timeZone || 'Europe/Berlin';
+
+/** Fills the timezone select (grouped by region, device zone preselected) and swaps out the static text. */
+function setupTimezone(root: HTMLElement): void {
+  timezones.set(root, deviceTimezone());
+  const select = root.querySelector<HTMLSelectElement>('[data-timezone]');
+  if (!select || typeof Intl.supportedValuesOf !== 'function') return;
+
+  const device = deviceTimezone();
+  const zones = Intl.supportedValuesOf('timeZone');
+  if (!zones.includes(device)) zones.push(device);
+  const groups = new Map<string, HTMLOptGroupElement>();
+  for (const zone of zones) {
+    const [region, ...rest] = zone.split('/');
+    const regionLabel = REGIONS[region] ?? region;
+    const place = rest.length > 0 ? rest.join(', ').replaceAll('_', ' ') : zone;
+    let group = groups.get(regionLabel);
+    if (!group) {
+      group = document.createElement('optgroup');
+      group.label = regionLabel;
+      groups.set(regionLabel, group);
+    }
+    const option = new Option(zone === device ? `${place}, Ihr Gerät` : place, zone, false, zone === device);
+    group.append(option);
+  }
+  select.replaceChildren(...groups.values());
+  select.hidden = false;
+  root.querySelector<HTMLElement>('[data-timezone-static]')?.setAttribute('hidden', '');
+
+  select.addEventListener('change', () => {
+    timezones.set(root, select.value);
+    // A loaded calendar is rendered again in the new timezone; before that the choice simply waits.
+    if (root.dataset.state === 'ready' || root.dataset.state === 'loading') render(root);
+  });
+}
+
+/** Installs the embed snippet for a block and wires its events, once. */
+function mount(root: HTMLElement): void {
+  const { calOrigin, calScript, namespace } = root.dataset;
+  if (!calOrigin || !calScript || !namespace) return;
+
   installCalSnippet(calScript);
   const Cal = window.Cal!;
   Cal('init', namespace, { origin: calOrigin });
   const api = Cal.ns![namespace];
 
-  const timeout = window.setTimeout(() => setState(root, 'failed'), LOAD_TIMEOUT_MS);
-  const ready = () => {
-    window.clearTimeout(timeout);
-    setState(root, 'ready');
-  };
+  api('on', {
+    action: 'linkReady',
+    callback: () => {
+      window.clearTimeout(Number(root.dataset.timeout));
+      setState(root, 'ready');
+    },
+  });
   const failed = () => {
-    window.clearTimeout(timeout);
+    window.clearTimeout(Number(root.dataset.timeout));
     setState(root, 'failed');
   };
-
-  api('on', { action: 'linkReady', callback: ready });
   api('on', { action: 'linkFailed', callback: failed });
+
+  // embed.js blocked (content blocker, offline): no cal.com event will ever fire.
+  document.querySelector<HTMLScriptElement>(`script[src="${calScript}"]`)?.addEventListener('error', failed);
+  render(root);
+}
+
+/** Renders (or renders again, after a timezone change) the inline calendar into the reserved frame. */
+function render(root: HTMLElement): void {
+  const { calLink, namespace, target } = root.dataset;
+  const api = namespace ? window.Cal?.ns?.[namespace] : undefined;
+  const container = target ? document.getElementById(target) : null;
+  if (!calLink || !api || !container) return;
+
+  // cal.com ignores a second inline call while its previous element is still in the page.
+  container.replaceChildren();
+  setState(root, 'loading');
+  window.clearTimeout(Number(root.dataset.timeout));
+  root.dataset.timeout = String(window.setTimeout(() => setState(root, 'failed'), LOAD_TIMEOUT_MS));
+
   api('inline', {
     elementOrSelector: `#${target}`,
     calLink,
-    config: { layout: 'month_view', theme: 'light' },
+    config: { layout: 'month_view', theme: 'light', 'cal.tz': timezones.get(root) ?? deviceTimezone() },
   });
   api('ui', {
     theme: 'light',
     layout: 'month_view',
     // The event details stay hidden in both variants: cal.com renders links in the event description
     // in a fixed blue that fails text contrast on paper, and no embed option restyles them. The page
-    // around the calendar states duration, cost and terms of the first consultation instead.
+    // around the calendar states duration, cost and terms of the first consultation instead, and the
+    // timezone select of the page replaces the one inside the details.
     hideEventTypeDetails: true,
     cssVarsPerTheme: { light: CAL_THEME_VARS, dark: CAL_THEME_VARS },
   });
-
-  // embed.js blocked (content blocker, offline): no cal.com event will ever fire.
-  document.querySelector<HTMLScriptElement>(`script[src="${calScript}"]`)?.addEventListener('error', failed);
 }
 
 function init(): void {
   const roots = Array.from(document.querySelectorAll<HTMLElement>('[data-booking]'));
   if (roots.length === 0) return;
-  roots.forEach((root) => setState(root, 'pending'));
+  roots.forEach((root) => {
+    setState(root, 'pending');
+    setupTimezone(root);
+  });
 
   if (!('IntersectionObserver' in window)) {
     roots.forEach(mount);

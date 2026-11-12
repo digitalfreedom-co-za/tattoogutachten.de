@@ -30,6 +30,7 @@ Website des Sachverständigenbüros Wolf (Patrick Wolf, Bad Nauheim), Gutachten 
 | `src/lib/url.ts` | `url()` setzt den Basispfad vor interne Links und Dateien aus `public/` |
 | `src/config/site.ts` | Kontaktdaten, Navigation, Nachweise (Registernummer, Gericht). Einzige Quelle, nie im Markup wiederholen |
 | `src/config/practice.ts` | Angaben, die nur der Betreiber bestätigen kann (Gesprächsform, Antwortzeit, Fahrtkosten und mehr). Felder bleiben `null`, bis sie bestätigt sind; erst dann erscheinen sie auf der Seite |
+| `src/lib/primary-cta.ts` | Ziel und Text des Seiten-CTA in Header, Menü und mobiler Leiste: Terminbuchung, auf den Seiten für Rechtsanwälte, Gerichte und Gerichtsgutachten die Anfrage über die Kontaktdaten |
 | `src/data/enquiry.ts` | Hinweise vor der Anfrage (Frist, Vertraulichkeit, Unterlagen), gezeigt neben Kalender und Kontaktwegen |
 | `src/layouts/BaseLayout.astro` | HTML-Gerüst mit `lang="de"`, Schriften, Sprunglink, Header, Footer, Slot `head` für SEO |
 | `src/layouts/ArticleLayout.astro` | Langtext (Ratgeber, Rechtstexte) mit Brotkrumen, Randspalte und `prose-report` |

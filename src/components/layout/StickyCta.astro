@@ -1,5 +1,5 @@
 ---
-// Mobile only booking bar fixed to the bottom edge, above the home indicator (safe area).
+// Mobile only bar with the page CTA (booking, or an enquiry on pages for lawyers and courts) fixed to the bottom edge, above the home indicator (safe area).
 // It needs JS to know when to step aside. It stays hidden until the page's own primary action
 // ([data-primary-action], the booking button of the opening hero or page header, or the title block
 // of a page without actions) has scrolled above the viewport, so one booking action is visible at a
@@ -13,24 +13,24 @@
 // the bar is scrolled clear of it, so keyboard focus is never hidden.
 import Container from '../ui/Container.astro';
 import Icon from '../ui/Icon.astro';
-import { primaryCta } from '../../config/site';
-import { bookingHref } from '../../config/booking';
+import { pageCta } from '../../lib/primary-cta';
 import { url, withoutBase } from '../../lib/url';
 
-const href = url(bookingHref(withoutBase(Astro.url.pathname)));
+const cta = pageCta(withoutBase(Astro.url.pathname));
+const href = url(cta.href);
 ---
 
-<aside class="sticky-cta md:hidden" aria-label="Erstberatung buchen" data-sticky-cta hidden>
+<aside class="sticky-cta md:hidden" aria-label={cta.label} data-sticky-cta hidden>
   <Container class="flex items-center justify-between gap-4 py-3">
     <p class="text-sm leading-snug text-paper/75 max-[359px]:hidden">
-      Erstberatung kostenlos,<br />bis zu 60 Minuten
+      {cta.note[0]}<br />{cta.note[1]}
     </p>
     <a
       href={href}
       class="inline-flex min-h-11 shrink-0 items-center justify-center gap-3 rounded-xs max-[359px]:flex-1 border border-paper bg-paper px-5 py-3 text-[0.9375rem] font-semibold leading-none text-ink transition-colors hover:border-brass-light hover:bg-brass-light"
     >
-      <span>{primaryCta.label}</span>
-      <Icon name="calendar" size={18} class="shrink-0" />
+      <span>{cta.label}</span>
+      <Icon name={cta.icon} size={18} class="shrink-0" />
     </a>
   </Container>
 </aside>
