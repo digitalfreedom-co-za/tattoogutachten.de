@@ -97,7 +97,10 @@ function mount(root: HTMLElement): void {
   api('ui', {
     theme: 'light',
     layout: 'month_view',
-    hideEventTypeDetails: root.dataset.hideDetails === 'true',
+    // The event details stay hidden in both variants: cal.com renders links in the event description
+    // in a fixed blue that fails text contrast on paper, and no embed option restyles them. The page
+    // around the calendar states duration, cost and terms of the first consultation instead.
+    hideEventTypeDetails: true,
     cssVarsPerTheme: { light: CAL_THEME_VARS, dark: CAL_THEME_VARS },
   });
 

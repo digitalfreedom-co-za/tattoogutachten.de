@@ -4,8 +4,9 @@
 // While the demo calendar is configured (CAL_IS_DEMO), a notice above the frame says so.
 // Until then a calendar sheet skeleton holds the final height, so nothing shifts.
 // Without JavaScript the frame shows the alternatives instead: the booking link, phone, email.
-//   compact: landing page, event details hidden, fallback link to /termin/.
-//   full:    /termin/, event details shown, fallback link straight to the cal.com booking page.
+// Both variants hide the cal.com event details (see src/scripts/booking.ts); they differ in the fallback:
+//   compact: landing page, fallback link to /termin/.
+//   full:    /termin/, fallback link straight to the cal.com booking page.
 import Button from '../ui/Button.astro';
 import Icon from '../ui/Icon.astro';
 import { CAL_LINK, CAL_ORIGIN, CAL_EMBED_SCRIPT, CAL_PUBLIC_URL, CAL_IS_DEMO } from '../../config/booking';
@@ -28,14 +29,13 @@ const weekdays = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
 ---
 
 <div
-  class:list={['booking', compact ? 'booking-compact' : 'booking-full', className]}
+  class:list={['booking', className]}
   data-booking
   data-cal-link={CAL_LINK}
   data-cal-origin={CAL_ORIGIN}
   data-cal-script={CAL_EMBED_SCRIPT}
   data-namespace={namespace}
   data-target={targetId}
-  data-hide-details={String(compact)}
   data-state="idle"
   data-status-loading="Der Kalender wird geladen."
   data-status-ready="Der Kalender ist geladen."
@@ -56,15 +56,6 @@ const weekdays = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
     <!-- Calendar sheet placeholder, same footprint as the loaded month view. -->
     <div class="booking-skeleton absolute inset-0 p-5 md:p-8" aria-hidden="true">
       <div class="flex h-full flex-col gap-6 md:flex-row md:gap-10">
-        {
-          !compact && (
-            <div class="hidden w-56 shrink-0 flex-col gap-3 border-r border-rule pr-8 lg:flex">
-              <span class="skeleton-bar w-24" />
-              <span class="skeleton-bar h-5 w-44" />
-              <span class="skeleton-bar w-20" />
-            </div>
-          )
-        }
         <div class="flex-1">
           <div class="flex items-center justify-between">
             <span class="skeleton-bar h-5 w-36" />
@@ -122,32 +113,20 @@ const weekdays = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
 </div>
 
 <style>
-  /* Reserved height of the loaded cal.com month view, so the embed lands without moving anything
-     below it. Measured against the rendered embed (November 2026): below a frame width of 770px
-     cal.com stacks its layout and the height grows linearly with the width; from 770px it is fixed.
-     Re-measure if cal.com changes its layout or the event shows more details. */
+  /* Reserved height of the loaded cal.com month view (event details hidden), so the embed lands
+     without moving anything below it. Measured against the rendered embed (November 2026): below a
+     frame width of 770px cal.com stacks its layout and the height grows linearly with the width;
+     from 770px it is fixed. Re-measure if cal.com changes its layout. */
   .booking {
     container: booking / inline-size;
   }
 
-  .booking-compact .booking-frame {
+  .booking-frame {
     min-height: calc(1018px + 0.819 * 100cqw);
   }
 
-  .booking-full .booking-frame {
-    min-height: calc(1452px + 0.616 * 100cqw);
-  }
-
-  /* The event details wrap onto one more line just below the switch. */
-  @container booking (min-width: 712px) {
-    .booking-full .booking-frame {
-      min-height: calc(1444px + 0.642 * 100cqw);
-    }
-  }
-
   @container booking (min-width: 770px) {
-    .booking-compact .booking-frame,
-    .booking-full .booking-frame {
+    .booking-frame {
       min-height: 572px;
     }
   }
